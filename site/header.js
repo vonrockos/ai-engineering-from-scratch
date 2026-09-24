@@ -8,10 +8,82 @@
   var REPO = 'rohitg00/ai-engineering-from-scratch';
   var CACHE_KEY = 'gh:stars:' + REPO;
   var CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
-  var COMPACT_HEADER_QUERY = '(max-width: 1240px)';
+  var COMPACT_HEADER_QUERY = '(max-width: 1400px)';
   var NARROW_HEADER_QUERY = '(max-width: 820px)';
-  var NARRATION_VERSION = '20260822a';
+  var NARRATION_VERSION = '20260829a';
+  var UI_I18N_VERSION = '20260923a';
   var navId = 0;
+
+  function isStaticPreview(locationValue) {
+    var current = locationValue || window.location;
+    var hostname = String(current && current.hostname || '').toLowerCase();
+    return !!(current && current.protocol === 'file:') ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname === '::1' ||
+      hostname === '[::1]';
+  }
+
+  function adaptRouteHref(href, locationValue) {
+    if (typeof href !== 'string' || !isStaticPreview(locationValue)) return href;
+    if (/^[a-z][a-z\d+.-]*:/i.test(href) || href.indexOf('//') === 0) {
+      try {
+        var resolved = new URL(href, (locationValue || window.location).href);
+        if (resolved.origin !== (locationValue || window.location).origin) return href;
+      } catch (_) {
+        return href;
+      }
+    }
+    return href.replace(/(^|\/)(lesson|certification)(?=[?#]|$)/, '$1$2.html');
+  }
+
+  function adaptRouteLink(link) {
+    if (!link || typeof link.getAttribute !== 'function') return;
+    var href = link.getAttribute('href');
+    var adapted = adaptRouteHref(href);
+    if (adapted !== href) link.setAttribute('href', adapted);
+  }
+
+  function adaptRouteTree(root) {
+    if (!root) return;
+    if (typeof root.matches === 'function' && root.matches('a[href]')) adaptRouteLink(root);
+    if (typeof root.querySelectorAll !== 'function') return;
+    var links = root.querySelectorAll('a[href]');
+    for (var i = 0; i < links.length; i++) adaptRouteLink(links[i]);
+  }
+
+  function setupRouteLinks() {
+    window.AIFSRouteLinks = {
+      isStaticPreview: isStaticPreview,
+      adaptHref: adaptRouteHref,
+      adaptLink: adaptRouteLink,
+      adaptTree: adaptRouteTree
+    };
+    if (!isStaticPreview()) return;
+
+    adaptRouteTree(document);
+    document.addEventListener('click', function (event) {
+      var target = event.target;
+      var link = target && typeof target.closest === 'function' ? target.closest('a[href]') : null;
+      adaptRouteLink(link);
+    }, true);
+
+    if (typeof MutationObserver === 'function') {
+      var observer = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          if (mutations[i].type === 'attributes') adaptRouteLink(mutations[i].target);
+          var added = mutations[i].addedNodes || [];
+          for (var j = 0; j < added.length; j++) adaptRouteTree(added[j]);
+        }
+      });
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ['href'],
+        childList: true,
+        subtree: true
+      });
+    }
+  }
 
   function format(n) {
     if (n >= 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
@@ -90,6 +162,15 @@
     document.head.appendChild(script);
   }
 
+  function ensureUiI18n() {
+    if (window.AIFSUiI18n || document.querySelector('script[data-aifs-ui-i18n="' + UI_I18N_VERSION + '"]')) return;
+    var script = document.createElement('script');
+    script.src = 'ui-i18n.js?v=' + UI_I18N_VERSION;
+    script.async = true;
+    script.setAttribute('data-aifs-ui-i18n', UI_I18N_VERSION);
+    document.head.appendChild(script);
+  }
+
   function pageFile(url) {
     try {
       var parsed = new URL(url, location.href);
@@ -138,18 +219,23 @@
     }
   }
 
-  function addMobileCertificationsLink(nav) {
+  function ensureNavigationLink(nav, filename, label, className) {
     var links = nav.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
-      if (pageFile(links[i].href) === 'certifications.html') return;
+      if (pageFile(links[i].href) === filename) return;
     }
 
     var link = document.createElement('a');
-    link.href = 'certifications.html';
-    link.className = 'header-mobile-only';
-    link.textContent = 'Certifications';
+    link.href = filename;
+    if (className) link.className = className;
+    link.textContent = label;
     var github = nav.querySelector('.header-github');
     nav.insertBefore(link, github || null);
+  }
+
+  function addNavigationLinks(nav) {
+    ensureNavigationLink(nav, 'learning-paths.html', 'Learning Paths', '');
+    ensureNavigationLink(nav, 'certifications.html', 'Certifications', 'header-mobile-only');
   }
 
   function setupNavigation(header) {
@@ -158,7 +244,7 @@
     var logo = header.querySelector('.logo');
     if (!inner || !nav || !logo || inner.querySelector('.header-menu-toggle')) return;
 
-    addMobileCertificationsLink(nav);
+    addNavigationLinks(nav);
     syncCurrentPage(header);
 
     navId += 1;
@@ -187,7 +273,7 @@
     });
     routeLinks.forEach(function (link) {
       var label = link.textContent.trim().toLowerCase();
-      if (label !== 'contents' && label !== 'catalog') return;
+      if (label !== 'contents' && label !== 'catalog' && label !== 'learning paths') return;
       var marker = document.createComment('header-priority-' + label);
       nav.insertBefore(marker, link);
       priorityEntries.push({ link: link, marker: marker });
@@ -336,7 +422,10 @@
     for (var i = 0; i < headers.length; i++) setupNavigation(headers[i]);
     loadStars();
     ensureNarration();
+    ensureUiI18n();
   }
+
+  setupRouteLinks();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', load);
