@@ -155,7 +155,7 @@ python:3.12-slim
 Aquí está el archivo de Docker en `code/Dockerfile`- Caminar por ella:
 
 ```dockerfile
-FROM nvidia/cuda:12.4.1-devel-ubuntu22.04
+FROM --platform=linux/amd64 nvidia/cuda:12.4.1-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
@@ -215,6 +215,8 @@ docker build -t ai-dev -f phases/00-setup-and-tooling/07-docker-for-ai/code/Dock
 ```
 
 Esto toma un tiempo la primera vez (descargar CUDA base imagen + PyTorch).
+
+**macOS / Apple Silicon (M1/M2/M3/M4):**El `--platform=linux/amd64`en el `FROM`La imagen base de CUDA también envía una variante arm64 y Docker Desktop lo selecciona automáticamente en Apple Silicon, pero PyTorch publica su `cu124`Las ruedas sólo para x86_64, así que el `pip install torch==2.6.0+cu124`la capa falla con `No matching distribution found for torch==2.6.0+cu124`. Pinar la plataforma tira la imagen x86_64 y la ejecuta bajo emulación: la construcción es más lenta y el contenedor no tiene GPU (no hay CUDA en un Mac de ninguna manera).`--gpus all`de la `docker run`Para el trabajo de GPU en Apple Silicon, ejecuta las lecciones de forma nativa con la construcción de MPS de la Lección 01 y guarde esta imagen para hosts x86_64 Linux con una GPU NVIDIA.
 
 - ¿Qué quieres decir ?
 
