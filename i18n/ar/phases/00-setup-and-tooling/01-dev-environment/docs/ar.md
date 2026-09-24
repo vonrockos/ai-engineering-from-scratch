@@ -49,7 +49,7 @@ xcode-select --install
 brew install git curl wget
 
 # Ubuntu/Debian
-sudo apt update && sudo apt install -y build-essential git curl wget
+sudo apt update && sudo apt install -y build-essential git curl wget unzip
 
 # Windows (use WSL2)
 wsl --install -d Ubuntu-24.04
@@ -95,6 +95,8 @@ npm install -g pnpm
 
 node -e "console.log('Node', process.version)"
 ```
+
+يقوم جهاز التثبيت بالتحقق من`unzip`أولاً و يخرج مع`Not installing fnm due to missing dependencies.`عندما لا يوجد: على لينكس يفتح أرشيف zip، على macOS يثبت من خلال Homebrew.`unzip`؛ أوبونتو، ديبيان، و WSL2 الحصول عليه من الخط الخط 1`sudo apt install -y unzip`إذا تخطيت تلك الخطوة)
 
 **macOS / Apple Silicon (M1/M2/M3/M4):**إذا توقف التركيب عن`Error: Cannot install under Rosetta 2 in ARM default prefix (/opt/homebrew)`، محطةك تعمل تحت " روزيتا 2 "`arch`بصمات`i386`(هومبريو) هو بناء أليف أرم64، قم بتثبيت (أرم64) القسري، قم بتسجيله في قذفك، ثم قم بإعادة تشغيل الأوامر أعلاه من (أرم64).`fnm install 22`:
 
