@@ -49,7 +49,7 @@ xcode-select --install
 brew install git curl wget
 
 # Ubuntu/Debian
-sudo apt update && sudo apt install -y build-essential git curl wget
+sudo apt update && sudo apt install -y build-essential git curl wget unzip
 
 # Windows (use WSL2)
 wsl --install -d Ubuntu-24.04
@@ -95,6 +95,8 @@ npm install -g pnpm
 
 node -e "console.log('Node', process.version)"
 ```
+
+fnm इंस्टॉलर की जाँच करता है`unzip`पहले और बाहर निकलता है `Not installing fnm due to missing dependencies.`जब यह अनुपस्थित हैः लिनक्स पर यह एक ज़िप संग्रह को अनपैक करता है, macOS पर यह Homebrew के माध्यम से स्थापित करता है। macOS जहाज `unzip`; उबंटू, डेबियन, और WSL2 इसे चरण 1 apt लाइन से प्राप्त करें (`sudo apt install -y unzip`यदि आप उस कदम को छोड़ दिया है) ।
 
 **macOS / Apple Silicon (M1/M2/M3/M4):**यदि इंस्टॉलर के साथ बंद हो जाता है `Error: Cannot install under Rosetta 2 in ARM default prefix (/opt/homebrew)`, आपका टर्मिनल Rosetta 2 के तहत चल रहा है (`arch`छापें `i386`जबकि Homebrew एक मूल arm64 निर्माण है. fnm बल arm64 स्थापित करें, इसे अपने खोल में तार, फिर ऊपर से आदेशों को फिर से चलाएँ.`fnm install 22`:
 
