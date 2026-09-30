@@ -150,7 +150,6 @@ Bác là công thức, mỗi lần cài đặt là một phần.
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) Máy phát điện nguồn duy nhất trên sáu công cụ
 - [agents.md — the open spec](https://agents.md/) điều gì router của gói của bạn phải thực hiện
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) Thực hiện tham chiếu của một gói tương đương
-- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) Quý vị được hỗ trợ bởi Redis với bộ eval
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) gói tài liệu thanh chất lượng
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
