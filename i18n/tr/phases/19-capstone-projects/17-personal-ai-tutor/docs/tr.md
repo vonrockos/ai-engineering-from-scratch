@@ -151,7 +151,7 @@ learner: "6"
 
 - [Khanmigo (Khan Academy)](https://www.khanmigo.ai) İpucu tüketicisi K-12 öğretmeni
 - [Duolingo Max](https://blog.duolingo.com/duolingo-max/) İdeal dil öğrenme öğretmeni
-- [Google LearnLM / Gemini for Education](https://blog.google/technology/google-deepmind/learnlm) barındırılmış referans modeli
+- [Google LearnLM / Gemini for Education](https://blog.google/products-and-platforms/products/education/google-learnlm-gemini-generative-ai/) barındırılmış referans modeli
 - [Quizlet Q-Chat](https://quizlet.com) Değişkin referans
 - [Synthesis Tutor](https://www.synthesis.com) Başlangıç referansı
 - [FSRS algorithm](https://github.com/open-spaced-repetition/fsrs4anki) Aralıklı tekrar programı

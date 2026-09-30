@@ -182,7 +182,7 @@ Ders 69 tüm boru hattını (çunker, retriever, reranker, generator) kablolar v
 - Buckley, Voorhees, "Evaluation Measure Stability Assessment", SIGIR 2000 - ranking metrikleri üzerine kanonik makale
 - Jarvelin, Kekalainen, "Kümülte Kazanç Baslı IR Tekniklerinin Değerlendirilmesi" - nDCG makalesi
 - [Ragas: Automated Evaluation of RAG Pipelines](https://docs.ragas.io)
-- [Anthropic, Evaluating RAG](https://www.anthropic.com/news/evaluating-rag)
+- [Anthropic, Introducing Contextual Retrieval](https://www.anthropic.com/engineering/contextual-retrieval)- 1 eksi geri çağırma ile değerlendirme
 - EY 11 Ders 10 - Değerlendirme çerçevesinin temelleri
 - Fase 19 dersleri 64-67 - burada değerlendirilmiş bileşenler
 - Eğitim 69 - Bu değerlendirme notlarının sonundan sonuna kadar olan boru hattı

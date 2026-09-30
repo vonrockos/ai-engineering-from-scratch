@@ -90,7 +90,7 @@ cc-atomic-checkpoint
 
 ### Adım 1: RNG durumunu yakalamak ve geri getirmek
 
-`capture_rng_state`Python'un bir diktesini gönderir.`random.getstate`NumPy'nin.`np.random.get_state`, PyTorch CPU ve CUDA RNG baytları.`restore_rng_state`CPU tensörü PyTorch'un RNG'inin nasıl tükettiğini bildiği bir Uint8 byte tamponu.
+`capture_rng_state`Python'un bir diktesini gönderir.`random.getstate`NumPy'nin.`np.random.get_state`Her parça basit Python sayıları, tuples ve listeler olarak depolanır.`tolist()`), böylece 3. Adımda yükleyici, keyfi nesneleri açmadan tekrar okuyabilir. `restore_rng_state`CPU tensörü PyTorch'un RNG'inin nasıl tükettiğini bildiği bir Uint8 byte tamponu.
 
 ### Adım 2: Atomik kurtarma
 
@@ -100,9 +100,11 @@ cc-atomic-checkpoint
 
 `save_checkpoint`model, optimizer, programlayıcı, tren durumu ve RNG'yi tek bir dikte paketler. `load_checkpoint`tersine çevirir ve bir `TrainState`Şema alanı yükseltme hokudur: Gelecek biçim değişiklikleri versiyon dizini ve yüklemeci gönderir.
 
+`load_checkpoint`Çağrılar`torch.load(..., weights_only=True)`- A.`.pt`Dosya bir çürük ve güvenilmeyen bir dosyayı açmak.`weights_only=False`Dosya isimleri ne olursa olsun kod çalıştırır. Sadece ağırlıklı yükleyici tenzorları ve ilkel konteynerleri kabul eder ve diğer her şeyi reddeder. Bu nedenle Adım 1 RNG durumunu basit listelerde tutar. Doğruluk kontrolleri yükseltilmektedir`ValueError`kullanmak yerine`assert`Çünkü ...`python -O`2. 6 veya daha yeni bir meşale kullanın: bu serbest bırakmadan önce `weights_only=True`Bu ders, sadece 2.6'den itibaren beklenen garantiye dayanır.
+
 ### 4. adım: parçalanmış variant
 
-`save_sharded_checkpoint`N parçalar boyunca parametre anahtarlarını yuvarlaklaştırır, her parça kendi atomik kaydetmesi ile yazılır, optimizer ve programlayıcı ve tren durumu ile bir meta dosyası yazar ve JSON indeksiyi parça sha256s ile yazar. `load_sharded_checkpoint`Birleştirmeden önce her parçayı doğruluyor.
+`save_sharded_checkpoint`N parçalar boyunca parametre anahtarlarını yuvarlaklaştırır, her parça kendi atomik kaydetmesi ile yazılır, optimizer ve programlayıcı ve tren durumu ile bir meta dosyası yazar ve JSON indeksiyi parça sha256s ile yazar. `load_sharded_checkpoint`birleşmeden önce her parçayı doğruluyor ve kontrol noktaları dizininin dışında çözülen herhangi bir parçacık yolunu reddediyor.
 
 ### Adım 5: Yeniden başlatma gösterimi
 
@@ -120,8 +122,9 @@ Tek dosya ve parçalanmış demolar her ikisi de 1e-4 altında maksimum farkı i
 
 Üretim eğitiminde, geminin kontrol noktasını eğitmenin bir parçası olarak yığar. Şekili aynıdır: model + optimizer + planlayıcı + sayıcı + RNG, atomik olarak yazılmış, en sonunu bulmak kolay olması için adım adım adlandırılmıştır.
 
-Üç örneği uygulayacak:
+Dört örneği uygulayacak:
 
+- **Load with `weights_only=True`.**Paylaşılan bir sürücülükten veya bir indirmeden çekilen bir kontrol noktası güvenilmeyen bir girişdir. Sadece ağırlıklı yükleyici, maliyetli bir dosyanın yeniden başlatılan makine üzerinde kod çalışmasını engeller.
 - **Schema is a string in the payload.**Bu olmadan eski yolları kırmadan formatı geliştiremezsin.
 - **Sha256 every shard.**Sessiz bir şekilde kısaltılmış bir indirme en kötü tür hata; yükleme cihazı hızlı veya geç geç başarısız olur.
 - **Keep checkpoint cadence honest.**Her N adımını ve her saat dakikasını, hangisi daha kısa olursa, sakla yoksa çarpışan uzun adım, işin tam bir penceresini boşa harcar.
@@ -151,7 +154,7 @@ Tek dosya ve parçalanmış demolar her ikisi de 1e-4 altında maksimum farkı i
 ## Daha Fazla Okumak
 
 - POSIX `rename`Atomiklik için semantik iddiaları `os.replace`- Bu da güvenilir.
-- PyTorch belgesi `torch.save`ve `torch.load`, içinde `map_location`Cihazlar arası restorasyonlar için.
+- PyTorch belgesi `torch.save`ve `torch.load`, içinde `map_location`Araçlı devreyi geri getirmek için ve `weights_only`Güvenilmeyen dosyaları yüklemek için.
 - Fase 19 ders 46 bu ders için kontrol noktası yararlı yükü hayatta kaldığı gradient birikimi kapsar.
 - Fase 19 ders 48 bu düzenlemeyi uygulayan devlet belirti biçimindeki dağıtılan ambalajları kapsar.
 - Linux çekirdeği `fsync`Atomik isim değiştirmenin arkasındaki dayanıklılık garantisi için belgeler.

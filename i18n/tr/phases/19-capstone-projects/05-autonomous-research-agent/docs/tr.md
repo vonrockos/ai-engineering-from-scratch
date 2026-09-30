@@ -156,4 +156,4 @@ $ ai-scientist run --seed "attention sparsity in sub-1B transformers" --budget 3
 - [LangGraph documentation](https://langchain-ai.github.io/langgraph/) Referans orkestrasyon katmanı
 - [Semantic Scholar Graph API](https://api.semanticscholar.org/) Edebiyat aramaları
 - [E2B sandboxes](https://e2b.dev) Referans deney izolesi
-- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/Reviewer-Guidelines) eleştirmen grubunun kodladığı rubrik
+- [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2026/ReviewerGuidelines) eleştirmen grubunun kodladığı rubrik
