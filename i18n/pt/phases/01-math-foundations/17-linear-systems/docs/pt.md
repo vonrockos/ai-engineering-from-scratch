@@ -577,5 +577,5 @@ Esta lição produz:
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)(Gilbert Strang) - o curso definitivo sobre sistemas lineares e factorizations de matriz
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)(Trefethen & Bau) -- a referência padrão para entender a estabilidade numérica, condicionamento, e por que os algoritmos falham
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)(Golub & Van Loan) -- a referência enciclopédica para cada algoritmo de matriz
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)(Golub & Van Loan) -- a referência enciclopédica para cada algoritmo de matriz
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)-- intuição visual para o que resolver Ax = b significa geométricamente
