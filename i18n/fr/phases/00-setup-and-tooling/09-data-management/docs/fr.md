@@ -61,7 +61,7 @@ Ceci télécharge le jeu de données de critique de film IMDB. Après le premier
 Certains ensembles de données sont trop grands pour être mis sur disque.
 
 ```python
-dataset = load_dataset("wikimedia/wikipedia", "20220301.en", split="train", streaming=True)
+dataset = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
 
 for i, example in enumerate(dataset):
     print(example["title"])
