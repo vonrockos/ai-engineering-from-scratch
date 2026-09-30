@@ -224,4 +224,4 @@ Esta lección produce:
 - [CLIP: Learning Transferable Visual Models from Natural Language Supervision (Radford et al., 2021)](https://arxiv.org/abs/2103.00020)
 - [SigLIP: Sigmoid Loss for Language-Image Pre-Training (Zhai et al., 2023)](https://arxiv.org/abs/2303.15343)
 - [OpenCLIP](https://github.com/mlfoundations/open_clip) la base de código de la comunidad
-- [DINOv2 vs CLIP vs MAE: a features comparison](https://huggingface.co/blog/dinov2) Guía de HF con casos de uso paralelos
+- [Oquab et al. (2023). DINOv2: Learning Robust Visual Features without Supervision](https://arxiv.org/abs/2304.07193) el papel, con puntos de referencia de características en comparación con los modelos CLIP y MAE

@@ -440,7 +440,7 @@ Esta lección produce:
 
 ## Leer más
 
-- [Charles Poynton — A Guided Tour of Color Space](https://poynton.ca/PDFs/Guided_tour.pdf) el tratamiento técnico más claro de por qué hay tantos espacios de color y cuándo cada uno importa
+- [Charles Poynton — A Guided Tour of Color Space](https://web.archive.org/web/20251220000525/https://poynton.ca/PDFs/Guided_tour.pdf) el tratamiento técnico más claro de por qué hay tantos espacios de color y cuándo cada uno importa
 - [PyTorch Vision Transforms Docs](https://pytorch.org/vision/stable/transforms.html) la línea completa de transformaciones que realmente se compondrá en la producción
 - [How JPEG Works (Colt McAnlis)](https://www.youtube.com/watch?v=F1kYBnY6mwg) una visión de la submuestreo de croma, DCT, y por qué JPEG codifica YCbCr en lugar de RGB
 - [ImageNet Preprocessing Conventions (torchvision models)](https://pytorch.org/vision/stable/models.html) la fuente de la verdad para `mean=[0.485, 0.456, 0.406]`Y por qué cada modelo en el zoológico lo espera
