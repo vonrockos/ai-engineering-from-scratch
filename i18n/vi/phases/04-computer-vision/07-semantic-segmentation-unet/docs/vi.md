@@ -400,4 +400,4 @@ Bài học này mang lại:
 - [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597) giấy gốc; hình ảnh mọi người sao chép là trên trang 2
 - [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038) báo cáo đầu tiên làm cho phân đoạn một vấn đề kết thúc đến kết thúc con
 - [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch) tham chiếu cho phân đoạn sản xuất; mỗi kiến trúc tiêu chuẩn cộng với mỗi lỗ tiêu chuẩn
-- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch) một thông tin về lý do tại sao TTA, nhãn giả và trọng lượng lớp quan trọng đối với dữ liệu thực
+- [iafoss, Unet34 submission with TTA (Kaggle notebook)](https://www.kaggle.com/code/iafoss/unet34-submission-tta-0-699-new-public-lb) Tăng thời gian thử nghiệm cho một U-Net trên một cuộc thi phân đoạn thực

@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### Bước 5: Độ sâu bất cứ điều gì sử dụng V3 (chỉ dẫn)
+### Bước 5: Độ sâu bất cứ điều gì sử dụng V2 (chỉ dẫn)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-Ba dòng.`out["depth"]`là một PIL thang xám; chuyển đổi thành numpy cho toán học. Đối với Depth Anything V3 cụ thể, thay đổi ID mô hình một khi được phát hành; API không thay đổi.
+Ba dòng.`out["depth"]`là một thang độ xám PIL; chuyển đổi thành numpy cho toán học. Depth Anything 3 (Triều 11 năm 2025) không tải thông qua đường ống này. Nó vận chuyển riêng nó `depth_anything_3`gói: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`Load mô hình đơn hình tương đối, và `model.inference(images).depth`trả lại một `[N, H, W]`Dòng độ sâu.
 
 ## Sử dụng nó
 
