@@ -170,5 +170,5 @@ Règle générale: **if you are not working on music, start with 80 log-mels.**L
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420) le document de la CFPM.
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/) l'échelle de la méle originale.
 - [OpenAI — Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py) lire la mise en œuvre de référence.
-- [librosa feature extraction docs](https://librosa.org/doc/main/feature.html) référence à `mfcc`- Je suis là .`melspectrogram`, et le saut / fenêtre.
+- [librosa feature extraction docs](https://librosa.org/doc/latest/api/feature.html) référence à `mfcc`- Je suis là .`melspectrogram`, et le saut / fenêtre.
 - [NVIDIA NeMo — audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers) pipeline à l'échelle de la production pour les modèles Parakeet + Canary.
