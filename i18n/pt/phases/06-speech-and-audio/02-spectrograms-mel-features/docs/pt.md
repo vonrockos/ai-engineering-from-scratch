@@ -170,5 +170,5 @@ Salva como`outputs/skill-feature-extractor.md`A habilidade seleciona o tipo de c
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420) o documento do MFCC.
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/)- A escala mel original.
 - [OpenAI — Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py) ler a aplicação de referência.
-- [librosa feature extraction docs](https://librosa.org/doc/main/feature.html) referência para `mfcc`- Não .`melspectrogram`, e salto/janela.
+- [librosa feature extraction docs](https://librosa.org/doc/latest/api/feature.html) referência para `mfcc`- Não .`melspectrogram`, e salto/janela.
 - [NVIDIA NeMo — audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers) Pipeline em escala de produção para os modelos Parakeet + Canary.
