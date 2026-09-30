@@ -516,4 +516,4 @@ Ayrıca üretir `outputs/skill-llm-evaluation.md`-- görev türüne, bütçenize
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)-- MMLU makalesi, still the most cited LLM benchmark despite its saturation
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- OpenAI'den HumanEval makalesi, kurulan kod üretimi değerlendirme metodolojisi
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)-- pozisyon ve sözcüksellik önyargısı bulguları dahil olmak üzere LLM'leri değerlendirmek için LLM'lerin kullanılması sistematik analiz
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- 2M+ oyları olan, gerçek dünyadaki en güvenilir LLM sıralaması
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- 2M+ oyları olan, gerçek dünyadaki en güvenilir LLM sıralaması

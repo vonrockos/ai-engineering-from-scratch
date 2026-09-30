@@ -264,4 +264,4 @@ Bu ders bize çok yararlı .`outputs/skill-llm-pipeline-reviewer.md`. Bu projeyi
 - [Kaplan et al., 2020 -- "Scaling Laws for Neural Language Models"](https://arxiv.org/abs/2001.08361)-- orijinal hesaplama- veri-param ölçekleme ilişkisi
 - [Hoffmann et al., 2022 -- "Training Compute-Optimal Large Language Models (Chinchilla)"](https://arxiv.org/abs/2203.15556)-- Kaplan'a yapılan düzeltme modern veri bütçelerini yeniden kalibrlemişti
 - [PyTorch FSDP2 documentation](https://pytorch.org/docs/stable/fsdp.html)-- PyTorch 2.4+'de FSDP1'i değiştiren dağıtılmış eğitim primitif
-- [Weights & Biases LLM Reports](https://wandb.ai/site/llms)-- açık kaynaklı LLM çalışmalar için gerçek manifestolar ve deney takipçisi çıkışı, plagiat edilebilir şablonlar olarak kullanışlı
+- [Weights & Biases LLM Reports](https://wandb.ai/site/solutions/llms/)-- açık kaynaklı LLM çalışmalar için gerçek manifestolar ve deney takipçisi çıkışı, plagiat edilebilir şablonlar olarak kullanışlı

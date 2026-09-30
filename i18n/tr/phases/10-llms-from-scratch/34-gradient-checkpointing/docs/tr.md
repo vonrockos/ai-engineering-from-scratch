@@ -303,4 +303,4 @@ Bu ders bize çok yararlı .`outputs/prompt-activation-recompute-policy.md` mode
 - [Pudipeddi et al., 2020 -- "Training Large Neural Networks with Constant Memory using a New Execution Algorithm"](https://arxiv.org/abs/2002.05645)-- ters modunda yeniden maddeleşme yoluyla alternatif sabit hafıza yaklaşımı
 - [Ren et al., 2021 -- "ZeRO-Offload: Democratizing Billion-Scale Model Training"](https://arxiv.org/abs/2101.06840)-- Ölçüsünde aktifleştirme yükü
 - [PyTorch torch.utils.checkpoint docs](https://pytorch.org/docs/stable/checkpoint.html)-- Standart API
-- [Megatron-Core activation recomputation documentation](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/features/memory_optimizations.html)-- Seçkin, tam ve blok modları
+- [Megatron Bridge activation recomputation documentation](https://docs.nvidia.com/nemo/megatron-bridge/latest/training/activation-recomputation.html)-- Seçkin, tam ve blok modları

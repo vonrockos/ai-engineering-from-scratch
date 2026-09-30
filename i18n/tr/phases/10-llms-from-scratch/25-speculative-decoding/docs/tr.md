@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## Kullan
 
-- **vLLM**ve **SGLang**Birinci sınıf spekülasyon kodlaması.`--speculative_model`- Evet .`--num_speculative_tokens`. Eagle-2/3 desteği `--spec_decoding_algorithm eagle`Bayrak.
+- **vLLM**ve **SGLang**VLLM'de, geçiş yapın.`--speculative-config` ile bir JSON nesnesi`method`- Evet .`model`ve`num_speculative_tokens`; EAGLE-3 `"method": "eagle3"`- Evet .
 - **NVIDIA TensorRT-LLM**Medusa ve Eagle ağaçlarını yerli olarak destekliyor.
-- **Reference draft models**- Evet .`Qwen/Qwen3-0.6B-spec`(Qwen3-32B'nin taslağı),`meta-llama/Llama-3.2-1B-Instruct-spec`(70B'nin taslakları).
+- **Reference draft models**- Evet .`Qwen/Qwen3-0.6B`(Qwen3-32B'nin taslağı),`meta-llama/Llama-3.2-1B-Instruct`(Llama 3.x 70B'nin taslakları).
 - **Medusa heads**(Cai et al. 2024, "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"): Bir taslak model yerine, K paralel öngörüm başlarını hedefe ekleyin.
 
 ## Gönder
