@@ -170,5 +170,5 @@ def dct_ii(x, n_coeffs):
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420) 国际金融委员会论文.
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/)原始的MEL尺度.
 - [OpenAI — Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py)阅读参考实施.
-- [librosa feature extraction docs](https://librosa.org/doc/main/feature.html)参考`mfcc`现在`melspectrogram`跳/窗户.
+- [librosa feature extraction docs](https://librosa.org/doc/latest/api/feature.html)参考`mfcc`现在`melspectrogram`跳/窗户.
 - [NVIDIA NeMo — audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers)生产规模的管道,用于Parakeet+加拿大车型.
