@@ -170,5 +170,5 @@ def dct_ii(x, n_coeffs):
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420) एमएफसीसी पेपर।
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/) मूल मेल स्केल।
 - [OpenAI — Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py) संदर्भ कार्यान्वयन पढ़ें।
-- [librosa feature extraction docs](https://librosa.org/doc/main/feature.html) संदर्भ के लिए `mfcc`,`melspectrogram`, और कूद / खिड़की.
+- [librosa feature extraction docs](https://librosa.org/doc/latest/api/feature.html) संदर्भ के लिए `mfcc`,`melspectrogram`, और कूद / खिड़की.
 - [NVIDIA NeMo — audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers) पैराकीट + कैनरी मॉडल के लिए उत्पादन पैमाने पर पाइपलाइन।
