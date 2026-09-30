@@ -264,4 +264,4 @@ Esta lição produz`outputs/skill-llm-pipeline-reviewer.md`. fornecer um manifes
 - [Kaplan et al., 2020 -- "Scaling Laws for Neural Language Models"](https://arxiv.org/abs/2001.08361)-- a relação de escalação original computação-parâmetros de dados
 - [Hoffmann et al., 2022 -- "Training Compute-Optimal Large Language Models (Chinchilla)"](https://arxiv.org/abs/2203.15556)-- a correcção para Kaplan que recalibrou os orçamentos modernos de dados
 - [PyTorch FSDP2 documentation](https://pytorch.org/docs/stable/fsdp.html)-- o primitivo de formação distribuído que substitui o FSDP1 no PyTorch 2.4+
-- [Weights & Biases LLM Reports](https://wandb.ai/site/llms)-- Manifestos reais e experimentos de rastreamento de saída para cursos de LLM de código aberto, úteis como modelos plagiáveis
+- [Weights & Biases LLM Reports](https://wandb.ai/site/solutions/llms/)-- Manifestos reais e experimentos de rastreamento de saída para cursos de LLM de código aberto, úteis como modelos plagiáveis
