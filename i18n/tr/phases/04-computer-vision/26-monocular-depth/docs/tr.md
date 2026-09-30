@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### Adım 5: V3 kullanımı (referans)
+### Adım 5: V2 kullanımı (referans)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-Üç satır.`out["depth"]`Bu, PIL gri ölçeği olarak kullanılır. Matematik için numpy olarak dönüştürülür.
+Üç satır.`out["depth"]`Bu boru hattı üzerinden yüklenmiyor. Kendi yükünü gönderir.`depth_anything_3`Paket: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`nispeten tek boyutlu model yüklenir ve `model.inference(images).depth`bir `[N, H, W]`derinlik dizisi.
 
 ## Kullan
 
