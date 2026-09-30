@@ -202,7 +202,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 ## Daha Fazla Okumak
 
 - [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) politika iterasyonunun ve değer iterasyonunun kanonik sunumu.
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) Kısalaşma haritası argümanlarının sıkı şekilde ele alınması.
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook_athena.html) Kısalaşma haritası argümanlarının sıkı şekilde ele alınması.
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) modifi politikayı tekrarlama ve onun yakınlaştırma analizi.
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/) orijinal politika tekrarlama kağıdı.
 - [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html) DP'den yaklaşık DP/ derin RL'ye kadar her sonraki dersde kullanılan köprü.

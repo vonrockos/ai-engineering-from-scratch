@@ -203,6 +203,5 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) DDQN.
 - [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581)DQN'de dövüş.
 - [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298)- Yapacakları kağıt.
-- [OpenAI Spinning Up — DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html) Modern açıklama.
 - [Sutton & Barto (2018). Ch. 9 — On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf) DQN'nin hedef ağının ve tekrarlama tamponu tarafından kontrol altına alınması için tasarlanmış olan "ölümlü üçlü" (fonksiyon yaklaşımı + başlatma + politika dışı) ders kitabı tedavisi.
 - [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/) Ablation çalışmalarında kullanılan tek dosya DQN referansı; bu dersin sıfırdan versiyonu ile birlikte okumak iyi.
