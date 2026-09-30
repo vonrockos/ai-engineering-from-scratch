@@ -577,5 +577,5 @@ print(f"Ridge weights (sklearn): {ridge_sk.coef_}")
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)关于线性系统和矩阵因数化的最终课程
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)对于理解数值稳定性,条件化以及算法为什么失败的标准参考
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)对于每个矩阵算法的百科全书参考
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)对于每个矩阵算法的百科全书参考
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)解决 Ax = b 什么意思的视觉直觉
