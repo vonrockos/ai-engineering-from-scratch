@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### चरण 5: गहराई कुछ भी V3 उपयोग (संदर्भ)
+### चरण 5: गहराई कुछ भी V2 उपयोग (संदर्भ)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-तीन पंक्तियों।`out["depth"]`एक पीआईएल ग्रे स्केल है; गणित के लिए numpy में परिवर्तित करें. गहराई कुछ भी V3 के लिए विशेष रूप से, मॉडल आईडी एक बार जारी किया गया है के लिए स्विच; एपीआई अपरिवर्तित है।
+तीन पंक्तियों।`out["depth"]`यह एक पीआईएल ग्रे स्केल है, जिसे गणित के लिए नम्पी में परिवर्तित किया गया है। गहराई कुछ भी 3 (नवंबर 2025) इस पाइपलाइन के माध्यम से लोड नहीं करता है। यह अपना स्वयं का जहाज भेजता है `depth_anything_3`पैकेज: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`सापेक्ष मोनोकुलर मॉडल को लोड करता है, और `model.inference(images).depth`एक `[N, H, W]`गहराई सरणी।
 
 ## इसका प्रयोग करें
 

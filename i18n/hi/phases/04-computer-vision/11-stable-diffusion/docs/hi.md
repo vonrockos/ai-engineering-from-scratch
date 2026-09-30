@@ -193,13 +193,16 @@ out = inpaint(
 ### चरण 5: लोरा लोडिंग
 
 ```python
-pipe.load_lora_weights("sayakpaul/sd-lora-ghibli")
+pipe.load_lora_weights(
+    "artificialguybr/studioghibli-redmond-1-5v-studio-ghibli-lora-for-liberteredmond-sd-1-5",
+    weight_name="StudioGhibliRedmond-15V-LiberteRedmond-StdGBRedmAF-StudioGhibli.safetensors",
+)
 pipe.fuse_lora(lora_scale=0.8)
 
-image = pipe(prompt="a village square in ghibli style").images[0]
+image = pipe(prompt="a village square, StdGBRedmAF, Studio Ghibli").images[0]
 ```
 
-`lora_scale`नियंत्रण बल; 0.0 = कोई प्रभाव नहीं, 1.0 = पूर्ण प्रभाव। `fuse_lora`गति के लिए समायोजित वजन में एडाप्टर को बेक करता है, लेकिन स्विचिंग को रोकता है।`pipe.unfuse_lora()`एक अलग एडाप्टर लोड करने से पहले।
+मॉडल कार्ड से ट्रिगर वाक्यांश (`StdGBRedmAF, Studio Ghibli`) शैली चालू करता है। `lora_scale`नियंत्रण बल; 0.0 = कोई प्रभाव नहीं, 1.0 = पूर्ण प्रभाव। `fuse_lora`गति के लिए समायोजित वजन में एडाप्टर को बेक करता है, लेकिन स्विचिंग को रोकता है।`pipe.unfuse_lora()`एक अलग एडाप्टर लोड करने से पहले।
 
 ### चरण 6: लोरा प्रशिक्षण (स्केच)
 

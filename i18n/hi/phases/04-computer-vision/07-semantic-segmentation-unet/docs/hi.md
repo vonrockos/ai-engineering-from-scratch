@@ -400,4 +400,4 @@ model = smp.Unet(
 - [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597) मूल कागज; प्रत्येक व्यक्ति का प्रतिलिपि बनाने का आंकड़ा पृष्ठ 2 पर है
 - [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038) पेपर जो पहली बार विभाजन को एक अंत-से-अंत कन्वि समस्या बना दिया
 - [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch) उत्पादन खंडन के लिए संदर्भ; प्रत्येक मानक वास्तुकला प्लस प्रत्येक मानक हानि
-- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch) एक walkthrough क्यों TTA, छद्म लेबलिंग, और वर्ग वजन वास्तविक डेटा पर मायने रखते हैं
+- [iafoss, Unet34 submission with TTA (Kaggle notebook)](https://www.kaggle.com/code/iafoss/unet34-submission-tta-0-699-new-public-lb) वास्तविक खंडन प्रतियोगिता पर यू-नेट के लिए परीक्षण समय बढ़ाया जाना
