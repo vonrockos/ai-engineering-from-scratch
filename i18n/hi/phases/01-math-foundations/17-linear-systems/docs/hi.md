@@ -577,5 +577,5 @@ print(f"Ridge weights (sklearn): {ridge_sk.coef_}")
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)(गिलबर्ट स्ट्रैंग) -- रैखिक प्रणालियों और मैट्रिक्स कारककरण पर अंतिम पाठ्यक्रम
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)(ट्रेफेटन और बाउ) - संख्यात्मक स्थिरता, संस्थिता और एल्गोरिदम विफल क्यों समझने के लिए मानक संदर्भ
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)(गोलब और वैन लोन) - प्रत्येक मैट्रिक्स एल्गोरिदम के लिए ज्ञानकोश संदर्भ
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)(गोलब और वैन लोन) - प्रत्येक मैट्रिक्स एल्गोरिदम के लिए ज्ञानकोश संदर्भ
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)-- दृश्य अंतर्ज्ञान के लिए क्या हल करने के लिए Ax = b ज्यामितीय रूप से मतलब

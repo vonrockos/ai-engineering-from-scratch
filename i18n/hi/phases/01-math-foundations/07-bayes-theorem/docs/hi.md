@@ -469,6 +469,6 @@ graph LR
 ## आगे पढ़ना
 
 - [3Blue1Brown: Bayes' theorem](https://www.youtube.com/watch?v=HZGCoVF3YvM)- चिकित्सा परीक्षण के उदाहरण के साथ दृश्य स्पष्टीकरण
-- [Stanford CS229: Generative Learning Algorithms](https://cs229.stanford.edu/notes2022fall/cs229-notes2.pdf)- बेयज़ की साफ़ता और भेदभावपूर्ण मॉडल से उसका संबंध
+- [Stanford CS229: Generative Learning Algorithms](https://cs229.stanford.edu/main_notes.pdf)- बेयज़ की साफ़ता और भेदभावपूर्ण मॉडल से उसका संबंध
 - [Think Bayes](https://greenteapress.com/wp/think-bayes/)- मुक्त पुस्तक, पायथन कोड के साथ बेयसियन सांख्यिकी
 - [scikit-learn Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html)- उत्पादन के कार्यान्वयन और प्रत्येक संस्करण का उपयोग कब किया जाना चाहिए
