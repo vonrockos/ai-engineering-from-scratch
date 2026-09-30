@@ -303,4 +303,4 @@ Bài học này sẽ mang lại kết quả `outputs/prompt-activation-recompute
 - [Pudipeddi et al., 2020 -- "Training Large Neural Networks with Constant Memory using a New Execution Algorithm"](https://arxiv.org/abs/2002.05645)-- Phương pháp tiếp cận thay thế về bộ nhớ liên tục thông qua tái vật lý hóa chế độ ngược
 - [Ren et al., 2021 -- "ZeRO-Offload: Democratizing Billion-Scale Model Training"](https://arxiv.org/abs/2101.06840)-- kích hoạt tải xuống trên quy mô
 - [PyTorch torch.utils.checkpoint docs](https://pytorch.org/docs/stable/checkpoint.html)-- API tiêu chuẩn
-- [Megatron-Core activation recomputation documentation](https://docs.nvidia.com/nemo-framework/user-guide/latest/nemotoolkit/features/memory_optimizations.html)-- các chế độ chọn lọc, đầy đủ và chặn
+- [Megatron Bridge activation recomputation documentation](https://docs.nvidia.com/nemo/megatron-bridge/latest/training/activation-recomputation.html)-- các chế độ chọn lọc, đầy đủ và chặn

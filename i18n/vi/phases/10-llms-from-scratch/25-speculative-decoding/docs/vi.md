@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## Sử dụng nó
 
-- **vLLM**và **SGLang**tàu lớp đầu tiên giải mã đầu cơ.`--speculative_model`- `--num_speculative_tokens`. Eagle-2/3 hỗ trợ thông qua `--spec_decoding_algorithm eagle`cờ.
+- **vLLM**và **SGLang**tàu lớp đầu tiên giải mã đầu cơ.`--speculative-config`một đối tượng JSON với `method`- `model`, và`num_speculative_tokens`; EAGLE-3 là `"method": "eagle3"`- Tôi không biết.
 - **NVIDIA TensorRT-LLM**hỗ trợ cây Medusa và Eagle bản địa.
-- **Reference draft models**`Qwen/Qwen3-0.6B-spec`(Các dự thảo về Qwen3-32B),`meta-llama/Llama-3.2-1B-Instruct-spec`(Các dự thảo cho 70B).
+- **Reference draft models**`Qwen/Qwen3-0.6B`(Các dự thảo về Qwen3-32B),`meta-llama/Llama-3.2-1B-Instruct`(Các dự thảo về Llama 3.x 70B).
 - **Medusa heads**(Cai et al. 2024, "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"): thay vì mô hình dự thảo, thêm các đầu dự đoán song song K vào mục tiêu.
 
 ## Chuyển nó

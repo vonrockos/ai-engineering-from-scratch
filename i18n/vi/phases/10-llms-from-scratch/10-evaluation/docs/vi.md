@@ -516,4 +516,4 @@ Nó cũng sản xuất `outputs/skill-llm-evaluation.md`-- một khung quyết �
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)-- bài báo của MMLU, vẫn là điểm chuẩn LLM được trích dẫn nhiều nhất mặc dù nó bão hòa
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- bài báo HumanEval từ OpenAI, đã thiết lập phương pháp đánh giá tạo ra mã
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)-- phân tích hệ thống sử dụng LLM để đánh giá LLM, bao gồm các kết quả về vị trí và sự thiên vị về lời nói
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- nền tảng so sánh mô hình được crowdsourced với 2M + phiếu bầu, xếp hạng LLM thực tế đáng tin cậy nhất
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- nền tảng so sánh mô hình được crowdsourced với 2M + phiếu bầu, xếp hạng LLM thực tế đáng tin cậy nhất

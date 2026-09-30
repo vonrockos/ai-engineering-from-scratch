@@ -264,4 +264,4 @@ Bài học này sẽ mang lại kết quả `outputs/skill-llm-pipeline-reviewer
 - [Kaplan et al., 2020 -- "Scaling Laws for Neural Language Models"](https://arxiv.org/abs/2001.08361)-- mối quan hệ quy mô đầu tiên về tính toán-dữ liệu-pháp
 - [Hoffmann et al., 2022 -- "Training Compute-Optimal Large Language Models (Chinchilla)"](https://arxiv.org/abs/2203.15556)-- sự sửa đổi của Kaplan đã tái định đo ngân sách dữ liệu hiện đại
 - [PyTorch FSDP2 documentation](https://pytorch.org/docs/stable/fsdp.html)-- tập huấn phân tán nguyên thủy thay thế FSDP1 trong PyTorch 2.4+
-- [Weights & Biases LLM Reports](https://wandb.ai/site/llms)-- các biểu hiện thực và đầu ra theo dõi thí nghiệm cho các chương trình LLM nguồn mở, hữu ích như các mẫu có thể làm vở kịch
+- [Weights & Biases LLM Reports](https://wandb.ai/site/solutions/llms/)-- các biểu hiện thực và đầu ra theo dõi thí nghiệm cho các chương trình LLM nguồn mở, hữu ích như các mẫu có thể làm vở kịch
