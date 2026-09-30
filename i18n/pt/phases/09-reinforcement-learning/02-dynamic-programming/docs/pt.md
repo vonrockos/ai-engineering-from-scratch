@@ -202,7 +202,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 ## Mais leitura
 
 - [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) a apresentação canónica da iteração de políticas e da iteração de valores.
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) tratamento rigoroso dos argumentos de mapeamento de contracção.
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook_athena.html) tratamento rigoroso dos argumentos de mapeamento de contracção.
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) a iteração da política modificada e a sua análise de convergência.
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/) o documento original de iteração da política.
 - [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html) a ponte de DP a aproximadamente-DP / profunda RL utilizada em cada aula subsequente.
