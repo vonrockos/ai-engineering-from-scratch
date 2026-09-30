@@ -170,5 +170,5 @@ Başparmak kuralı: **if you are not working on music, start with 80 log-mels.**
 - [Davis, Mermelstein (1980). Comparison of parametric representations for monosyllabic word recognition](https://ieeexplore.ieee.org/document/1163420)- MFCC kağıdı.
 - [Stevens, Volkmann, Newman (1937). A Scale for the Measurement of the Psychological Magnitude Pitch](https://pubs.aip.org/asa/jasa/article-abstract/8/3/185/735757/) orijinal mel ölçeği.
 - [OpenAI — Whisper source, log_mel_spectrogram](https://github.com/openai/whisper/blob/main/whisper/audio.py) referans uygulanmasını okuyun.
-- [librosa feature extraction docs](https://librosa.org/doc/main/feature.html) referans için `mfcc`- Evet .`melspectrogram`, ve hop / penceresi.
+- [librosa feature extraction docs](https://librosa.org/doc/latest/api/feature.html) referans için `mfcc`- Evet .`melspectrogram`, ve hop / penceresi.
 - [NVIDIA NeMo — audio preprocessing](https://docs.nvidia.com/deeplearning/nemo/user-guide/docs/en/main/asr/asr_all.html#featurizers) Parakeet + Canary modelleri için üretim ölçeği boru hattı.
