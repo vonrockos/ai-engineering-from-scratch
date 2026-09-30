@@ -78,7 +78,7 @@ EAGLE-3 (2025) đã thêm tìm kiếm cây trên các tiếp tục ứng cử vi
 
 Các nguồn cấp dữ liệu xác minh `N`dự thảo mã thông báo vào xác minh trong một lần đi trước. Điều này mở rộng bộ nhớ cache KV của xác minh bởi `N`Nếu một số bản thảo bị từ chối, bạn phải xoay bộ nhớ cache trở lại chiều dài tiền tố được chấp nhận.
 
-Các thực hiện sản xuất (vLLM's `--speculative-model`- Thử xử lý với các bộ đệm KV.
+Các thực hiện sản xuất (vLLM's `--speculative-config`- Thử xử lý với các bộ đệm KV.
 
 ```figure
 draft-verify-tokens
@@ -160,14 +160,11 @@ Sản xuất:
 ```bash
 # vLLM with EAGLE
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
-    --speculative-model /models/llama-3.1-eagle-70b \
-    --speculative-draft-tensor-parallel-size 1 \
-    --num-speculative-tokens 5
+    --speculative-config '{"method": "eagle", "model": "/models/llama-3.1-eagle-70b", "draft_tensor_parallel_size": 1, "num_speculative_tokens": 5}'
 
 # vLLM with vanilla draft model
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
-    --speculative-model meta-llama/Llama-3.2-1B-Instruct \
-    --num-speculative-tokens 5
+    --speculative-config '{"method": "draft_model", "model": "meta-llama/Llama-3.2-1B-Instruct", "num_speculative_tokens": 5}'
 ```
 
 TensorRT-LLM có con đường Medusa nhanh nhất từ giữa năm 2026. `faster-whisper`bao trùm mã hóa giả định cho Whisper-large với một bản thảo nhỏ.
