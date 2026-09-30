@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## استخدمها
 
-- **vLLM**و**SGLang**السفينة التشخيص المضاربي من الدرجة الأولى.`--speculative_model`،`--num_speculative_tokens`. دعم إيغل-2/3 عبر `--spec_decoding_algorithm eagle`العلم
+- **vLLM**و**SGLang**في vLLM، اجتياز `--speculative-config`كائن JSON مع `method`،`model`و`num_speculative_tokens`؛ الـ 3 هي`"method": "eagle3"`. . .
 - **NVIDIA TensorRT-LLM**يدعم شجرة ميدوسا و شجرة النسر بشكل أصلي
-- **Reference draft models**: `Qwen/Qwen3-0.6B-spec`(مصادر قوانين 32-32ب) ،`meta-llama/Llama-3.2-1B-Instruct-spec`(مصادر 70 ب)
+- **Reference draft models**: `Qwen/Qwen3-0.6B`(مصادر قوانين 32-32ب) ،`meta-llama/Llama-3.2-1B-Instruct`(مصادر للاما 3.x 70B)
 - **Medusa heads**(Cai et al. 2024, "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"): بدلاً من مشروع نموذج، أضف رؤوس تنبؤ متوازية K إلى الهدف نفسه. أبسط في النشر، وقبول أقل قليلاً من EAGLE.
 
 ## أرسله

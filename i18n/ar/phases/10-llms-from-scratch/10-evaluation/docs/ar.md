@@ -516,4 +516,4 @@ tests:
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)-- ورقة MMLU، لا تزال أكثر المراجع المشار إليها في ماجستير في العلوم على الرغم من اكتثافها
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- ورقة HumanEval من OpenAI، وضع طريقة تقييم توليد الرمز
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)-- تحليل منهجي لاستخدام القانون الدولي لتقييم القانون الدولي الدولي الدولي، بما في ذلك نتائج التمييز الموقع والتمييز الكلام
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- منصة مقارنة النماذج المستخدمة من قبل الجمهور مع أصوات 2M + ، التصنيف الأكثر ثقة في عالم الواقع LLM
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- منصة مقارنة النماذج المستخدمة من قبل الجمهور مع أصوات 2M + ، التصنيف الأكثر ثقة في عالم الواقع LLM

@@ -264,4 +264,4 @@ python code/main.py gate    # read manifest.out.yaml, apply eval gates, ship-or-
 - [Kaplan et al., 2020 -- "Scaling Laws for Neural Language Models"](https://arxiv.org/abs/2001.08361)-- العلاقة الأصلية بين الحوسبة والبيانات والفئات
 - [Hoffmann et al., 2022 -- "Training Compute-Optimal Large Language Models (Chinchilla)"](https://arxiv.org/abs/2203.15556)-- تصحيح كابلان الذي أعاد توازن الميزانيات البيانات الحديثة
 - [PyTorch FSDP2 documentation](https://pytorch.org/docs/stable/fsdp.html)-- التدريب القديم الموزع الذي يحل محل FSDP1 في PyTorch 2.4+
-- [Weights & Biases LLM Reports](https://wandb.ai/site/llms)-- المخططات الحقيقية ومخرجات متابعة التجربة لدرجات LLM مفتوحة المصدر، مفيدة كملوائح يمكن التلاعب بها
+- [Weights & Biases LLM Reports](https://wandb.ai/site/solutions/llms/)-- المخططات الحقيقية ومخرجات متابعة التجربة لدرجات LLM مفتوحة المصدر، مفيدة كملوائح يمكن التلاعب بها
