@@ -577,5 +577,5 @@ Bu ders şunları ortaya çıkarır:
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)(Gilbert Strang) - Düzsel sistemler ve matris faktörleşmeleri konusunda kesin ders.
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)(Trefethen & Bau) - Sayısal istikrarı, koşullamaları ve algoritmaların neden başarısız olduğunu anlamak için standart referans
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)(Golub & Van Loan) - her matris algoritması için ansiklopedik referans
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)(Golub & Van Loan) - her matris algoritması için ansiklopedik referans
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)-- Ax = b çözmenin geometrik anlamı için görsel algılama
