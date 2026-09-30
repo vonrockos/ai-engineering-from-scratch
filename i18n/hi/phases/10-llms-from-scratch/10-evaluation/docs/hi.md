@@ -516,4 +516,4 @@ RAGAS मापता है कि क्या सामान्य मूल
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)-- एमएमएलयू पेपर, अभी भी इसकी संतृप्ति के बावजूद सबसे अधिक उल्लिखित एलएलएम बेंचमार्क
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- ओपनएआई से मानव इवल पेपर, स्थापित कोड जनरेशन मूल्यांकन पद्धति
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)-- स्थिति पूर्वाग्रह और शब्द पूर्वाग्रह के निष्कर्षों सहित LLM का मूल्यांकन करने के लिए LLM का उपयोग करने का व्यवस्थित विश्लेषण
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- 2M+ वोटों के साथ भीड़-भाड़ वाले मॉडल तुलना मंच, वास्तविक दुनिया में सबसे विश्वसनीय LLM रैंकिंग
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- 2M+ वोटों के साथ भीड़-भाड़ वाले मॉडल तुलना मंच, वास्तविक दुनिया में सबसे विश्वसनीय LLM रैंकिंग

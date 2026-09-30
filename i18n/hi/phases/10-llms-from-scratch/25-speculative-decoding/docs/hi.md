@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## इसका प्रयोग करें
 
-- **vLLM**और **SGLang**जहाज प्रथम श्रेणी के अनुमानित डिकोडिंग।`--speculative_model`,`--num_speculative_tokens`. ईगल-2/3 सहायता `--spec_decoding_algorithm eagle`ध्वज।
+- **vLLM**और **SGLang**VLLM में, पास `--speculative-config` के साथ एक JSON वस्तु`method`,`model`और `num_speculative_tokens`; ईगल-3 है `"method": "eagle3"`. .
 - **NVIDIA TensorRT-LLM**मेदुसा और ईगल के पेड़ों का मूल रूप से समर्थन करता है।
-- **Reference draft models**`Qwen/Qwen3-0.6B-spec`(Qwen3-32B के मसौदे), `meta-llama/Llama-3.2-1B-Instruct-spec`(70B के मसौदे) ।
+- **Reference draft models**`Qwen/Qwen3-0.6B`(Qwen3-32B के मसौदे), `meta-llama/Llama-3.2-1B-Instruct`(लामा 3.x 70B के मसौदे) ।
 - **Medusa heads**(Cai et al. 2024, "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"): एक मसौदा मॉडल के बजाय, लक्ष्य के लिए K समानांतर भविष्यवाणी के सिर जोड़ें। तैनात करने के लिए सरल, EAGLE की तुलना में थोड़ा कम स्वीकृति।
 
 ## इसे भेजें

@@ -773,59 +773,73 @@ if __name__ == "__main__":
 
 ## इसका प्रयोग करें
 
-### ऑटोजीपीटीक्यू के साथ क्वांटिज़िंग
+### GPTQModel के साथ क्वांटिज़िंग
 
 ```python
-# pip install auto-gptq transformers
-# from auto_gptq import AutoGPTQForCausalLM, BaseQuantizeConfig
-# from transformers import AutoTokenizer
+# pip install gptqmodel
+# from gptqmodel import GPTQConfig, GPTQModel
 #
 # model_id = "meta-llama/Llama-3.1-8B"
-# quantize_config = BaseQuantizeConfig(
-#     bits=4,
-#     group_size=128,
-#     desc_act=False,
+# quant_config = GPTQConfig(bits=4, group_size=128)
+#
+# model = GPTQModel.load(model_id, quant_config)
+# model.quantize(calibration_texts[:128], batch_size=1)
+# model.save("llama-8b-gptq-int4")
+```
+
+### LLM कंप्रेसर के साथ AWQ को क्वांटिज़ करना
+
+```python
+# pip install llmcompressor
+# from transformers import AutoModelForCausalLM, AutoTokenizer
+# from llmcompressor import oneshot
+# from llmcompressor.modifiers.quantization import QuantizationModifier
+# from llmcompressor.modifiers.transform.awq import AWQModifier
+#
+# model_id = "meta-llama/Llama-3.1-8B"
+# model = AutoModelForCausalLM.from_pretrained(model_id)
+# tokenizer = AutoTokenizer.from_pretrained(model_id)
+#
+# recipe = [
+#     AWQModifier(duo_scaling="both"),
+#     QuantizationModifier(ignore=["lm_head"], scheme="W4A16_ASYM", targets=["Linear"]),
+# ]
+# oneshot(
+#     model=model,
+#     dataset="perfectblend",
+#     splits="train[:512]",
+#     recipe=recipe,
+#     max_seq_length=512,
+#     num_calibration_samples=256,
 # )
-#
-# tokenizer = AutoTokenizer.from_pretrained(model_id)
-# model = AutoGPTQForCausalLM.from_pretrained(model_id, quantize_config)
-#
-# calibration = [tokenizer(t, return_tensors="pt") for t in calibration_texts[:128]]
-# model.quantize(calibration)
-# model.save_quantized("llama-8b-gptq-int4")
+# model.save_pretrained("llama-8b-awq-int4", save_compressed=True)
+# tokenizer.save_pretrained("llama-8b-awq-int4")
 ```
 
-### ऑटोएडब्ल्यूक्यू के साथ क्वांटिज़िंग
-
-```python
-# pip install autoawq
-# from awq import AutoAWQForCausalLM
-# from transformers import AutoTokenizer
-#
-# model_id = "meta-llama/Llama-3.1-8B"
-# model = AutoAWQForCausalLM.from_pretrained(model_id)
-# tokenizer = AutoTokenizer.from_pretrained(model_id)
-#
-# model.quantize(tokenizer, quant_config={"zero_point": True, "q_group_size": 128, "w_bit": 4})
-# model.save_quantized("llama-8b-awq-int4")
-```
+इन दो तरीकों के लिए मूल उपकरण, ऑटोजीपीटीक्यू और ऑटोएडब्ल्यूक्यू, संग्रहीत किए जाते हैं। जीपीटीक्यू मॉडल और एलएलएम कंप्रेसर बनाए रखे गए उत्तराधिकारी हैं।
 
 ### GGUF में परिवर्तित करना
 
 ```bash
-# pip install llama-cpp-python
-# python convert_hf_to_gguf.py meta-llama/Llama-3.1-8B --outtype q4_k_m --outfile llama-8b-q4km.gguf
-# llama-server -m llama-8b-q4km.gguf -c 4096 -ngl 99
+# git clone https://github.com/ggml-org/llama.cpp
+# cmake -S llama.cpp -B llama.cpp/build && cmake --build llama.cpp/build --config Release
+# pip install -r llama.cpp/requirements.txt
+# hf download meta-llama/Llama-3.1-8B --local-dir Llama-3.1-8B
+# python llama.cpp/convert_hf_to_gguf.py Llama-3.1-8B --outtype f16 --outfile llama-8b-f16.gguf
+# llama.cpp/build/bin/llama-quantize llama-8b-f16.gguf llama-8b-q4km.gguf Q4_K_M
+# llama.cpp/build/bin/llama-server -m llama-8b-q4km.gguf -c 4096 -ngl 99
 ```
+
+कनवर्टर में कोई K-क्वांट आउटपुट नहीं है (`--outtype`स्वीकार करता है `f32`,`f16`,`bf16`,`q8_0`,`tq1_0`,`tq2_0`या `auto`), तो `llama-quantize`Q4_K_M फ़ाइल उत्पन्न करता है।
 
 ### क्वांटिज़्ड मॉडल की सेवा करना
 
 ```python
 # pip install vllm
-# vllm serve model-awq --quantization awq --dtype half --max-model-len 8192
+# vllm serve llama-8b-awq-int4 --max-model-len 8192
 ```
 
-vLLM नेटिव रूप से AWQ और GPTQ मॉडल का समर्थन करता है। यह मैट्रिक्स गुणन के दौरान डिक्वांटाइजेशन को संभालता है और KV कैश के लिए पेजड ध्यान का उपयोग करता है। H100 पर FP8 के लिए, जोड़ें `--dtype float8_e4m3fn`. .
+vLLM नेटिव रूप से AWQ और GPTQ मॉडल का समर्थन करता है और चेकपॉइंट के कॉन्फ़िग से क्वांटिज़ेशन विधि पढ़ता है, इसलिए नहीं `--quantization`यह मैट्रिक्स गुणन के दौरान डीक्वैंटाइजेशन को संभालता है और KV कैश के लिए पेजड ध्यान का उपयोग करता है। H100 पर FP8 के लिए, जोड़ें `--quantization fp8_per_tensor`लोड समय पर 16-बिट चेकपॉइंट के वजन को मात्राबद्ध करने के लिए।
 
 ## इसे भेजें
 

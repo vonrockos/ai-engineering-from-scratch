@@ -264,4 +264,4 @@ python code/main.py gate    # read manifest.out.yaml, apply eval gates, ship-or-
 - [Kaplan et al., 2020 -- "Scaling Laws for Neural Language Models"](https://arxiv.org/abs/2001.08361)-- मूल कम्प्यूटिंग-डेटा-पेरम्स स्केलिंग रिश्ता
 - [Hoffmann et al., 2022 -- "Training Compute-Optimal Large Language Models (Chinchilla)"](https://arxiv.org/abs/2203.15556)-- काप्लान को सुधार जो आधुनिक डेटा बजट को पुनः मापता है
 - [PyTorch FSDP2 documentation](https://pytorch.org/docs/stable/fsdp.html)-- PyTorch 2.4+ में FSDP1 की जगह वितरित प्रशिक्षण आदिम
-- [Weights & Biases LLM Reports](https://wandb.ai/site/llms)-- ओपन सोर्स LLM रन के लिए वास्तविक मैनिफेस्ट और प्रयोग ट्रैकर आउटपुट, plagiarizable टेम्पलेट के रूप में उपयोगी
+- [Weights & Biases LLM Reports](https://wandb.ai/site/solutions/llms/)-- ओपन सोर्स LLM रन के लिए वास्तविक मैनिफेस्ट और प्रयोग ट्रैकर आउटपुट, plagiarizable टेम्पलेट के रूप में उपयोगी
