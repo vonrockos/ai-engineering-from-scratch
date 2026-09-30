@@ -577,5 +577,5 @@ Bài học này mang lại:
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)(Gilbert Strang) - khóa học cuối cùng về hệ thống tuyến tính và các hệ số tử liệu
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)(Trefethen & Bau) - tham chiếu tiêu chuẩn để hiểu sự ổn định số, điều kiện hóa, và tại sao các thuật toán thất bại
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)(Golub & Van Loan) -- tham khảo khoa học cho mỗi thuật toán tử liệu
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)(Golub & Van Loan) -- tham khảo khoa học cho mỗi thuật toán tử liệu
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)-- trực giác thị giác cho giải quyết Ax = b nghĩa là hình học
