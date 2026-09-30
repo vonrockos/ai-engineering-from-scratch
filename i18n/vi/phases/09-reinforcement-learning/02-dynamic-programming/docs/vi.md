@@ -202,7 +202,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 ## Đọc thêm
 
 - [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) trình bày theo quy định của sự lặp lại chính sách và sự lặp lại giá trị.
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) xử lý nghiêm ngặt các lập luận lập bản đồ thu hẹp.
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook_athena.html) xử lý nghiêm ngặt các lập luận lập bản đồ thu hẹp.
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) Phác thảo chính sách đã được sửa đổi và phân tích sự hội tụ của nó.
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/) giấy lặp lại chính sách ban đầu.
 - [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html) cầu từ DP đến khoảng-DP / RL sâu được sử dụng trong mỗi bài học tiếp theo.

@@ -203,6 +203,5 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) DDQN.
 - [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581) Đấu đấu DQN.
 - [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298)- Báo đống thủ thuật.
-- [OpenAI Spinning Up — DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html) trình bày hiện đại rõ ràng.
 - [Sutton & Barto (2018). Ch. 9 — On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf) việc xử lý sách giáo khoa của "những phần ba chết người" (chấp gần chức năng + bootstrapping + ngoại lệ chính sách) mà mạng mục tiêu của DQN và bộ đệm lặp lại được thiết kế để làm đục.
 - [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/) DQN tài liệu đơn tham khảo được sử dụng trong các nghiên cứu ablation; tốt để đọc cùng với phiên bản đầu tiên của bài học này.
