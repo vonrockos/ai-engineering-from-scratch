@@ -203,6 +203,5 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) DDQN
 - [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581)     
 - [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298)堆的刺纸.
-- [OpenAI Spinning Up — DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html)清晰的现代化展示.
 - [Sutton & Barto (2018). Ch. 9 — On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf)教科书处理"致命三位一体" (函数接近+启动+非政策) 目标网络和DQN的重播缓冲器旨在制.
 - [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/)用于除研究的参考单档DQN;好在此课程的从头开始版本旁边阅读.
