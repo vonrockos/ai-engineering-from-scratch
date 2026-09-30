@@ -150,7 +150,6 @@ Her paket bir resept, her kurulum bir porsiyon.
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) 6 alet üzerinde tek kaynaklı jeneratör
 - [agents.md — the open spec](https://agents.md/) paketinizin yönlendirici neyi uygulamalı
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) Paket eşdeğerinin referans uygulanması
-- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) Evaluation Suite ile Redis desteklenmiş referans
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) paket belgeler kaliteli çubuğu
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
