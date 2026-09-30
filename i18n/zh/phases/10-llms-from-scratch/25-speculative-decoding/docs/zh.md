@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## 用它
 
-- **vLLM**其他**SGLang**飞船第一级的猜测解码.`--speculative_model`现在`--num_speculative_tokens`通过 `--spec_decoding_algorithm eagle`旗.
+- **vLLM**其他**SGLang**在vLLM中,通过`--speculative-config`具有 JSON 对象`method`现在`model`其他`num_speculative_tokens`3是`"method": "eagle3"`现在,我们要去.
 - **NVIDIA TensorRT-LLM**支持梅杜萨和树的本土.
-- **Reference draft models**其他`Qwen/Qwen3-0.6B-spec`(Qwen3-32B草案),`meta-llama/Llama-3.2-1B-Instruct-spec`(70B草案)
+- **Reference draft models**其他`Qwen/Qwen3-0.6B`(Qwen3-32B草案),`meta-llama/Llama-3.2-1B-Instruct`(关于Llama 3.x 70B的草案)
 - **Medusa heads**(Cai et al. 2024,"Medusa:简单的LLM推理加速框架与多个解码头"):而不是一个草案模型,将K平行预测头添加到目标本身.更简单的部署,接受度略低于EAGLE.
 
 ## 运送它

@@ -516,4 +516,4 @@ RAGAS测量一般评估所缺少的内容:模型的答案是否基于检索的�
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)尽管其度很高,但仍是最受引用的LLM基准.
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- 开通AI的HumanEval论文,建立了代码生成评估方法
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)--系统分析使用LLM来评估LLM,包括位置偏差和语句偏差的发现
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- 群众共享的模型比较平台,有2M+的投票,
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- 群众共享的模型比较平台,有2M+的投票,
