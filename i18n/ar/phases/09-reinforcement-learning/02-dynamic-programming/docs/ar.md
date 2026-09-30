@@ -202,7 +202,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 ## المزيد من القراءة
 
 - [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) العرض القنوني للتكرار السياسي وتكرار القيمة.
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) التعامل الصارم مع حجج خريطة التقلص.
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook_athena.html) التعامل الصارم مع حجج خريطة التقلص.
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) تكرار السياسة المعدل وتحليل التقارب.
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/)ورقة التكرار الأصلية للسياسة.
 - [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html)الجسر من دبي إلى تقريبي دبي / عميق RL المستخدم في كل درس لاحقا.
