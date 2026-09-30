@@ -78,7 +78,7 @@ EAGLE-3 (2025) a ajouté la recherche d'arbres sur les continuations candidates.
 
 Feeds de vérification `N`Les jetons de projet dans le vérificateur en un seul passage.`N`Si certains projets sont rejetés, vous devez faire glisser le cache à la longueur du préfixe accepté.
 
-Les actions de production (vLLM) `--speculative-model`Je suis en train de faire une réflexion sur le sujet, et je suis en train de faire une réflexion sur le sujet.
+Les actions de production (vLLM) `--speculative-config`Je suis en train de faire une réflexion sur le sujet, et je suis en train de faire une réflexion sur le sujet.
 
 ```figure
 draft-verify-tokens
@@ -160,14 +160,11 @@ Produit:
 ```bash
 # vLLM with EAGLE
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
-    --speculative-model /models/llama-3.1-eagle-70b \
-    --speculative-draft-tensor-parallel-size 1 \
-    --num-speculative-tokens 5
+    --speculative-config '{"method": "eagle", "model": "/models/llama-3.1-eagle-70b", "draft_tensor_parallel_size": 1, "num_speculative_tokens": 5}'
 
 # vLLM with vanilla draft model
 vllm serve meta-llama/Llama-3.1-70B-Instruct \
-    --speculative-model meta-llama/Llama-3.2-1B-Instruct \
-    --num-speculative-tokens 5
+    --speculative-config '{"method": "draft_model", "model": "meta-llama/Llama-3.2-1B-Instruct", "num_speculative_tokens": 5}'
 ```
 
 TensorRT-LLM a le chemin le plus rapide de Méduse à partir de la mi-2026. `faster-whisper`Enveloppe le décodeur spéculatif pour Whisper-large avec un petit morceau.
