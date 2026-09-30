@@ -61,7 +61,7 @@ print(dataset["train"][0])
 流媒体将它们排列一排,而没有下载完整的东西.
 
 ```python
-dataset = load_dataset("wikimedia/wikipedia", "20220301.en", split="train", streaming=True)
+dataset = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
 
 for i, example in enumerate(dataset):
     print(example["title"])
