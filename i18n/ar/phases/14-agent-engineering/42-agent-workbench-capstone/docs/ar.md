@@ -150,7 +150,6 @@ python3 code/main.py
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) مولد مصدر واحد عبر ست أدوات
 - [agents.md — the open spec](https://agents.md/) ما يجب أن ينفذ جهاز توجيه حزمة التوصيل الخاصة بك
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) تنفيذ مرجعية لمكافئ الحزمة
-- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) إشارة مدعومة من إعادة التأهيل مع مجموعة تقييم
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) إعداد الوثائق
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
