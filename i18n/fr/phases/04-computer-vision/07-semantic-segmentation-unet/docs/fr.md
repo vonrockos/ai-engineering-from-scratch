@@ -400,4 +400,4 @@ Cette leçon donne:
 - [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597) le papier original; le chiffre que chacun copie est à la page 2
 - [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038) le document qui a fait de la segmentation un problème de convection de bout en bout
 - [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch) la référence pour la segmentation de la production; chaque architecture standard plus chaque perte standard
-- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch) une explication de la raison pour laquelle le TTA, le pseudo-étiquetage et les poids de classe sont importants sur les données réelles
+- [iafoss, Unet34 submission with TTA (Kaggle notebook)](https://www.kaggle.com/code/iafoss/unet34-submission-tta-0-699-new-public-lb) Augmentation du temps d'essai d'un réseau U-Net lors d'un concours de segmentation réel

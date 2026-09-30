@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### Étape 5: profondeur Quelque chose utilisation V3 (référence)
+### Étape 5: profondeur de tout utilisation V2 (référence)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-Trois lignes.`out["depth"]`est une échelle de gris PIL; convertis en numpy pour les mathématiques. Pour Depth Anything V3 spécifiquement, échanger l'id du modèle une fois publié; l'API est inchangée.
+Trois lignes.`out["depth"]`La profondeur n'importe quoi 3 (novembre 2025) ne se charge pas à travers ce pipeline.`depth_anything_3`le paquet: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`charge le modèle relatif monoculaire, et `model.inference(images).depth`retourne une `[N, H, W]`le tableau de profondeur.
 
 ## Utilisez-le
 
