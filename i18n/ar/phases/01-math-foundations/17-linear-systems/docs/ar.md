@@ -577,5 +577,5 @@ print(f"Ridge weights (sklearn): {ridge_sk.coef_}")
 
 - [MIT 18.06: Linear Algebra](https://ocw.mit.edu/courses/18-06-linear-algebra-spring-2010/)(غيلبرت سترانغ) -- الدورة النهائية على الأنظمة الخطية وتعاملات المصفوفة
 - [Numerical Linear Algebra](https://people.maths.ox.ac.uk/trefethen/text.html)(تريفثن و باو) -- المرجع القياسي لفهم الاستقرار الرقمي، والتشريط، ولماذا الفشل الخوارزميات
-- [Matrix Computations](https://www.cs.cornell.edu/cv/GolubVanLoan4/golubandvanloan.htm)(جولب و فان لون) -- المرجع المعارفية لكل خوارزمية المصفوفة
+- [Matrix Computations](https://www.press.jhu.edu/books/title/10678/matrix-computations)(جولب و فان لون) -- المرجع المعارفية لكل خوارزمية المصفوفة
 - [3Blue1Brown: Inverse Matrices](https://www.3blue1brown.com/lessons/inverse-matrices)-- البصرية للشيء الذي يحل Ax = b يعني هندسيًا
