@@ -61,7 +61,7 @@ Esto descarga el conjunto de datos de revisión de películas de IMDB. Después 
 Algunos conjuntos de datos son demasiado grandes para caber en el disco.
 
 ```python
-dataset = load_dataset("wikimedia/wikipedia", "20220301.en", split="train", streaming=True)
+dataset = load_dataset("wikimedia/wikipedia", "20231101.en", split="train", streaming=True)
 
 for i, example in enumerate(dataset):
     print(example["title"])
