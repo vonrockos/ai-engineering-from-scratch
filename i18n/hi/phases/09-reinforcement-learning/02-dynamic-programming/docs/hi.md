@@ -202,7 +202,7 @@ Refuse to run DP on state spaces > 10⁷. Refuse to claim convergence without a 
 ## आगे पढ़ना
 
 - [Sutton & Barto (2018). Ch. 4 — Dynamic Programming](http://incompleteideas.net/book/RLbook2020.pdf) नीति पुनरावृत्ति और मूल्य पुनरावृत्ति की कैनोनिक प्रस्तुति।
-- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook.html) संकुचन मानचित्रण तर्क का कठोर उपचार।
+- [Bertsekas (2019). Reinforcement Learning and Optimal Control](http://www.athenasc.com/rlbook_athena.html) संकुचन मानचित्रण तर्क का कठोर उपचार।
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) संशोधित नीति पुनरावृत्ति और इसके अभिसरण विश्लेषण।
 - [Howard (1960). Dynamic Programming and Markov Processes](https://mitpress.mit.edu/9780262582300/dynamic-programming-and-markov-processes/) मूल नीति पुनरावृत्ति पत्र।
 - [Bertsekas & Tsitsiklis (1996). Neuro-Dynamic Programming](http://www.athenasc.com/ndpbook.html) प्रत्येक पाठ में डीपी से लेकर लगभग डीपी/गहरे आरएल तक का पुल।

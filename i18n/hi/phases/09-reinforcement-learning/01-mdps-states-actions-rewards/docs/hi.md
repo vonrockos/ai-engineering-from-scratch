@@ -189,4 +189,4 @@ Refuse to ship any MDP where the state is non-Markovian without explicit mention
 - [Bellman (1957). Dynamic Programming](https://press.princeton.edu/books/paperback/9780691146683/dynamic-programming) बेलमैन समीकरण की उत्पत्ति।
 - [OpenAI Spinning Up — Part 1: Key Concepts](https://spinningup.openai.com/en/latest/spinningup/rl_intro.html) गहरे आरएल कोण से संक्षिप्त एमडीपी प्राइमर।
 - [Puterman (2005). Markov Decision Processes](https://onlinelibrary.wiley.com/doi/book/10.1002/9780470316887) एमडीपी और सटीक समाधान विधियों पर संचालन-अनुसंधान संदर्भ।
-- [Littman (1996). Algorithms for Sequential Decision Making (PhD thesis)](https://www.cs.rutgers.edu/~mlittman/papers/thesis-main.pdf) गतिशील प्रोग्रामिंग विशेषज्ञता के रूप में एमडीपी का सबसे स्वच्छ व्युत्पन्न।
+- [Littman (1996). Algorithms for Sequential Decision Making (PhD thesis)](https://cs.brown.edu/media/filer_public/d1/a6/d1a6f66a-289a-4b81-9596-417114843489/littman.pdf) गतिशील प्रोग्रामिंग विशेषज्ञता के रूप में एमडीपी का सबसे स्वच्छ व्युत्पन्न।

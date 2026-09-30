@@ -203,6 +203,5 @@ Refuse to ship a DQN with no target network, no replay buffer, or ε held at 1. 
 - [Hasselt, Guez, Silver (2016). Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/abs/1509.06461) डीडीक्यूएन।
 - [Wang et al. (2016). Dueling Network Architectures](https://arxiv.org/abs/1511.06581) ड्यूलिंग डीक्यूएन।
 - [Hessel et al. (2018). Rainbow: Combining Improvements in Deep RL](https://arxiv.org/abs/1710.02298) ढेर-ट्रिक कागज।
-- [OpenAI Spinning Up — DQN](https://spinningup.openai.com/en/latest/algorithms/dqn.html) स्पष्ट आधुनिक प्रदर्शनी।
 - [Sutton & Barto (2018). Ch. 9 — On-policy Prediction with Approximation](http://incompleteideas.net/book/RLbook2020.pdf) "मृत्युलयी त्रयी" (फंक्शन अप्रोक्सिमेशन + बूटस्ट्रेपिंग + ऑफ पॉलिसी) के पाठ्यपुस्तक उपचार को DQN के लक्षित नेटवर्क और रिप्ले बफर को tame करने के लिए डिज़ाइन किया गया है।
 - [CleanRL DQN implementation](https://docs.cleanrl.dev/rl-algorithms/dqn/) अपघटन अध्ययनों में इस्तेमाल किए जाने वाले संदर्भ एकल-फ़ाइल डीक्यूएन; इस पाठ के साथ-साथ पढ़ना अच्छा है।
