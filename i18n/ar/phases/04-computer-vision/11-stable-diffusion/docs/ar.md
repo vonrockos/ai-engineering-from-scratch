@@ -193,13 +193,16 @@ out = inpaint(
 ### الخطوة 5: تحميل لورا
 
 ```python
-pipe.load_lora_weights("sayakpaul/sd-lora-ghibli")
+pipe.load_lora_weights(
+    "artificialguybr/studioghibli-redmond-1-5v-studio-ghibli-lora-for-liberteredmond-sd-1-5",
+    weight_name="StudioGhibliRedmond-15V-LiberteRedmond-StdGBRedmAF-StudioGhibli.safetensors",
+)
 pipe.fuse_lora(lora_scale=0.8)
 
-image = pipe(prompt="a village square in ghibli style").images[0]
+image = pipe(prompt="a village square, StdGBRedmAF, Studio Ghibli").images[0]
 ```
 
-`lora_scale`يحدد قوة؛ 0.0 = لا تأثير، 1.0 = تأثير كامل. `fuse_lora`يخبز المعدل إلى الأوزان الموضحة لسرعة، ولكن يمنع التبادل.`pipe.unfuse_lora()`قبل تحميل جهاز تعديل مختلف
+عبارة الإطلاق من بطاقة النموذج (`StdGBRedmAF, Studio Ghibli`) يُشغّلُ النمط. `lora_scale`يحدد قوة؛ 0.0 = لا تأثير، 1.0 = تأثير كامل. `fuse_lora`يخبز المعدل إلى الأوزان الموضحة لسرعة، ولكن يمنع التبادل.`pipe.unfuse_lora()`قبل تحميل جهاز تعديل مختلف
 
 ### الخطوة 6: تدريب لوري (رسم)
 

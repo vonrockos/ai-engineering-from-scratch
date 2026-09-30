@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### الخطوة 5: عمق أي شيء استخدام V3 (المراجعة)
+### الخطوة 5: عمق أي شيء استخدام V2 (المراجعة)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-ثلاث خطات`out["depth"]`هو مقياس الرمادي PIL؛ تحويل إلى numpy للرياضيات. بالنسبة إلى عمق أي شيء V3 تحديدا، تبادل اسم النموذج بمجرد إصدار؛ API غير متغيرة.
+ثلاث خطات`out["depth"]`هو مقياس الرمادي في PIL؛ تحويل إلى numpy للرياضيات. عمق أي شيء 3 (نوفمبر 2025) لا يحمل من خلال هذا الأنابيب.`depth_anything_3`الحزمة: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`تحميل النموذج المتوحد النسبي، و `model.inference(images).depth`يعود رقم `[N, H, W]`مجموعة عمق
 
 ## استخدمها
 
