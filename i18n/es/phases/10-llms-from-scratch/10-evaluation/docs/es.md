@@ -516,4 +516,4 @@ También produce `outputs/skill-llm-evaluation.md`-- un marco de decisión para 
 - [Hendrycks et al., 2021 -- "Measuring Massive Multitask Language Understanding"](https://arxiv.org/abs/2009.03300)-- el artículo de la MMLU, sigue siendo el referente de LLM más citado a pesar de su saturación
 - [Chen et al., 2021 -- "Evaluating Large Language Models Trained on Code"](https://arxiv.org/abs/2107.03374)-- el documento de HumanEval de OpenAI, metodología de evaluación de generación de código establecida
 - [Zheng et al., 2023 -- "Judging LLM-as-a-Judge"](https://arxiv.org/abs/2306.05685)-- análisis sistemático del uso de los LLM para evaluar los LLM, incluidos los hallazgos de sesgo de posición y sesgo de verbosidad
-- [LMSYS Chatbot Arena](https://chat.lmsys.org/)-- plataforma de comparación de modelos de crowdsourcing con 2M+ votos, el ranking de LLM más confiable del mundo real
+- [Arena (formerly LMSYS Chatbot Arena)](https://arena.ai/leaderboard)-- plataforma de comparación de modelos de crowdsourcing con 2M+ votos, el ranking de LLM más confiable del mundo real

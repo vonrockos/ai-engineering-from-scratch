@@ -162,9 +162,9 @@ def speculative_step(p_target, q_draft, K, temperature=1.0):
 
 ## Usalo
 
-- **vLLM**y **SGLang**Descifrado especulativo de primera clase.`--speculative_model`¿ Qué ?`--num_speculative_tokens`. EL ESPIRO-2/3 apoyo a través de la `--spec_decoding_algorithm eagle`bandera.
+- **vLLM**y **SGLang**En el VLLM, pasa `--speculative-config`un objeto JSON con `method`¿ Qué ?`model`, y `num_speculative_tokens`; EAGLE-3 es `"method": "eagle3"`¿ Qué ?
 - **NVIDIA TensorRT-LLM**apoya los árboles Medusa y Eagle nativo.
-- **Reference draft models**¿ Qué es esto ?`Qwen/Qwen3-0.6B-spec`(proyectos para el Qwen3-32B), `meta-llama/Llama-3.2-1B-Instruct-spec`(proyectos para el 70B).
+- **Reference draft models**¿ Qué es esto ?`Qwen/Qwen3-0.6B`(proyectos para el Qwen3-32B), `meta-llama/Llama-3.2-1B-Instruct`(proyectos de Llama 3.x 70B).
 - **Medusa heads**(Cai et al. 2024, "Medusa: Simple LLM Inference Acceleration Framework with Multiple Decoding Heads"): en lugar de un modelo de proyecto, añadir K heads de predicción paralela al objetivo mismo.
 
 ## Envío
