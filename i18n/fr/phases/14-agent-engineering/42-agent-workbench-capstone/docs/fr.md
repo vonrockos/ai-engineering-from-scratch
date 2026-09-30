@@ -150,7 +150,6 @@ Le paquet est la recette, chaque installation est une portion.
 - [Nx Blog, Teach Your AI Agent How to Work in a Monorepo](https://nx.dev/blog/nx-ai-agent-skills) Générateur à source unique sur six outils
 - [agents.md — the open spec](https://agents.md/) ce que doit mettre en œuvre le routeur de votre paquet
 - [HKUDS/OpenHarness](https://github.com/HKUDS/OpenHarness) mise en œuvre de référence d'un équivalent de conditionnement
-- [andrewgarst/agentic_harness](https://github.com/andrewgarst/agentic_harness) Références réutilisées avec suite eval
 - [Augment Code, A good AGENTS.md is a model upgrade](https://www.augmentcode.com/blog/how-to-write-good-agents-dot-md-files) les documents de package
 - [Anthropic, Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - [Anthropic, Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
