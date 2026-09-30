@@ -349,7 +349,7 @@ class GradientBoostingScratch:
 ## आगे पढ़ना
 
 - [Schapire & Freund: Boosting: Foundations and Algorithms](https://mitpress.mit.edu/9780262526036/)-- AdaBoost के रचनाकारों की पुस्तक
-- [Friedman: Greedy Function Approximation: A Gradient Boosting Machine (2001)](https://statweb.stanford.edu/~jhf/ftp/trebst.pdf)-- मूल ग्रेडिएंट बूस्टिंग पेपर
+- [Friedman: Greedy Function Approximation: A Gradient Boosting Machine (2001)](https://doi.org/10.1214/aos/1013203451)-- मूल ग्रेडिएंट बूस्टिंग पेपर
 - [Chen & Guestrin: XGBoost (2016)](https://arxiv.org/abs/1603.02754)-- XGBoost पेपर
 - [Wolpert: Stacked Generalization (1992)](https://www.sciencedirect.com/science/article/abs/pii/S0893608005800231)-- मूल स्टैकिंग पेपर
 - [scikit-learn Ensemble Methods](https://scikit-learn.org/stable/modules/ensemble.html)-- व्यावहारिक संदर्भ
