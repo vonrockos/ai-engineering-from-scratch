@@ -400,4 +400,4 @@ Esta lição produz:
 - [U-Net: Convolutional Networks for Biomedical Image Segmentation (Ronneberger et al., 2015)](https://arxiv.org/abs/1505.04597) o papel original; a figura que todos copiam está na página 2
 - [Fully Convolutional Networks (Long et al., 2015)](https://arxiv.org/abs/1411.4038) o papel que fez a segmentação um problema de con-
 - [segmentation_models_pytorch](https://github.com/qubvel/segmentation_models.pytorch) a referência para a segmentação da produção; cada arquitetura padrão mais cada perda padrão
-- [Lessons learned from training SOTA segmentation (kaggle.com competitions)](https://www.kaggle.com/code/iafoss/carvana-unet-pytorch) um passo-a-passo sobre por que a TTA, a pseudoetiquetação e os pesos de classe importam nos dados reais
+- [iafoss, Unet34 submission with TTA (Kaggle notebook)](https://www.kaggle.com/code/iafoss/unet34-submission-tta-0-699-new-public-lb) Aumentar o tempo de ensaio de uma rede U-Net numa competição de segmentação real

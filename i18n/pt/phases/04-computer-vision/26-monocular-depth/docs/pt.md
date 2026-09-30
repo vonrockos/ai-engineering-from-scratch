@@ -192,21 +192,21 @@ print(f"before align  absRel = {abs_rel_error(pred, gt):.3f}")
 print(f"after align   absRel = {abs_rel_error(aligned, gt):.3f}")
 ```
 
-### Passo 5: Profundidade Qualquer coisa V3 uso (referência)
+### Passo 5: Profundidade Qualquer coisa V2 uso (referência)
 
 ```python
-import torch
+import numpy as np
 from transformers import pipeline
 from PIL import Image
 
-pipe = pipeline(task="depth-estimation", model="LiheYoung/depth-anything-v2-large")
+pipe = pipeline(task="depth-estimation", model="depth-anything/Depth-Anything-V2-Large-hf")
 
 image = Image.open("street.jpg").convert("RGB")
 out = pipe(image)
 depth_np = np.array(out["depth"])
 ```
 
-Três linhas.`out["depth"]`é uma escala de cinza PIL; converter em numpy para matemática. Para Depth Anything V3 especificamente, troque o modelo id uma vez publicado; a API é inalterada.
+Três linhas.`out["depth"]`A profundidade qualquer 3 (Novembro 2025) não carga através deste gasoduto.`depth_anything_3`Pacote: `DepthAnything3.from_pretrained("depth-anything/DA3MONO-LARGE")`Carrega o modelo monócular relativo e `model.inference(images).depth`Retorna um `[N, H, W]`Array de profundidade.
 
 ## Usá-lo
 

@@ -193,13 +193,16 @@ Os pixels brancos da máscara são a área para regeneração.
 ### Passo 5: Carregamento de LoRA
 
 ```python
-pipe.load_lora_weights("sayakpaul/sd-lora-ghibli")
+pipe.load_lora_weights(
+    "artificialguybr/studioghibli-redmond-1-5v-studio-ghibli-lora-for-liberteredmond-sd-1-5",
+    weight_name="StudioGhibliRedmond-15V-LiberteRedmond-StdGBRedmAF-StudioGhibli.safetensors",
+)
 pipe.fuse_lora(lora_scale=0.8)
 
-image = pipe(prompt="a village square in ghibli style").images[0]
+image = pipe(prompt="a village square, StdGBRedmAF, Studio Ghibli").images[0]
 ```
 
-`lora_scale`- 0,0 = sem efeito, 1,0 = efeito total. `fuse_lora`O adaptador é colocado nos pesos para a velocidade, mas impede a troca.`pipe.unfuse_lora()`antes de carregar um adaptador diferente.
+A frase desencadeadora do modelo de cartão (`StdGBRedmAF, Studio Ghibli`) liga o estilo. `lora_scale`- 0,0 = sem efeito, 1,0 = efeito total. `fuse_lora`O adaptador é colocado nos pesos para a velocidade, mas impede a troca.`pipe.unfuse_lora()`antes de carregar um adaptador diferente.
 
 ### Passo 6: Formação do LoRA (esquema)
 
