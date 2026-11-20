@@ -3,14 +3,14 @@
 > Three production computer-use models in 2026. All three are vision-based. All three treat screenshots, DOM text, and tool outputs as untrusted input. Only direct user instructions count as permission. Per-step safety services are the norm.
 
 **Type:** Learn
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 20 (WebArena, OSWorld), Phase 14 · 27 (Prompt Injection)
 **Time:** ~60 minutes
 
 ## Learning Objectives
 
 - Describe Claude computer use: screenshot in, keyboard/mouse commands out, no accessibility API.
-- Name the three models' benchmark numbers on OSWorld / WebArena / Online-Mind2Web.
+- Recall the launch benchmark numbers this lesson cites: OpenAI CUA on OSWorld / WebArena / WebVoyager, and Gemini 2.5 Computer Use on Online-Mind2Web.
 - Explain the per-step safety pattern Gemini 2.5 Computer Use documents.
 - Summarize the untrusted-input contract all three models enforce.
 
@@ -92,6 +92,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The output shows the safety classifier catching an injected directive in DOM text and blocking an unconfirmed purchase.

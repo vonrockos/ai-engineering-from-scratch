@@ -3,7 +3,7 @@
 > METR (ex-ARC Evals) is an independent 501(c)(3) since December 2023. Their Time Horizon 1.1 benchmark (January 2026) fits a logistic curve to task-success probability vs log(expert human completion time); the intersection at 50% probability defines the model's time horizon. The 2025–2026 engagement set covers GPT-5.1, GPT-5.1-Codex-Max, and prototype monitoring evaluations (can a monitor catch side tasks; can the agent evade). Benchmark suites: HCAST (180+ ML, cyber, SWE, reasoning tasks; 1 minute to 8+ hours), RE-Bench (71 ML research-engineering tasks with expert baseline), SWAA. The honest note: METR measurements are idealized — no human, no real consequences — and the team has documented the eval-vs-deployment behavior gap (Lesson 1). A time horizon is an upper bound, not a deployment prediction.
 
 **Type:** Learn
-**Languages:** Python (stdlib, logistic-fit horizon estimator)
+**Languages:** Python (stdlib, logistic-fit horizon estimator), TypeScript
 **Prerequisites:** Phase 15 · 01 (Long-horizon agents), Phase 15 · 19 (RSP)
 **Time:** ~60 minutes
 
@@ -30,7 +30,7 @@ Methodology (from METR blog and papers):
 
 1. Collect a task suite spanning minute-scale to hour-scale expert completion times. Current suites: HCAST (180+ tasks), RE-Bench (71 tasks), SWAA.
 2. Run the model on each task; record success or failure.
-3. Fit a logistic curve: P(success) as a function of log(expert completion time).
+3. Fit a logistic curve: $P(\text{success})$ as a function of $\log(\text{expert completion time})$.
 4. The horizon is the expert-time at which P(success) = 0.5.
 
 The logistic-fit shape is the right one because capability generally has an increasing, plateau-approaching relationship with task difficulty. The 50% point is a choice (could be 10%, 90%); METR reports multiple thresholds in the detailed paper but leads with 50% because it is the most intuitive.
@@ -79,7 +79,7 @@ a5-horizon-fit
 
 ## Use It
 
-`code/main.py` implements a logistic fit of task-success vs log(expert time), given a synthetic result set. It reports the 50% horizon (METR's headline), 10% horizon (conservative), and 90% horizon (optimistic). Also demonstrates what changes when the success rate is artificially inflated by eval-context gaming.
+`code/main.py` implements a logistic fit of task-success vs $\log(\text{expert time})$, given a synthetic result set. It reports the 50% horizon (METR's headline), 10% horizon (conservative), and 90% horizon (optimistic). Also demonstrates what changes when the success rate is artificially inflated by eval-context gaming.
 
 ## Ship It
 

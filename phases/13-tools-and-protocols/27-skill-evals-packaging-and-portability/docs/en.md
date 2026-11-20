@@ -3,7 +3,7 @@
 > A skill is finished when its package survives linting, routes on the right requests, improves a measured task, stays inside policy, and degrades honestly on another host.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 13 · 22, 24, 25, and 26
 **Time:** ~150 minutes
 
@@ -137,10 +137,12 @@ Split cases into development and validation sets. Tune descriptions on developme
 
 For binary invocation:
 
-```text
-precision = true_positives / (true_positives + false_positives)
-recall = true_positives / (true_positives + false_negatives)
-f1 = 2 * precision * recall / (precision + recall)
+```math
+\begin{aligned}
+\text{precision} &= \frac{\text{true\_positives}}{\text{true\_positives} + \text{false\_positives}} \\[4pt]
+\text{recall} &= \frac{\text{true\_positives}}{\text{true\_positives} + \text{false\_negatives}} \\[4pt]
+\text{f1} &= \frac{2 \cdot \text{precision} \cdot \text{recall}}{\text{precision} + \text{recall}}
+\end{aligned}
 ```
 
 Report raw counts with the ratios. Ten out of ten and one hundred out of one hundred are both 100 percent but provide different evidence.
@@ -423,6 +425,7 @@ Run the capstone lab:
 cd "$(git rev-parse --show-toplevel)"
 cd phases/13-tools-and-protocols/27-skill-evals-packaging-and-portability
 python3 code/main.py
+npx tsx code/main.ts
 python3 -m unittest discover -s code/tests -v
 ```
 

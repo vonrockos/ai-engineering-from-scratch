@@ -3,7 +3,7 @@
 > Chao, Robey, Dobriban, Hassani, Pappas, Wong (NeurIPS 2023, arXiv:2310.08419). PAIR — Prompt Automatic Iterative Refinement — is the canonical automated black-box jailbreak. An attacker LLM with a red-team system prompt iteratively proposes jailbreaks for a target LLM, accumulating attempts and responses in its own chat history as in-context feedback. PAIR typically succeeds within 20 queries, orders of magnitude more efficient than GCG (Zou et al.'s token-level gradient search) and without requiring white-box access. PAIR is now a standard baseline in JailbreakBench (arXiv:2404.01318) and HarmBench, alongside GCG, AutoDAN, TAP, and Persuasive Adversarial Prompt.
 
 **Type:** Build
-**Languages:** Python (stdlib, mock PAIR loop against a toy target)
+**Languages:** Python, TypeScript (stdlib, mock PAIR loop against a toy target)
 **Prerequisites:** Phase 18 · 01 (instruction-following), Phase 14 (agent engineering)
 **Time:** ~75 minutes
 
@@ -31,11 +31,11 @@ Inputs:
 
 Loop, for k in 1..K:
 1. A is prompted with the goal G and the history of (prompt, response) pairs so far.
-2. A emits a new prompt p_k.
-3. Submit p_k to T; receive response r_k.
-4. J scores (p_k, r_k) on the goal.
+2. A emits a new prompt $p_k$.
+3. Submit $p_k$ to T; receive response $r_k$.
+4. J scores $(p_k, r_k)$ on the goal.
 5. If score >= threshold, halt — jailbreak found.
-6. Else, append (p_k, r_k) to A's history; continue.
+6. Else, append $(p_k, r_k)$ to A's history; continue.
 
 Empirical result (NeurIPS 2023): >50% attack success rate against GPT-3.5-turbo, Llama-2-7B-chat; mean queries to success in the 10-20 range.
 

@@ -3,7 +3,7 @@
 > Documents are not photos. A PDF, scientific paper, invoice, or handwritten form has layout, tables, diagrams, footnotes, headers, and semantic structure that plain image understanding cannot capture. The pre-VLM stack was a pipeline: Tesseract OCR + LayoutLMv3 + table-extraction heuristics. The VLM wave replaced that with OCR-free models — Donut (2022), Nougat (2023), DocLLM (2023) — that emit structured markup directly. By 2026 the frontier is just "feed the page image to Claude Opus 4.7 at 2576px native," and the structured-markup output comes for free. This lesson reads the three-era arc of document AI.
 
 **Type:** Build
-**Languages:** Python (stdlib, layout-aware document parser skeleton)
+**Languages:** Python (stdlib, layout-aware document parser skeleton), TypeScript
 **Prerequisites:** Phase 12 · 05 (LLaVA), Phase 5 (NLP)
 **Time:** ~180 minutes
 
@@ -74,7 +74,7 @@ LayoutLMv3 is the peak of OCR-based document understanding. Strong on forms and 
 
 ### DocLLM (2023)
 
-DocLLM (Wang et al., arXiv:2401.00908) is LayoutLM's generative sibling. Generates free-form answers conditioned on layout tokens. Better for QA on documents; still depends on OCR input.
+DocLLM (Wang et al., arXiv:2401.00908, submitted 31 December 2023, so the ID carries a January 2024 prefix) is LayoutLM's generative sibling. Generates free-form answers conditioned on layout tokens. Better for QA on documents; still depends on OCR input.
 
 ### Era 3 — VLM-native (2024+)
 
@@ -83,7 +83,7 @@ DocLLM (Wang et al., arXiv:2401.00908) is LayoutLM's generative sibling. Generat
 - LLaVA-NeXT 336-tile AnyRes works for small documents.
 - Qwen2.5-VL dynamic-resolution handles 2048+ pixels natively.
 - Claude Opus 4.7 supports 2576px documents.
-- PaliGemma 2 (April 2025) trains specifically for documents + handwriting.
+- PaliGemma 2 (December 2024) trains specifically for documents + handwriting.
 
 The gap between VLM-native and OCR-pipeline closed rapidly. By 2026, VLM-native wins on:
 

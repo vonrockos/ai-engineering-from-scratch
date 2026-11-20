@@ -3,7 +3,7 @@
 > The agent does not get to mark its own work as done. A verification gate reads the scope contract, the feedback log, the rule report, and the diff, and answers a single question: is this task actually complete? If the gate says no, the task is not done, no matter what the chat says.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 33 (Rules), Phase 14 · 36 (Scope), Phase 14 · 37 (Feedback)
 **Time:** ~55 minutes
 
@@ -81,13 +81,14 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: three verdict reports, each saved next to the script.
 
 ## Production patterns in the wild
 
-Four patterns elevate the gate from "another lint job" to "the deciding edge."
+Five patterns elevate the gate from "another lint job" to "the deciding edge."
 
 **Defense-in-depth, not single gate.** Pre-commit hook → CI status check → pre-tool authz hook → pre-merge gate. Each layer is deterministic so a failure in one layer is caught by the next. microservices.io's March 2026 playbook is explicit: the pre-commit hook is non-bypassable because, unlike a model-side skill, it does not depend on the agent following instructions. The verification gate sits at the CI / pre-merge layer.
 

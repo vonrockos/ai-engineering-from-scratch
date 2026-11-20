@@ -3,13 +3,13 @@
 > Everything from Lessons 01 to 12 is one stage of one pipeline. This lesson is the scaffold that turns those stages into a single end-to-end run: tokenize, pre-train, scale, SFT, align, evaluate, quantize, serve. You will not train a 70B model on a laptop. You will produce the orchestration layer, the manifest, the eval gate, and the rollback plan that a 2026 frontier team uses to decide what gets shipped. This is the capstone.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), Rust
 **Prerequisites:** All Phase 10 lessons 01-12
 **Time:** ~120 minutes
 
 ## Learning Objectives
 
-- Compose the eleven prior lessons (tokenizer, data, pre-training, scaling, SFT, RLHF, DPO, CAI, eval, quantization, inference) into a single reproducible pipeline spec
+- Compose the twelve prior lessons (two tokenizer lessons, data, pre-training, scaling, SFT, RLHF, DPO, CAI, eval, quantization, inference) into a single reproducible pipeline spec
 - Define the artifact contract between stages: what each stage consumes, what it produces, and how the next stage verifies the input
 - Build an orchestrator that tracks experiments, hashes artifacts, and gates ship decisions on eval thresholds
 - Design the rollback plan: which artifacts are cheap to re-run, which are expensive, and what a corrupted checkpoint costs
@@ -72,7 +72,7 @@ stages:
     cost_usd: 12
 ```
 
-The output hash of stage N is the input hash of stage N+1. Any deviation and the pipeline halts. This is how you catch data corruption early. It is also how a teammate on a different continent verifies that their replay produced the same artifact as yours.
+The output hash of stage N is the input hash of stage N+1. Any deviation and the pipeline halts. This is how you catch data corruption early. It is also how a teammate on a different continent verifies that their replay of a deterministic stage produced the same artifact as yours.
 
 In practice teams use a small YAML schema plus a manifest checker that diffs against the previous successful run. Any delta outside the expected fields (cost, wall clock) is a red flag.
 
@@ -150,7 +150,7 @@ Llama 3's reported cost was $61M. DeepSeek-V3 reported $5.6M for the main pre-tr
 
 These are not the same. *Reproducible* means the same manifest plus the same code plus the same infrastructure produces a checkpoint with equivalent downstream metrics. *Deterministic* means bit-identical output.
 
-Modern LLM training is reproducible but not deterministic. Distributed training's reduce-order, GPU kernel non-determinism (cuBLAS, flash-attn), and mixed precision rounding combine to produce floats that differ at the 1e-5 level between runs. This is fine for the final metrics, which do not move. It is fatal if you are trying to debug with bit-level diffs. The cure is to log every stage's input hash, output hash, and headline metrics -- if those match, the run is "reproduced" even if the weights are not bit-identical.
+Modern LLM training is reproducible but not deterministic. Distributed training's reduce-order, GPU kernel non-determinism (cuBLAS, flash-attn), and mixed precision rounding combine to produce floats that differ at the 1e-5 level between runs. This is fine for the final metrics, which do not move. It is fatal if you are trying to debug with bit-level diffs. The cure is to log every stage's input hash, output hash, and headline metrics. On a replay, the hashes match only for deterministic stages, such as data processing and tokenization. A training stage writes new weights, so its output hash changes. For those stages, the run is "reproduced" when the headline metrics match, even though the weights are not bit-identical.
 
 ```mermaid
 graph LR
@@ -216,10 +216,16 @@ The pipeline in `main.py` runs twelve placeholder stages, produces a manifest, a
 
 The canonical workflow has three commands.
 
-```
+```bash
 python code/main.py plan    # validate manifest, compute cost estimate, print DAG
 python code/main.py run     # execute stages, writing to manifest.out.yaml
 python code/main.py gate    # read manifest.out.yaml, apply eval gates, ship-or-hold
+```
+
+The Rust port runs the same `plan` step:
+
+```bash
+rustc --edition 2021 -O code/main.rs -o /tmp/lesson && /tmp/lesson plan
 ```
 
 Run `plan` first every time. Most pipeline bugs show up at plan time -- missing gate thresholds, stale hashes, budget overruns. Running `plan` is free. Running `run` is expensive. Save money by catching bugs on the cheap side.
@@ -249,7 +255,7 @@ This lesson produces `outputs/skill-llm-pipeline-reviewer.md`. Feed it a propose
 | Manifest | "The recipe file" | YAML or JSON describing pipeline version, seed, per-stage config, and gate thresholds — sufficient to replay a run |
 | Content-addressed | "By hash not name" | Artifacts stored by SHA-256 of their contents, so you can never confuse version A with version B |
 | Eval gate | "The ship criteria" | Numeric thresholds on benchmark metrics and safety scores that must pass before an artifact is marked shippable |
-| KL budget | "How far alignment drifted" | A cap on cumulative KL(policy || reference) across alignment stages, enforced as a gate |
+| KL budget | "How far alignment drifted" | A cap on cumulative $\mathrm{KL}(\text{policy} \Vert \text{reference})$ across alignment stages, enforced as a gate |
 | MFU | "How much of the GPU you used" | Model FLOPs Utilization — achieved FLOPs divided by theoretical peak. 40% is typical at 70B scale, 55% at 7B |
 | Rollback plan | "What we do when it breaks" | Pre-written set of actions per stage on failure: re-run, fall back, retrain with revised inputs |
 | Orchestrator | "The conductor" | The process that reads the manifest, dispatches stages, verifies hashes, halts on any contract violation |

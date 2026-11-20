@@ -3,7 +3,7 @@
 > Traditional A/B testing was not built for non-deterministic LLMs. The critical distinction: evals answer "can the model do the job?" A/B tests answer "do users care?" Both are required; shipping on vibe checks is over. What to test in 2026: prompt engineering (wording), model selection (GPT-4 vs GPT-3.5 vs OSS; accuracy vs cost vs latency), generation parameters (temperature, top-p). Real cases: a chatbot reward-model variant delivered +70% conversation length and +30% retention; Nextdoor AI subject-line experiments delivered +1% CTR after reward-function refinement; Khan Academy Khanmigo iterated on a latency-vs-math-accuracy axis. Platform split: **Statsig** (acquired by OpenAI for $1.1B in September 2025) — sequential testing, CUPED, all-in-one. **GrowthBook** — open-source, warehouse-native, Bayesian + Frequentist + Sequential engines, CUPED, SRM checks, Benjamini-Hochberg + Bonferroni corrections. You pick based on warehouse-SQL preference and whether "acquired by OpenAI" matters to your organization.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy sequential test simulator)
+**Languages:** Python, TypeScript (stdlib, toy sequential test simulator)
 **Prerequisites:** Phase 17 · 13 (Observability), Phase 17 · 20 (Progressive Deployment)
 **Time:** ~60 minutes
 
@@ -108,7 +108,7 @@ This lesson produces `outputs/skill-ab-plan.md`. Given feature change, workload,
 2. Pick Statsig or GrowthBook for a healthcare-regulated on-prem customer.
 3. Design an A/B that tests GPT-4 vs GPT-3.5 on cost-per-resolved-ticket. What's the primary metric, guardrail metric, secondary?
 4. Your canary passes but A/B shows -1.2% conversion. Do you ship? Write the escalation criteria.
-5. Apply CUPED to a pre-period with 60% of the variance of post. Compute the effective-sample-size boost.
+5. Apply CUPED with a pre-period covariate that explains 60% of the post-period variance (squared correlation 0.6). Compute the effective-sample-size boost.
 
 ## Key Terms
 

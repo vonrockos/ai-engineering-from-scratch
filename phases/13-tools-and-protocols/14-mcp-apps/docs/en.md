@@ -3,7 +3,7 @@
 > An interactive result is still an MCP tool and resource exchange. The 2026-07-28 core makes that exchange self-contained, while the Apps extension adds the sandboxed browser surface.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 13 · 07 (MCP server), Phase 13 · 10 (resources)
 **Time:** ~75 minutes
 
@@ -265,10 +265,11 @@ Run it:
 ```bash
 cd phases/13-tools-and-protocols/14-mcp-apps
 python3 code/main.py
+npx tsx code/main.ts
 python3 -m unittest discover code/tests -v
 ```
 
-Inspect four things in the output:
+Inspect five things in the output:
 
 1. Every call is independent.
 2. Every request has `_meta` capabilities.
@@ -292,7 +293,7 @@ This lesson ships `outputs/skill-mcp-apps-spec.md`. Use it to review an App cont
 2. Send `Mcp-Name: ui://notes/other.html` with a body that reads the timeline. Confirm error `-32020`.
 3. Change the resource to `cacheScope: private`. Describe the user-specific condition that justifies it.
 4. Move the script to `https://static.example.com/app.js`. Add that origin to `resourceDomains` and explain the new supply-chain risk.
-5. Add an `notes_open` tool and route the button click through the host. Keep user approval in the host.
+5. Add a `notes_open` tool and route the button click through the host. Keep user approval in the host.
 
 ## Key Terms
 

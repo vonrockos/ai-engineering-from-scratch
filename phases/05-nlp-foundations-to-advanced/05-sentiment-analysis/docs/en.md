@@ -3,7 +3,7 @@
 > The canonical NLP task. Most of what you need to know about classical text classification shows up here.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 2 · 14 (Naive Bayes)
 **Time:** ~75 minutes
 
@@ -200,7 +200,7 @@ pipe.fit(X_train, y_train)
 print(pipe.score(X_test, y_test))
 ```
 
-Three things to notice. `stop_words=None` keeps negations. `ngram_range=(1, 2)` adds bigrams so `not_good` becomes a feature. `sublinear_tf=True` dampens repeated words. These three flags are the difference between a 75%-accurate baseline and an 85%-accurate baseline on SST-2.
+Three things to notice. `stop_words=None` keeps negations. `ngram_range=(1, 2)` adds bigrams so `not good` becomes a feature (scikit-learn joins the two words with a space). `sublinear_tf=True` dampens repeated words. These three flags are the difference between a 75%-accurate baseline and an 85%-accurate baseline on SST-2.
 
 ### When to reach for a transformer
 

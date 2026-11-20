@@ -3,13 +3,13 @@
 > Pre-gen, during-gen, post-gen. Three checkpoints, one verdict, an audit trail per request.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 18 safety lessons, Phase 19 Track A lessons 25-29
 **Time:** ~90 min
 
 ## Problem
 
-Lessons 82-86 in this track each shipped a single piece: a taxonomy, an input detector, an evaluation framework, an output classifier, a rules engine. A real safety gate has to compose them, run them at the right moment in the request lifecycle, decide what action to take when they disagree, and produce a trace a reviewer can read on Monday morning. The composition is the lesson.
+Lessons 82-86 in this track each shipped a single piece: a taxonomy, an input detector, an evaluation framework, an output classifier, a rules engine. A real safety gate has to compose the runtime pieces (the lesson 83 detector, the lesson 85 classifier, and the lesson 86 rules engine), run them at the right moment in the request lifecycle, decide what action to take when they disagree, and produce a trace a reviewer can read on Monday morning. The composition is the lesson.
 
 The gate sits at three checkpoints. Pre-gen runs before the model is called: the detector from lesson 83 looks at the prompt and either passes it, blocks it outright (high-confidence attack), or attaches a flag for downstream layers to weigh. During-gen runs as the model emits tokens: a streaming filter buffers chunks and terminates the stream early if a forbidden phrase appears (prefix-injection survives this if the gate only looks post-hoc). Post-gen runs after the model finishes: the classifier router from lesson 85 and the rules engine from lesson 86 inspect the full output, the gate aggregates their verdicts with the pre-gen signal, and the gate applies a final action.
 
@@ -35,11 +35,11 @@ The aggregator combines four severity signals: detector confidence (lesson 83), 
 
 | Signal state | Action |
 |---|---|
+| detector confidence >= 0.85 on a non-benign category | block before generation |
 | any high severity | block |
-| any medium severity | redact |
-| any low severity | warn |
-| all none + detector confidence < 0.5 | allow |
-| detector confidence 0.5-0.85, no other signal | warn |
+| any medium severity (detector confidence 0.5 to 0.85, or early stream termination) | redact |
+| any low severity (detector confidence below 0.5 on a non-benign category) | warn |
+| detector says benign and no other signal | allow |
 
 Block returns a refusal. Redact ships the classifier-redacted text and applies the rules-engine fixer. Warn ships the original with a soft notice. Allow ships the original. Each request emits a `RequestTrace` with `request_id`, `prompt`, `pre_gen` (detector verdict), `during_gen` (token-filter trigger), `post_gen` (classifier action + rules report), `final_action`, `final_output`, and `latency_ms`.
 
@@ -59,7 +59,7 @@ The demo runs all 50 taxonomy fixtures plus 10 benign prompts. The trace summary
 
 ## Use It
 
-`python3 main.py`. The demo loads everything, runs end-to-end, prints the summary table, and writes the trace artifact. Exit code is zero. The demo is self-terminating in the literal sense: each request runs to completion or early termination and the gate moves to the next.
+`python3 main.py` or `npx tsx main.ts`. The demo loads everything, runs end-to-end, prints the summary table, and writes the trace artifact. Exit code is zero. The demo is self-terminating in the literal sense: each request runs to completion or early termination and the gate moves to the next.
 
 ## Ship It
 

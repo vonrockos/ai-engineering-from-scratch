@@ -3,7 +3,7 @@
 > In 2023 a chatbot answered a question in one turn. In 2026 a frontier model routinely runs minutes to hours on a single task. METR's Time Horizon 1.1 benchmark (January 2026) puts Claude Opus 4.6 at 14+ hours of expert work at 50% reliability. The horizon has been doubling roughly every seven months since GPT-2. Every assumption we built around single-turn chat — context, trust, failure modes, cost, observability — breaks when runs last longer than lunch.
 
 **Type:** Learn
-**Languages:** Python (stdlib, horizon-curve simulator)
+**Languages:** Python, TypeScript (stdlib, horizon-curve simulator)
 **Prerequisites:** Phase 14 · 01 (The Agent Loop)
 **Time:** ~45 minutes
 
@@ -50,7 +50,7 @@ Practical consequence: a horizon number is a capability ceiling, not a reliabili
 | Property | Chatbot (single-turn) | Long-horizon agent |
 |---|---|---|
 | Run length | seconds | minutes to hours |
-| Tokens per run | 10^3 | 10^5 to 10^7 |
+| Tokens per run | $10^3$ | $10^5$ to $10^7$ |
 | State | ephemeral | durable, checkpointed |
 | Failure surface | model capability | capability + drift + loops + hacking |
 | Review unit | final answer | trajectory |

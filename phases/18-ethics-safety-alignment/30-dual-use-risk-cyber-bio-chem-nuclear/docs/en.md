@@ -3,7 +3,7 @@
 > The 2026 dual-use picture, domain by domain. Bio/chem: Lesson 17 covers WMDP; Anthropic's bioweapon-acquisition trial (2.53x uplift) and OpenAI's April 2025 Preparedness Framework v2 warning ("on the cusp of meaningfully helping novices create known biological threats") mark the inflection point. Cyber (November 2025 Anthropic report): Chinese-linked state actors used Claude's agentic coding tool to automate up to 90% of a cyberattack campaign, with human intervention only in 4-6 steps; OpenAI "trusted access" pilot gives vetted security organisations capability access for defensive dual-use work. Chem/bio execution gap erosion: the classic defense was "information access alone is insufficient." Vision-enabled frontier models (GPT-5.2, Gemini 3 Pro, Claude Opus 4.5, Grok 4.1) can observe wet-lab video and provide real-time correction. December 2025: OpenAI demonstrated GPT-5 iterating on wet-lab experiments, achieving 79x efficiency improvement via AI-driven protocol optimization. Novice-vs-expert pattern: AI provides greater relative uplift to novices but greater absolute capability to experts.
 
 **Type:** Learn
-**Languages:** none
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 18 · 17 (WMDP), Phase 18 · 18 (safety frameworks), Phase 18 · 28 (ecosystem)
 **Time:** ~75 minutes
 
@@ -16,7 +16,7 @@
 
 ## The Problem
 
-Lesson 17 is the measurement methodology. Lesson 30 is the 2026 state of the measurement. The picture shifted materially between 2024 and late 2025: each domain crossed a threshold that the 2024 frameworks did not anticipate.
+Lesson 17 is the measurement methodology. Lesson 30 is the 2026 state of the measurement. The picture shifted materially between 2024 and late 2025: three of the four domains crossed a threshold that the 2024 frameworks did not anticipate.
 
 ## The Concept
 
@@ -47,6 +47,8 @@ Implications:
 - Agentic coding is the attack-automation primitive. Previous AI cyber assistance was bounded at code-snippet level; agentic workflows integrate reconnaissance, exploitation, post-exploitation, and exfiltration.
 - The 4-6 human steps are the bottleneck; future capability gains would reduce that count.
 - Defensive dual-use: OpenAI's "trusted access" pilot provides vetted security organisations (established incident-response firms, government) with capability access for defense. Asymmetry in access favors defenders if the pilot scales.
+
+The defensive side of this work starts with reading compiled code you are allowed to analyze. The reverse engineering track in Phase 13 teaches it on programs you build yourself, with static analysis only: an ELF reader in [Lesson 13.32](../../../13-tools-and-protocols/32-program-anatomy-elf-from-scratch/docs/en.md), disassembly in [Lesson 13.33](../../../13-tools-and-protocols/33-disassembly-and-control-flow/docs/en.md), lifting to pseudocode in [Lesson 13.34](../../../13-tools-and-protocols/34-lifting-to-pseudocode/docs/en.md), and an evidence ledger that keeps observed facts apart from inferred ones in [Lesson 13.35](../../../13-tools-and-protocols/35-evidence-confidence-and-unknowns/docs/en.md). The [Inside a Decompiler](https://aiengineeringfromscratch.com/inside-a-decompiler) machine shows the full pipeline on one function. An agent that does this work needs the same ledger, because a confident decompilation can still rest on a guess.
 
 ### Nuclear
 

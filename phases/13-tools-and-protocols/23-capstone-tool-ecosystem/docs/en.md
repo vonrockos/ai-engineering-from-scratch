@@ -3,7 +3,7 @@
 > A production agent system is a set of boundaries, not a pile of features. This capstone separates a readable in-process simulation from the protocol clients, authorization server, sandbox, and telemetry exporter a real deployment still needs.
 
 **Type:** Build
-**Languages:** Python (stdlib, in-process simulation)
+**Languages:** Python (stdlib, in-process simulation), TypeScript
 **Prerequisites:** Phase 13 · 01 through 22, using MCP revision `2026-07-28`
 **Time:** ~120 minutes
 
@@ -203,9 +203,10 @@ Run the in-process harness:
 ```bash
 cd phases/13-tools-and-protocols/23-capstone-tool-ecosystem
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
-Inspect five things:
+Inspect six things:
 
 1. `server/discover` advertises revision `2026-07-28` and the Tasks extension.
 2. Alice can read and generate a report, while Bob's write-scoped call is denied.

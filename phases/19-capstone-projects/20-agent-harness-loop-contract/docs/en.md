@@ -3,7 +3,7 @@
 > The harness is the agent. The model is a coprocessor. This lesson freezes the loop contract you can wire any model into.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 13 lessons 01-07, Phase 14 lesson 01
 **Time:** ~90 minutes
 
@@ -43,7 +43,7 @@ stateDiagram-v2
     DONE --> [*]
 ```
 
-`IDLE` is the only legal entry point. `DONE` is the only legal exit. `AWAITING_TOOL` is the only state that yields a pull point. Every other transition is internal.
+`IDLE` is the only legal entry point. `DONE` is the only legal exit. `AWAITING_TOOL` is the only state that yields a pull point by itself. The second pull point, `on_pause`, is not a state: it fires from any active state when the budget runs out or a hook asks for review. Every other transition is internal.
 
 The state machine is deterministic. Given the same event log, the harness re-enters the same state. That property is what lets you replay sessions for debugging without re-calling the model.
 

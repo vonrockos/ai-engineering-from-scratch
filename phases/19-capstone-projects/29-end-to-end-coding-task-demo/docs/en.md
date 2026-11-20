@@ -3,7 +3,7 @@
 > Track A's payoff. This lesson stitches the gate chain, the sandbox, the eval harness, and the OTel spans into one working coding agent that fixes a real (small, fixture-scale) bug in a multi-file Python project. The agent is a deterministic policy, not an LLM; the substitution makes the lesson reproducible and shows that the harness was the interesting part all along. The contract is identical: a real model plugs in at the policy seam.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 19 · 25 (verification gates), Phase 19 · 26 (sandbox), Phase 19 · 27 (eval harness), Phase 19 · 28 (observability), Phase 14 · 38 (verification gates), Phase 14 · 41 (workbench for real repos), Phase 14 · 42 (agent workbench capstone)
 **Time:** ~90 minutes
 
@@ -21,7 +21,7 @@ Most agent demos work in isolation: a sandbox by itself, an eval harness by itse
 
 The gate chain says ALLOW but the sandbox refuses for a reason the chain did not anticipate. The eval harness records a pass but the OTel spans say the gate refused a tool the agent claims it used. The Prometheus counter is incremented twice when it should be incremented once. The observation budget is exceeded but the agent kept going because the budget was tracked in the chain and the sandbox didn't know.
 
-This lesson is the integration test for the whole track. The agent has to do four things in order: read the project, run the tests, identify the bug from the test failure, write the fix, rerun the tests, and stop. Every operation goes through the gate chain. Every tool execution goes through the sandbox. Every step is wrapped in a span. The eval harness scores the whole thing at the end.
+This lesson is the integration test for the whole track. The agent has to do six things in order: read the project, run the tests, identify the bug from the test failure, write the fix, rerun the tests, and stop. Every operation goes through the gate chain. Every tool execution goes through the sandbox. Every step is wrapped in a span. The eval harness scores the whole thing at the end.
 
 ## The Concept
 
@@ -113,6 +113,7 @@ This lesson is the integration. Lesson 25 wrote the gate chain. Lesson 26 wrote 
 ```bash
 cd phases/19-capstone-projects/29-end-to-end-coding-task-demo
 python3 code/main.py
+npx tsx code/main.ts
 python3 -m pytest code/tests/ -v
 ```
 

@@ -27,7 +27,7 @@ manuals/<id>/
   figures/src/<figure-id>.js  optional figure kit source for each figure
   capture/                    the capture kit and its output in capture/out/
   research/brief.md           the fact brief the sections were written from
-  research/sources/           vendored primary sources for quote checks, with their license
+  research/sources/           vendored primary sources that the research checks against, with their license
 ```
 
 The `<id>` is lowercase and hyphenated, such as `a2a-101`. It matches the directory name.
@@ -44,7 +44,7 @@ The `<id>` is lowercase and hyphenated, such as `a2a-101`. It matches the direct
 | `outcomes` | at least three things the reader can do after the manual |
 | `palette` | the colour table: each `hue` and the one `meaning` it has in this manual |
 | `sources` | the ranked source list: `name`, `path`, `usedFor` |
-| `quoteSources` | map from a citation key such as `spec` to a vendored file, for quote checks; `null` declares a key whose quotes cannot be checked |
+| `quoteSources` | map from a source key such as `spec` to a vendored file; `null` declares a key with no vendored file. Every source marker must use a declared key |
 | `capture` | `run` and `check` argv arrays, run from the manual directory, and an optional `timeoutSeconds` for the check (default 300) |
 | `front` | the front matter file |
 | `plate` | the cover figure: `figure`, `title`, `caption` |
@@ -56,7 +56,7 @@ The `<id>` is lowercase and hyphenated, such as `a2a-101`. It matches the direct
 
 ## The shape of a manual
 
-**Front matter.** One document, `front.md`, titled "How to read this manual". It covers, in order: who the manual is for and what they can do after it, how it was made (the ranked sources table), the capture kit, the conventions, a first run the reader can do offline, how the parts are ordered (a `parts` block), colour in figures (a `palette` block), and figure 0.1, which teaches the arrow and colour grammar this manual uses.
+**Front matter.** One document, `front.md`, titled "How to read this manual". It covers, in order: who the manual is for and what they can do after it, how it was made (the ranked sources table), the capture kit, the conventions, a first run the reader can do offline, how the parts are ordered (a `parts` block), colour in figures (a `palette` block), and figure 0.1, which teaches the arrow and colour grammar this manual uses. A user-first manual can open with a quickstart instead, and move how it was made, the capture kit, and the conventions to a reference section titled "How this manual was made" that the front matter links to. SGLang 101 uses this form.
 
 **Part 1, the subject on one page.** Two sections, read once and completely:
 
@@ -76,7 +76,7 @@ The `<id>` is lowercase and hyphenated, such as `a2a-101`. It matches the direct
 3. An opening paragraph that starts from a concrete situation, then says "When you finish this section, you can ...". The outcome sentence must be in the first two paragraphs.
 4. The body: `##` subsections, definition paragraphs that start with `**Term:**`, figures, listings, and tables.
 5. Exactly one `takeaways` block. It says what to do with the section, as actions.
-6. A final `Sources: ...` paragraph that names every file the section was written from.
+6. A final `Sources: ...` paragraph that names every file the section was written from. The audit reads it. The reader view does not render it.
 
 Reference sections and the front matter need a thesis and a sources line, but no outcome sentence or takeaways.
 
@@ -92,7 +92,7 @@ The renderer accepts a small subset so that every edition renders the same way.
 | paragraphs, lists | plain paragraphs, `-` or `1.` lists, one level only |
 | tables | pipe tables with a header row |
 | emphasis | `**bold**`, `*italic*`, inline code |
-| citation | `{{spec §4.1}}` renders as a small mono citation |
+| citation | `{{spec §4.1}}` stays in the source for verification and renders nothing |
 | cross-reference | `[the effect](#s-5-3)` or `[figure](#fig-5-3)`; print adds the page number |
 | repository link | `[the lesson](phases/13-tools-and-protocols/19-a2a-protocol)` |
 | code | fenced blocks with a language tag |
@@ -129,14 +129,14 @@ note: The history array is cut after the first message.
 ```
 ````
 
-A quoted rule. The quote is checked verbatim against the file that `quoteSources` maps to the citation key:
+A rule from a source, stated in our own words. The `source` key must be declared in `quoteSources`:
 
 ````text
 ```rule
 label: the core rule
 source: spec §3.1
 ---
-"Quoted text, word for word."
+The server must reply with a task.
 ```
 ````
 
@@ -151,9 +151,11 @@ Takeaways, two or more actions:
 
 Generated blocks take no body: `parts`, `palette`, `figure-index`, and `contents`.
 
+A code block or a listing is highlighted at build time. The `lang` of a listing and the tag of a code block follow the convention in [CONTRIBUTING.md](../CONTRIBUTING.md#code-blocks): `bash` for commands, `console` for a session with `$ ` prompts, `text` for output and logs, and `ansi` for coloured logs. A `text` or `ansi` listing gets no Copy button. A `console` block copies its commands only.
+
 ## Figures
 
-### Nine kinds
+### Ten kinds
 
 | Kind | Use it for |
 |---|---|
@@ -166,8 +168,9 @@ Generated blocks take no body: `parts`, `palette`, `figure-index`, and `contents
 | `state` | a state machine with its transitions |
 | `decision` | where something fails and what each outcome means |
 | `layers` | a stack of layers with the parts each one owns |
+| `chart` | measured runs plotted on axes: sweeps, distributions, and the spread over repeated runs |
 
-The templates in [_shared/templates](_shared/templates) show one of each, drawn with the figure kit.
+The templates in [_shared/templates](_shared/templates) show one of each, drawn with the figure kit. A `chart` uses [_shared/chart.js](_shared/chart.js) on top of the figure kit and reads its numbers from a summary file that the capture kit writes, so the figure and the data cannot drift apart.
 
 ### Colour
 
@@ -240,20 +243,57 @@ module.exports = figure('fig-1-2', {
 
 Save it as `figures/src/fig-1-2.js` and run `node manuals/_shared/figkit.js build manuals/<id>`. The audit fails when a committed SVG differs from its source. A figure without a source file is checked as a hand-written SVG.
 
+### Object forms and project marks
+
+Two shared modules draw objects that say what they are. [_shared/forms.js](_shared/forms.js) holds the forms, and [_shared/marks.js](_shared/marks.js) holds the project marks. Use them on the cover plate and in architecture figures. Never use them in a chart, a timeline, or a decision figure.
+
+- A form must say what the object is, such as a terminal, a gateway with ports, a server tower, or a database cylinder.
+- A surface shows containment. A floor tile is a group such as a namespace, and a platform slab is a host. An open frame is a pod, and a shell with walls is a sandbox.
+- A layered stack is a workload with its state layers. Its dashed variant is a workload that is stopped or suspended.
+- Each form takes the figure, the isometric view, a position, a hue, and an optional mark. It returns anchor points for arrows and labels.
+- Each form has a flat variant under `forms.flat`, a front view of about 28 to 44 units. Use it in sequence, flow, structure, and layers figures, where depth would fight the data.
+
+A mark is the logo of a real project. The `mark` method of the figure kit draws it as one path in one palette colour.
+
+- A mark comes only from the official artwork of the project. Never draw a mark from memory.
+- `marks.js` records the source and the license or trademark note of each mark. Add both when you add a mark.
+- Each mark returns its path on an isometric face, on a floor, or flat.
+- Leave a mark out when it does not read at the size you have. A label alone is correct.
+- The sources page of the manual says that the marks belong to their owners.
+
+```javascript
+const forms = require('../../../_shared/forms.js');
+
+const view = forms.isoView(f, { ox: 250, oy: 160, angle: 'true' });
+const router = forms.gateway(f, view, [-28, -28, 0], 'indigo', { mark: 'envoy' });
+f.leader([120, 40], router.top);
+forms.flat.tower(f, 420, 16, 'blue', { mark: 'substrate' });
+```
+
+Keep the two modules out of `figures/src`, because the build treats every file there as a figure.
+
 ## Listings and the capture kit
 
 - A JSON, HTTP, SSE, or JSONL block must be a `listing` with a `source`. The audit fails a `json` fence that is not a listing.
 - The capture kit lives in `capture/`. It runs offline, needs no network and no keys, and follows the repository dependency allowlist.
+- One exception: a manual about a library may install that library and its pinned companion packages in the kit's own environment, listed with exact versions in `capture/requirements.txt`. Its lab scripts and demos may use them too. Everything else stays on the allowlist, and the kit's `check` prints `skipped` with the reason when the packages are not installed.
 - A subject that is a proprietary binary or a hosted service cannot run offline in CI. Its kit records on the author's machine with the pinned binaries installed. Its `check` compares stored outputs after masking, and when the subject is not installed it prints `skipped` with the reason and exits 0. The front matter names the captures recorded that way and the machine they were recorded on.
 - `capture.run` writes `capture/out/`. `capture.check` writes to a temporary directory and compares with `capture/out/` after masking values that change on every run, such as timestamps and generated ids. The audit runs `capture.check` and fails on drift.
-- A listing head names its source file, so a reader can open the full record.
+- A listing names its source file in the `source:` field, so the build and the audit can check the excerpt. The reader view shows the title and the language, not the file path.
 
 ## Sources and quotes
 
 - `sources` in `manual.json` is ranked by authority. When two sources disagree, the higher one wins and the text says so.
 - Vendor a source under `research/sources/` only when its license allows it, and keep its license file beside it.
-- Every `rule` block and every inline quote followed by a citation such as `{{spec §4.1}}` must use a key declared in `quoteSources`. The build fails on an undeclared key or a missing file.
-- The audit checks each of those quotes, word for word, against the vendored file for its key. A key declared as `null` marks a source that cannot be vendored, and its quotes are not checked.
+- The manuals present our own research, so we write every claim in our own words. Do not quote prose from a spec, docs, an issue, a post, or a code comment. Keep the force of a MUST, SHOULD, or MAY with "must", "should", or "is allowed to".
+- Quote marks are for literal strings only: log lines, error messages, CLI output, field values, and titles of reports. Put literal output in code font where you can.
+- Name another team only where you show their research or results, once, in plain prose, such as "SemiAnalysis measured ...".
+- Every source marker such as `{{spec §4.1}}` and every `rule` block must use a key declared in `quoteSources`. The build fails on an undeclared rule key or a missing file, and the audit flags an undeclared marker key.
+- The audit flags quoted prose of 24 or more characters next to a source marker, and a `rule` block that starts with a quote mark.
+- Citations, `Sources:` lines, and listing source paths live in the markdown for verification. They never render in a section. A reader sees no file paths, capture file names, commits, or citation chips in the prose.
+- Evidence is linked, never printed. A listing with a `source:` gets a "Full log" link to that file on GitHub. A paragraph that starts with **We measured** gets one "Raw runs" link: the summary file of the machine that the paragraph or its heading names, or the capture folder, when the section's `Sources:` line lists it. When that line lists several files under `capture/lab/summary`, the link goes to the one that a figure under the same heading cites, or to the summary folder. A section with no evidence path in its `Sources:` line gets no link. A ` ```lab-runs``` ` block renders one row for each sweep in `capture/gpu/summary/`. The build fails when a linked path does not exist.
+- A figure caption can end with a sentence that starts with "From" and names its sources. The reader view drops that sentence.
+- The sources reference page is the one place a reader sees where the facts came from. Write it for people: the kinds of sources, such as the code and docs, our measured runs, issues and pull requests, and papers, and the external reports by title and date. Do not list repository file paths there.
 
 ## Prose
 
@@ -272,7 +312,7 @@ The audit enforces these limits from Simplified Technical English:
 
 The word list is `LEXICON` in `scripts/audit_manuals.js`. Each entry names the plain word to use instead.
 
-Quotes, code, and citations are exempt.
+Code, literal strings, and source markers are exempt.
 
 ## Build and check
 
@@ -290,4 +330,4 @@ npx --yes pagedjs-cli@0.4.3 dist/manuals/<id>/print.html -o dist/manuals/aiefs-m
 
 - A `draft` manual builds at `/manual-<id>.html` with `noindex` and is not listed.
 - A `ready` manual is listed on the manuals page, needs a `README.md`, and adds a PDF to each release.
-- Commit one section per commit, with its figures and the captures it adds: `feat(manual/<id>): <section slug>`.
+- Size commits by judgment. A section with its figures and the captures it adds is a good unit: `feat(manual/<id>): <section slug>`. A small fix across sections can be one commit.

@@ -3,7 +3,7 @@
 > Treat the KV cache as a first-class, reusable resource stored in a radix tree, and scheduling changes with it: instead of FCFS (first-come, first-served) as vLLM schedules, a cache-aware scheduler prioritizes requests with longer shared prefixes — effectively a depth-first radix traversal so hot branches stay resident in HBM. SGLang is the engine that built serving around this idea. On Llama 3.1 8B with ShareGPT-like 1K prompts, SGLang hits ~16,200 tok/s to vLLM's ~12,500, a ~29% edge. On prefix-heavy RAG workloads the advantage reaches 6.4x. On voice-cloning-shaped workloads cache hit rate cleared 86%. Deployed on 400,000+ GPUs in 2026 across xAI, LinkedIn, Cursor, Oracle, GCP, Azure, AWS. The gotcha is that the 6.4x number evaporates when prefix ordering is inconsistent — ordering is the engineer's lever.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy radix-tree cache + cache-aware scheduler)
+**Languages:** Python, TypeScript (stdlib, toy radix-tree cache + cache-aware scheduler)
 **Prerequisites:** Phase 17 · 04 (Serving Engine Internals), Phase 14 (Agentic RAG)
 **Time:** ~75 minutes
 
@@ -93,6 +93,8 @@ roofline
 ## Use It
 
 `code/main.py` implements a toy radix-tree KV cache plus a scheduler with two policies: FCFS and cache-aware. Runs the same workload through both, reports prefix-cache hit rate and throughput delta. Then runs a "scrambled ordering" workload to show the 6.4x collapse.
+
+The [Inside an LLM Serving GPU](https://aiengineeringfromscratch.com/inside-an-llm-serving-gpu?workload=shared&shared=4096) machine shows the radix cache on a real L4 run. Four groups each have their own 4,096-token system prompt. The first request of a group computes its prompt. While that prompt stays in the cache, later requests of the group compute only the 128-token question. Switch the radix cache off to see the median first token go from 479 ms to 14,706 ms.
 
 ## Ship It
 

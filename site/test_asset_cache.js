@@ -106,7 +106,7 @@ function responseHeaders(url) {
 }
 
 test('HTML and mutable scripts/styles must revalidate, including old query strings', () => {
-  for (const url of ['/', '/index.html', '/projects.html', '/project.html', '/projects', '/project', '/learning-paths', '/prereqs', '/about', '/catalog',
+  for (const url of ['/', '/index.html', '/projects.html', '/project.html', '/projects', '/project', '/learning-paths', '/roadmap', '/about', '/catalog',
     '/header.js?v=20260927a', '/style.css?v=old', '/figures/projects/dataset-split-auditor.js']) {
     const policy = responseHeaders(url)['cache-control'];
     assert.match(policy, /(?:^|, )max-age=0(?:,|$)/, url);
@@ -139,7 +139,7 @@ test('server-rendered pages revalidate in browsers while keeping CDN reuse and e
     template: '<!-- AIFS:CERTIFICATION-SEO:START --><!-- AIFS:CERTIFICATION-SEO:END --><!-- AIFS:CERTIFICATION-FALLBACK:START --><!-- AIFS:CERTIFICATION-FALLBACK:END -->',
     manifest: { tracks: { example: { id: 'example', title: 'Example' } } },
   }) });
-  for (const result of [invoke(lesson, { path: lessonPath }), invoke(certification, { id: 'example' }),
+  for (const result of [invoke(lesson, { cleanPhase: 'math', cleanLesson: 'vectors' }), invoke(certification, { id: 'example' }),
     invoke(require('../api/markdown'), { path: '/' })]) {
     assert.equal(result.status, 200);
     assert.match(result.headers['cache-control'], /(?:^|, )max-age=0(?:,|$)/);

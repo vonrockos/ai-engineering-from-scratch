@@ -3,7 +3,7 @@
 > GPT-4o's product demo in May 2024 was disruptive not because of the underlying model but because of the product shape — a voice interface where you talk, the model sees what the camera sees, and it talks back in under 250ms. The open ecosystem spent the rest of 2024 and 2025 racing to reach that product surface. Qwen2.5-Omni (March 2025) is the reference open design: a Thinker (large text-generating transformer) plus a Talker (parallel speech-generating transformer), linked by streaming speech tokens. Mini-Omni simplified it, Moshi matched its latency, GLM-4-Voice extended it to Chinese. This lesson reads the Thinker-Talker architecture and the latency budget that makes streaming real-time dialogue work.
 
 **Type:** Build
-**Languages:** Python (stdlib, streaming pipeline latency simulator + VAD loop)
+**Languages:** Python (stdlib, streaming pipeline latency simulator + VAD loop), TypeScript
 **Prerequisites:** Phase 12 · 19 (audio-LLMs), Phase 12 · 16 (any-to-any)
 **Time:** ~180 minutes
 
@@ -12,7 +12,7 @@
 - Split the inference pipeline into Thinker (text reasoning) and Talker (speech synthesis) and explain why parallel streaming works.
 - Compute the time-to-first-audio-byte (TTFAB) budget for a conversational interaction, component by component.
 - Describe TMRoPE's time-aligned position encoding across vision, audio, and text within the Thinker.
-- Name the three real-time conversational patterns: half-duplex, turn-taking, full-duplex.
+- Name the two real-time conversational patterns, half-duplex and full-duplex, and explain how VAD turn-taking drives the half-duplex handoff.
 
 ## The Problem
 
@@ -41,10 +41,10 @@ The separation matters. Thinker has to be big for good reasoning. Talker can be 
 
 Running both in parallel:
 
-1. Thinker emits text token t_i.
-2. Talker consumes t_i (via streaming) and emits speech tokens s_i, s_{i+1}, ..., s_{i+k}.
+1. Thinker emits text token $t_i$.
+2. Talker consumes $t_i$ (via streaming) and emits speech tokens $s_i, s_{i+1}, \ldots, s_{i+k}$.
 3. Speech decoder consumes speech tokens as they come and emits audio samples.
-4. By the time Thinker is at text token t_{i+3}, Talker has already streamed audio for t_0..t_{i+2}.
+4. By the time Thinker is at text token $t_{i+3}$, Talker has already streamed audio for $t_0, \ldots, t_{i+2}$.
 
 ### TMRoPE — time-aligned multimodal positions
 
@@ -85,7 +85,7 @@ For a typical streaming interaction:
 - Residual-VQ decode: 30ms.
 - Speech waveform decode: 50-80ms.
 
-Total TTFAB: 320-510ms at 7B, 600-900ms at 70B. Frontier quality usually means 70B+; hence the frontier latency gap.
+Total TTFAB: 320-490ms at 7B, 600-900ms at 70B. Frontier quality usually means 70B+; hence the frontier latency gap.
 
 ### Token-rate math
 

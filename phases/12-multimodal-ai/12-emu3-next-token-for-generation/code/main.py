@@ -40,9 +40,9 @@ def token_table() -> None:
         TokCost("image 512x512",  512, 8),
         TokCost("image 1024x1024", 1024, 8),
         TokCost("image 2048x2048", 2048, 8),
-        TokCost("video 4s @8fps 256x256", 256, 4, 4.0, 8, 4),
-        TokCost("video 10s @8fps 256x256", 256, 4, 10.0, 8, 4),
-        TokCost("video 4s @8fps 512x512", 512, 4, 4.0, 8, 4),
+        TokCost("video 4s @8fps 256x256", 256, 8, 4.0, 8, 4),
+        TokCost("video 10s @8fps 256x256", 256, 8, 10.0, 8, 4),
+        TokCost("video 4s @8fps 512x512", 512, 8, 4.0, 8, 4),
     ]
     print(f"{'config':<32}{'tokens':>12}{'seconds @30tps':>18}")
     for c in configs:
@@ -75,7 +75,7 @@ def sample(probs: list[float]) -> int:
 
 
 def demo_cfg() -> None:
-    print("\nCLASSIFIER-FREE GUIDANCE — effect on logit shape")
+    print("\nCLASSIFIER-FREE GUIDANCE: effect on logit shape")
     print("-" * 60)
     cond = [2.0, 4.0, 1.0, 3.5, 0.5]
     uncond = [1.0, 2.0, 1.5, 1.8, 1.2]
@@ -119,7 +119,7 @@ def demo_sampling() -> None:
 
 def main() -> None:
     print("=" * 60)
-    print("EMU3 — NEXT-TOKEN PREDICTION FOR IMAGE + VIDEO (Phase 12, Lesson 12)")
+    print("EMU3: NEXT-TOKEN PREDICTION FOR IMAGE + VIDEO (Phase 12, Lesson 12)")
     print("=" * 60)
 
     token_table()
@@ -127,9 +127,9 @@ def main() -> None:
     demo_sampling()
 
     print("\n" + "=" * 60)
-    print("EMU3 vs SDXL — high-level compute picture")
+    print("EMU3 vs SDXL: high-level compute picture")
     print("-" * 60)
-    print("  training    : comparable (~300B tokens / ~300M image-steps)")
+    print("  training    : Emu3 does not publish a token count; exercise 4 assumes 300B")
     print("  inference   : Emu3 slow (~2min per 512x512 at 30 tps)")
     print("                SDXL fast (~2-5s per 512x512)")
     print("  quality     : Emu3 matches or beats on FID/GenEval")

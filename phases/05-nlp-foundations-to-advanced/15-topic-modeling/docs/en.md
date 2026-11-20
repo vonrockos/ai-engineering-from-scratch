@@ -3,7 +3,7 @@
 > LDA: documents are mixtures of topics, topics are distributions over words. BERTopic: documents cluster in embedding space, clusters are topics. Same goal, different decompositions.
 
 **Type:** Learn
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 02 (BoW + TF-IDF), Phase 5 · 03 (Word2Vec)
 **Time:** ~45 minutes
 
@@ -174,7 +174,7 @@ Refuse BERTopic on documents longer than the embedding model's context window wi
 | Mixed membership | Doc is multiple topics | LDA assigns each document a distribution over all topics. |
 | UMAP | Dimensionality reduction | Manifold learning that preserves local structure; used in BERTopic. |
 | HDBSCAN | Density clustering | Finds variable-size clusters; produces "noise" label (-1) for outliers. |
-| c_v coherence | Topic quality metric | Average pointwise mutual information of top topic words within sliding windows. |
+| c_v coherence | Topic quality metric | NPMI of top topic words over sliding windows, turned into context vectors and compared with cosine similarity. |
 
 ## Further Reading
 

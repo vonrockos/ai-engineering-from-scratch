@@ -57,10 +57,14 @@ def phase_title(phase):
     return read_h1(PHASES / phase / "README.md") or slug_to_title(phase.split("-", 1)[-1])
 
 
+def strip_number(name):
+    return re.sub(r"^\d+-", "", name)
+
+
 def urls_for(phase, lesson):
     rel = f"phases/{phase}/{lesson}"
     return {
-        "web": f"{SITE}/lesson?path={rel}",
+        "web": f"{SITE}/learn/{strip_number(phase)}/{strip_number(lesson)}",
         "code": f"{REPO}/tree/main/{rel}/code",
         "repo": f"{REPO}/tree/main/{rel}",
     }
@@ -330,6 +334,7 @@ def render(vol, md, chapters, pdf=False):
         "-o", str(epub),
         "--from", "markdown+fenced_divs",
         "--lua-filter", str(ROOT / "book" / "literal-tokens.lua"),
+        "--lua-filter", str(ROOT / "book" / "math-blocks.lua"),
         "--toc", "--toc-depth=1",
         "--top-level-division=chapter",
         "--css", str(ROOT / "book" / "epub.css"),
@@ -364,6 +369,7 @@ def render(vol, md, chapters, pdf=False):
             "-o", str(pdf_out),
             "--from", "markdown+fenced_divs+autolink_bare_uris",
             "--lua-filter", str(ROOT / "book" / "literal-tokens.lua"),
+            "--lua-filter", str(ROOT / "book" / "math-blocks.lua"),
             "--lua-filter", str(ROOT / "book" / "pdf-layout.lua"),
             "--toc", "--toc-depth=1",
             "--top-level-division=chapter",

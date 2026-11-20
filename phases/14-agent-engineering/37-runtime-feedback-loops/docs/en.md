@@ -3,7 +3,7 @@
 > Agents that do not see real command output guess. A feedback runner captures stdout, stderr, exit code, and timing into a structured record the next turn can read. Then the agent reacts to facts instead of to its own prediction of facts.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 32 (Minimal Workbench), Phase 14 · 35 (Init Script)
 **Time:** ~50 minutes
 
@@ -72,6 +72,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: three feedback records appended to `feedback_record.jsonl`, the last one of each printed inline. Tail the file across re-runs to see the loop accumulate.
@@ -106,7 +107,7 @@ The runner is a thin wrapper that survives every framework migration because it 
 2. Add a `redaction` step that strips lines matching `^Bearer ` or `password=`. Test on a fixture record.
 3. Cap total `feedback_record.jsonl` size at 1 MB by rotating to `.1`, `.2` files. Defend the rotation policy.
 4. Add a `parent_command_id` so retry chains are visible: which command produced the input that the next command consumed.
-5. Pipe the JSONL into a tiny TUI that highlights the latest non-zero exit. Eight key features the TUI must show to be useful in a review.
+5. Pipe the JSONL into a tiny TUI that highlights the latest non-zero exit. List eight key features the TUI must show to be useful in a review.
 
 ## Key Terms
 

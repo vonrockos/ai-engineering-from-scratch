@@ -3,7 +3,7 @@
 > Every VLM we have seen so far keeps images and text separate. Visual tokens come from a vision encoder, flow into a projector, then meet text inside the LLM. The vision and text vocabularies never overlap. Chameleon (Meta, May 2024) asked: what if they did? Train a VQ-VAE that turns an image into a sequence of discrete tokens from a shared vocabulary. Every multimodal document is now one sequence — text tokens and image tokens interleaved, a single autoregressive loss. Side effect: the model can generate mixed-modality outputs — alternating text and image tokens in a single inference call. This lesson reads the early-fusion thesis and builds a toy version end to end.
 
 **Type:** Build
-**Languages:** Python (stdlib, VQ-VAE tokenizer + interleaved decoder)
+**Languages:** Python, TypeScript (stdlib, VQ-VAE tokenizer + interleaved decoder)
 **Prerequisites:** Phase 12 · 05, Phase 8 (Generative AI)
 **Time:** ~180 minutes
 
@@ -39,7 +39,7 @@ The tokenizer is a vector-quantized variational autoencoder. The architecture:
 
 Training: VAE reconstruction loss + commitment loss + codebook loss. The codebook indices form a discrete alphabet for images.
 
-For Chameleon: one image becomes 32*32 = 1024 tokens drawn from a vocabulary of 8192. Concatenate with text tokens (from the LLM's BPE vocabulary, say 32000). Final vocabulary: 40192. The transformer sees one sequence, one loss.
+For Chameleon: one image becomes 32*32 = 1024 tokens drawn from a vocabulary of 8192. Put those image IDs in the same ID space as the text BPE tokens. Chameleon's single tokenizer has 65,536 entries, and that count already includes the 8192 image codes and the special tokens such as the image separators. The transformer sees one sequence, one loss.
 
 ### The shared vocabulary
 

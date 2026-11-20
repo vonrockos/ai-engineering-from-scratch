@@ -5,7 +5,7 @@
 > **Spec note (2026-07-28):** Dynamic Client Registration is deprecated in favor of Client ID Metadata Documents. DCR remains a compatibility mechanism. When it is used, the client declares the correct `application_type`. A client validates a present RFC 9207 `iss` value and never reuses credentials across authorization-server issuers.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 13 · 16 (OAuth 2.1 state machine), Phase 13 · 17 (gateways)
 **Time:** ~90 minutes
 
@@ -329,6 +329,7 @@ From the repository root, run:
 ```bash
 cd phases/13-tools-and-protocols/18-mcp-auth-production
 python3 code/main.py
+npx tsx code/main.ts
 python3 -m unittest discover -s code/tests -v
 ```
 
@@ -354,7 +355,7 @@ This lesson produces `outputs/skill-mcp-auth.md`. Given an MCP server config and
 
 ## Exercises
 
-1. Run `code/main.py`. Trace the flow. Note how the IdP rotates a key in step 6, the scheduled `refresh_jwks` re-pulls the published set, and both the old token (overlap window) and a fresh token validate without restart.
+1. Run `code/main.py`. Trace the flow. Note how the IdP rotates a key in step 6 of the script output (step 7 of the flow above), the scheduled `refresh_jwks` re-pulls the published set, and both the old token (overlap window) and a fresh token validate without restart.
 
 2. Add a new IdP to the protected-resource metadata's `authorization_servers` list. Issue a token signed by the new IdP and confirm the validator accepts it. Issue a token signed by an unlisted IdP and confirm the validator rejects with `WWW-Authenticate: Bearer error="invalid_token", error_description="iss not allowed"`.
 

@@ -3,7 +3,7 @@
 > The agent that wrote the code cannot grade it. A reviewer is a second loop with a different system prompt, a different goal, and read-only access to everything the builder produced. The gap between builder and reviewer is where most reliability lives.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 14 · 38 (Verification Gate)
 **Time:** ~55 minutes
 
@@ -43,7 +43,7 @@ Five dimensions, each scored 0 to 2.
 | Verification quality | Does the acceptance command actually prove the goal, or did it prove a weaker version? |
 | Handoff readiness | Could the next session pick up cleanly from the current state? |
 
-Total out of 10. A run below 7 is a soft fail; a run below 5 is a hard fail.
+Total out of 10. A run below 7 is a soft fail; a run below 5, or any dimension at 0, is a hard fail.
 
 ### The reviewer is a separate role, not a separate model
 
@@ -74,6 +74,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Output: two review reports written to disk and a console table of dimensional scores.

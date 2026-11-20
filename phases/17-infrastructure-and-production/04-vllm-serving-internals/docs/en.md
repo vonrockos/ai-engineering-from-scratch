@@ -3,7 +3,7 @@
 > Modern serving-engine throughput rests on three compounding defaults, not a single trick. PagedAttention is always on. Continuous batching injects new requests into the active batch between decode iterations. Chunked prefill slices long prompts so decode tokens never starve. Turn all three on and a Llama 3.3 70B FP8 on one H100 SXM5 pushes 2,200-2,400 tok/s at 128 concurrent — roughly 25% above vLLM's own default and 3-4x a naive PyTorch loop. This lesson reads the scheduler and attention kernel of vLLM — the reference engine for all three techniques — at a level you can diagram, and ends with a toy continuous batcher in `code/main.py` that schedules prefill and decode the way vLLM does.
 
 **Type:** Learn
-**Languages:** Python (stdlib, toy continuous batching scheduler)
+**Languages:** Python, TypeScript (stdlib, toy continuous batching scheduler)
 **Prerequisites:** Phase 17 · 01 (Model Serving), Phase 11 (LLM Engineering)
 **Time:** ~75 minutes
 
@@ -11,7 +11,7 @@
 
 - Explain PagedAttention as a KV cache allocator: blocks, block tables, and why fragmentation stays under 4% at production load.
 - Diagram continuous batching at the iteration level: how finished sequences leave the batch and new ones join without draining.
-- Describe chunked prefill in one sentence and name which latency metric it protects (hint: it is TTFT tail, not mean throughput).
+- Describe chunked prefill in one sentence and name which latency metric it protects (hint: it is the ITL tail of concurrent decodes, not mean throughput).
 - Check a vLLM feature combination against the compatibility matrix for your version before enabling every optimization at once.
 
 ## The Problem
@@ -44,7 +44,7 @@ Continuous batching operates between each decode step. Call the set of running s
 
 The batch size is never padded to a fixed number. Sequences at different positions in their output share one fused forward. In 2026 vLLM this is called the `V1 scheduler`. The key invariant: the scheduler runs once per decode iteration, not once per request.
 
-### Chunked prefill protects TTFT tail
+### Chunked prefill protects the ITL tail
 
 Prefill is compute-bound. A 32k-token prompt on Llama 3.3 70B takes ~800 ms of pure prefill on one H100. While prefill runs, decode tokens for every other sequence in the batch wait. In a serving loop, the first-token latency (TTFT) of one long prompt becomes the inter-token latency (ITL) blip for dozens of other users.
 
@@ -130,7 +130,7 @@ This lesson produces `outputs/skill-vllm-scheduler-reader.md`. Given a serving c
 | Chunked prefill | "prefill splitting" | Break long prefill into 512-token slices interleaved with decode |
 | TTFT | "first token time" | Prefill + queue + network; dominated by prefill at long prompts |
 | ITL | "inter-token latency" | Time between consecutive decode tokens; dominated by batch size |
-| Goodput | "throughput that meets SLO" | Tokens/sec where every request still hit TTFT and ITL targets |
+| Goodput | "throughput that meets SLO" | Requests/sec that still hit TTFT and ITL targets (Phase 17 · 08 reports it as the share of requests) |
 | V1 scheduler | "the new scheduler" | vLLM's 2026 scheduler; runs continuous batching with chunked prefill |
 | `--gpu-memory-utilization` | "the memory knob" | Fraction of HBM reserved for KV blocks after weights and activations |
 

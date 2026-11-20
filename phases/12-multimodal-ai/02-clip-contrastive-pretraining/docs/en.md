@@ -3,7 +3,7 @@
 > OpenAI's CLIP (2021) proved a single idea big enough to power the next five years: align an image encoder and a text encoder in the same vector space using only noisy web image-caption pairs and a contrastive loss. Zero supervised labels. 400M pairs. The resulting embedding space does zero-shot classification, image-text retrieval, and plugs into every 2026 VLM as its vision tower. SigLIP 2 (2025) replaced softmax with sigmoid and scaled past CLIP at lower cost. This lesson walks the math from InfoNCE to sigmoid pairwise loss and builds the training step in stdlib Python.
 
 **Type:** Build
-**Languages:** Python (stdlib, InfoNCE + sigmoid loss implementations)
+**Languages:** Python, TypeScript (stdlib, InfoNCE + sigmoid loss implementations)
 **Prerequisites:** Phase 12 · 01 (ViT patches), Phase 7 (Transformers)
 **Time:** ~180 minutes
 
@@ -35,10 +35,10 @@ CLIP has two towers:
 
 Both towers normalize their outputs to unit length. Similarity is `cos(f(x), g(y)) = f(x)^T g(y)` since both are unit-norm.
 
-For a batch of N (image, caption) pairs, build the similarity matrix `S` of shape `(N, N)`:
+For a batch of $N$ (image, caption) pairs, build the similarity matrix `S` of shape `(N, N)`:
 
-```
-S[i, j] = cos(f(x_i), g(y_j)) / tau
+```math
+S[i, j] = \cos(f(x_i), g(y_j)) / \tau
 ```
 
 where `tau` is a learned temperature (CLIP initializes to 0.07; learned in log-space).
@@ -57,7 +57,7 @@ This is InfoNCE. The softmax in CE forces each image to match its caption more t
 
 ### Temperature
 
-`tau` controls the sharpness of the softmax. Low tau → sharp distribution, hard negative mining effect. High tau → soft, all samples contribute. CLIP learns log(1/tau), clipped to prevent collapse. SigLIP 2 fixes the initial tau and uses a learned bias instead.
+`tau` controls the sharpness of the softmax. Low $\tau$ → sharp distribution, hard negative mining effect. High $\tau$ → soft, all samples contribute. CLIP learns $\log(1/\tau)$, clipped to prevent collapse. SigLIP 2 fixes the initial $\tau$ and uses a learned bias instead.
 
 ### Why sigmoid scales better (SigLIP)
 
@@ -65,8 +65,8 @@ Softmax needs the whole similarity matrix in sync. In distributed training you m
 
 SigLIP replaces softmax with element-wise sigmoid: for each pair `(i, j)`, the loss is a binary classification of "are these the matching pair?" positive class labels are the diagonal, everything else is negative. The loss is:
 
-```
-L = -1/N sum over (i, j) [ y_ij log sigmoid(S[i,j]) + (1-y_ij) log sigmoid(-S[i,j]) ]
+```math
+L = -\frac{1}{N} \sum_{(i, j)} \Big[ y_{ij} \log \mathop{\mathrm{sigmoid}}(S[i,j]) + (1-y_{ij}) \log \mathop{\mathrm{sigmoid}}(-S[i,j]) \Big]
 ```
 
 `y_ij = 1` if `i == j`, else 0. Each pair's loss is independent. No all-gather needed. Each GPU computes its local block and sums. SigLIP 2 scales to batch 32k-512k cheaply where CLIP would need proportionally more communication.
@@ -132,7 +132,7 @@ This lesson produces `outputs/skill-clip-zero-shot.md`. Given a set of images (v
 
 3. Build a zero-shot classifier for cats vs dogs. Try two prompt templates: `a photo of a {class}` and `a picture of a {class}`. Measure accuracy on 100 test images. Does the ensemble of templates beat single?
 
-4. Compute the communication cost of softmax InfoNCE vs sigmoid pairwise for a 512-GPU run at batch 32k. Which scales as O(N), which as O(N^2)? Cite SigLIP Section 4.
+4. Compute the communication cost of softmax InfoNCE vs sigmoid pairwise for a 512-GPU run at batch 32k. Which scales as $O(N)$, which as $O(N^2)$? Cite SigLIP Section 4.
 
 5. Read the OpenCLIP scaling-laws paper (arXiv:2212.07143, Cherti et al.). Reproduce their conclusion for data scaling from the figures: at fixed model size, what is the log-linear relationship between ImageNet zero-shot accuracy and training data size?
 

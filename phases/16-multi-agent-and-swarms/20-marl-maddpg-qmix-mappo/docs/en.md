@@ -3,7 +3,7 @@
 > The reinforcement-learning heritage of multi-agent coordination, which still informs LLM-agent systems in 2026. **MADDPG** (Lowe et al., NeurIPS 2017, arXiv:1706.02275) introduced Centralized Training, Decentralized Execution (CTDE): each critic sees all agents' states and actions during training; at test time only local actors run. Works for cooperative, competitive, and mixed settings. **QMIX** (Rashid et al., ICML 2018, arXiv:1803.11485) is value-decomposition with a monotonic mixing network; per-agent Qs combine into joint Q so `argmax` distributes cleanly — dominant on StarCraft Multi-Agent Challenge (SMAC). **MAPPO** (Yu et al., NeurIPS 2022, arXiv:2103.01955) is PPO with a centralized value function; "surprisingly effective" on particle-world, SMAC, Google Research Football, Hanabi with minimal tuning. These underpin training policies for agent teams that must act decentrally. MAPPO is the **default 2026 cooperative-MARL baseline**. This lesson builds each from a small grid-world toy and lands the three ideas in muscle memory before touching LLM-agent training.
 
 **Type:** Learn
-**Languages:** Python (stdlib, small NumPy-free implementations)
+**Languages:** Python (stdlib, small NumPy-free implementations), TypeScript
 **Prerequisites:** Phase 09 (Reinforcement Learning), Phase 16 · 09 (Parallel Swarm Networks)
 **Time:** ~90 minutes
 
@@ -42,10 +42,10 @@ Failure mode: critics grow with N agents (input includes all actions). Does not 
 
 ### QMIX (2018) — value decomposition
 
-Cooperative only. Global reward is the sum of a monotone function of per-agent Q-values:
+Cooperative only. The joint action-value `Q_tot` is a monotone mixing function of per-agent Q-values:
 
-```
-Q_tot(tau, a) = f(Q_1(tau_1, a_1), ..., Q_n(tau_n, a_n)),   df/dQ_i >= 0
+```math
+Q_{\text{tot}}(\tau, a) = f\big(Q_1(\tau_1, a_1), \ldots, Q_n(\tau_n, a_n)\big), \quad \frac{\partial f}{\partial Q_i} \ge 0
 ```
 
 The monotonicity guarantees `argmax_a Q_tot` can be computed by each agent choosing `argmax_{a_i} Q_i` independently. That is **exactly the decentralized execution property** you need. At training time, a mixing network produces `Q_tot` from the per-agent Qs.
@@ -117,6 +117,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Expected output: independent agents take ~6 steps on average; CTDE variants converge toward ~3.5 steps (optimal for the 4x4 grid is 3). The pattern difference shows up despite scripted policies.

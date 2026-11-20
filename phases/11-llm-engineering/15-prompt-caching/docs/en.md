@@ -3,7 +3,7 @@
 > Your system prompt is 4,000 tokens. Your RAG context is 20,000 tokens. You send both with every request. You also pay for both — every time. Prompt caching lets the provider keep that prefix warm on their side and bill you 10% of the normal rate on reuse. Used correctly, it cuts inference cost by 50–90% and first-token latency by 40–85%.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 11 · 01 (Prompt Engineering), Phase 11 · 05 (Context Engineering), Phase 11 · 11 (Caching and Cost)
 **Time:** ~60 minutes
 
@@ -46,7 +46,7 @@ Violate the order — put the user message above the system prompt, interleave d
 
 ### The break-even calculation
 
-Anthropic's 25% write premium means a cached block has to be read at least twice to net-save money. 1 write + 1 read averages 0.675x cost per request (saves 32%); 1 write + 10 reads averages 0.205x (saves 80%). Rule of thumb: cache anything you expect to reuse at least 3 times within the TTL.
+Anthropic's 25% write premium (5-minute TTL) pays for itself on the first read, because a cache read costs 0.1x. 1 write + 1 read averages 0.675x cost per request (saves 32%); 1 write + 10 reads averages 0.205x (saves 80%). The 1-hour TTL charges 2x for the write, so that block needs two reads to come out ahead. Rule of thumb: cache anything you expect to reuse at least 3 times within the TTL; that clears break-even on either TTL.
 
 ```figure
 prompt-cache-hit

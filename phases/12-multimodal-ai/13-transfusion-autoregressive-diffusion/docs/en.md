@@ -3,7 +3,7 @@
 > Chameleon and Emu3 bet everything on discrete tokens. They work, but the quantization bottleneck is visible — the image quality plateaus below continuous-space diffusion models. Transfusion (Meta, Zhou et al., August 2024) takes the opposite bet: keep images continuous, drop the VQ-VAE entirely, and train one transformer with two losses. Text tokens get next-token-prediction. Image patches get a flow-matching / diffusion loss. Both objectives optimize the same weights. The architecture underlying Stable Diffusion 3 (MMDiT) is a close cousin. This lesson reads the Transfusion thesis, builds a toy two-loss trainer, and traces the attention mask that lets one transformer do both jobs.
 
 **Type:** Build
-**Languages:** Python (stdlib, two-loss trainer on MNIST-scale toy)
+**Languages:** Python, TypeScript (stdlib, two-loss trainer on MNIST-scale toy)
 **Prerequisites:** Phase 12 · 11 (Chameleon), Phase 8 (Generative AI)
 **Time:** ~180 minutes
 
@@ -51,7 +51,7 @@ The mask:
 M[i, j] = 1 if:
   (i is text and j is text and j <= i)   # causal for text
   OR (i is image and j is image and same_image_block(i, j))   # bidirectional within image
-  OR (i is text and j is image and j < i_image_end)   # text attends to previous images
+  OR (i is text and j is image and j < i)   # text attends to images that closed before it
   OR (i is image and j is text and j < i_image_start)   # image attends to preceding text
 ```
 
@@ -62,9 +62,9 @@ Implemented as a block-triangular mask at training and inference.
 The diffusion loss is standard: add noise to an image patch, ask the model to predict the noise (or the clean patch, equivalently). Transfusion's version uses flow matching — predict the velocity field from noisy to clean.
 
 During training:
-1. For each image patch x0, sample a random timestep t.
-2. Sample noise ε, compute xt = (1-t) * x0 + t * ε (linear interpolation for flow matching).
-3. The transformer predicts v_theta(xt, t); loss = MSE(v_theta(xt, t), ε - x0).
+1. For each image patch $x_0$, sample a random timestep $t$.
+2. Sample noise $\epsilon$, compute $x_t = (1-t) \cdot x_0 + t \cdot \epsilon$ (linear interpolation for flow matching).
+3. The transformer predicts $v_\theta(x_t, t)$; $\text{loss} = \mathop{\mathrm{MSE}}(v_\theta(x_t, t), \epsilon - x_0)$.
 4. Backprop alongside text NTP losses from the same sequence.
 
 At inference, generation is:
@@ -97,7 +97,7 @@ Downside: Transfusion is a dual-loss model, making training dynamics trickier. L
 
 Janus-Pro (Lesson 12.15) refines Transfusion's idea by decoupling the vision encoder for understanding and generation — SigLIP for one, VQ for the other — while sharing the transformer body. Show-o (Lesson 12.14) swaps diffusion for discrete-diffusion (masked prediction). The unified-generation family branches rapidly after Transfusion.
 
-2026 production VLMs that emit images — Gemini 3 Pro, GPT-5, Claude Opus 4.7's image generation path — almost certainly use some descendant of this family. Details are proprietary.
+Closed production models that emit images natively may use some descendant of this family, but their architectures are not published, so treat any such claim as a guess.
 
 ```figure
 cfg-guidance-scale
@@ -111,7 +111,7 @@ cfg-guidance-scale
 - Images are 4x4 grids of bytes.
 - A pair of shared-weight linear projections acts as the transformer stand-in; NTP loss on text, MSE loss on noisy patches.
 - Training loop alternates the two losses, attention mask is explicit.
-- Generation produces a text caption and a 4x4 image in one forward pass.
+- A mask demo prints the block-triangular attention pattern for a text, image, text sequence. Generation is not run: a real sampler would decode text token by token, then denoise the image patches over many steps, as the exercises below count.
 
 The transformer is a toy. The two-loss plumbing, attention mask construction, and inference loop are the real artifacts.
 

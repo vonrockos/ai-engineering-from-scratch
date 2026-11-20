@@ -3,7 +3,7 @@
 > Pair a frontier coding model with an evolutionary loop and a machine-checkable evaluator. Let the loop run long enough. It discovers a 4x4 complex-matrix multiplication procedure that uses 48 scalar multiplications — the first improvement over Strassen in 56 years. It also finds a Google-wide Borg scheduling heuristic that recovers ~0.7% of cluster compute in production. The architecture is boring on purpose. The wins come from the evaluator's rigor.
 
 **Type:** Learn
-**Languages:** Python (stdlib, evolutionary-loop toy)
+**Languages:** Python, TypeScript (stdlib, evolutionary-loop toy)
 **Prerequisites:** Phase 15 · 01 (long-horizon framing), Phase 15 · 02 (self-taught reasoning)
 **Time:** ~60 minutes
 
@@ -58,7 +58,7 @@ The fix in AlphaEvolve: ship a held-out evaluator the LLM has never seen, with i
 
 The LLM can produce compilable, semantically plausible modifications. A random-mutation GA on a 2000-line Python file almost always produces syntax errors. The LLM also concentrates search on plausible neighborhoods (change one function, not random bytes) which dramatically reduces wasted evaluator calls.
 
-The evaluator, in turn, catches the LLM's confabulations. LLMs will confidently claim that a function "is O(n log n) in the limit" when it is actually O(n^2); a wall-clock benchmark makes the question settled.
+The evaluator, in turn, catches the LLM's confabulations. LLMs will confidently claim that a function "is $O(n \log n)$ in the limit" when it is actually $O(n^2)$; a wall-clock benchmark makes the question settled.
 
 ### Where AlphaEvolve fits in the frontier stack
 

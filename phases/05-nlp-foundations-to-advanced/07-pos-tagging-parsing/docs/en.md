@@ -3,7 +3,7 @@
 > Grammar was unfashionable for a while. Then every LLM pipeline needed to validate structured extraction, and it came back.
 
 **Type:** Build
-**Languages:** Python
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 5 · 01 (Text Processing), Phase 2 · 14 (Naive Bayes)
 **Time:** ~45 minutes
 
@@ -80,8 +80,8 @@ On the Brown corpus, this baseline hits ~85% accuracy. Not good, but the floor b
 
 Model the joint probability of the sequence:
 
-```
-P(tags, words) = prod P(tag_i | tag_{i-1}) * P(word_i | tag_i)
+```math
+P(\text{tags}, \text{words}) = \prod_i P(\text{tag}_i \mid \text{tag}_{i-1}) \cdot P(\text{word}_i \mid \text{tag}_i)
 ```
 
 Two tables: transition probabilities (tag given previous tag), emission probabilities (word given tag). Estimate both from counts with Laplace smoothing. Decode with Viterbi (dynamic programming over the tag lattice).

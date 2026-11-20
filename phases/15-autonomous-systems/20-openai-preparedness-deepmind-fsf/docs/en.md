@@ -3,7 +3,7 @@
 > OpenAI Preparedness Framework v2 (April 2025) introduces Research Categories — Long-range Autonomy, Sandbagging, Autonomous Replication and Adaptation, Undermining Safeguards — distinct from Tracked Categories. Tracked Categories trigger Capabilities Reports plus Safeguards Reports reviewed by the Safety Advisory Group. DeepMind's FSF v3 (September 2025, with Tracked Capability Levels added April 17, 2026) folds autonomy into ML R&D and Cyber domains (ML R&D autonomy level 1 = fully automate the AI R&D pipeline at competitive cost vs human + AI tools). FSF v3 explicitly addresses deceptive alignment via automated monitoring for instrumental-reasoning misuse. The honest note: Research Categories in PF v2 (including Long-range Autonomy) do not automatically trigger mitigations; the policy language is "potential." DeepMind itself says automated monitoring "will not remain sufficient long-term" if instrumental reasoning strengthens.
 
 **Type:** Learn
-**Languages:** Python (stdlib, three-framework decision-table diff tool)
+**Languages:** Python (stdlib, three-framework decision-table diff tool), TypeScript
 **Prerequisites:** Phase 15 · 19 (Anthropic RSP)
 **Time:** ~45 minutes
 
@@ -30,7 +30,7 @@ Key framing in v2: Research Categories do not automatically trigger mitigations.
 
 Structure:
 
-- **Critical Capability Levels (CCLs)**: capability thresholds across five domains: Cyber, Bio, ML R&D, CBRN, Autonomy (folded into ML R&D and Cyber).
+- **Critical Capability Levels (CCLs)**: capability thresholds in three groups: misuse (CBRN, Cyber, Harmful Manipulation), ML R&D, and an exploratory misalignment track. Autonomy is not its own domain; it is folded into ML R&D and Cyber.
 - **Tracked Capability Levels**: additional granularity added in April 2026. Concrete example: ML R&D autonomy level 1 = fully automate the AI R&D pipeline at competitive cost vs human + AI tools.
 - **Deceptive alignment monitoring**: explicit commitment to automated monitoring for instrumental-reasoning misuse.
 
@@ -94,7 +94,7 @@ a5-tracked-vs-research
 | Tracked Category | "Mandatory mitigation" | Triggers Capabilities + Safeguards Reports; SAG review |
 | Research Category | "Monitored only" | Tracked but no automatic mitigation; includes Long-range Autonomy |
 | Frontier Safety Framework | "DeepMind's scaling policy" | FSF v3 (Sept 2025) + Tracked Capability Levels (Apr 2026) |
-| CCL | "Critical Capability Level" | DeepMind threshold per domain (Cyber, Bio, ML R&D, CBRN) |
+| CCL | "Critical Capability Level" | DeepMind threshold per domain (CBRN, Cyber, Harmful Manipulation, ML R&D) |
 | ML R&D autonomy level 1 | "R&D automation" | Fully automate AI R&D pipeline at competitive cost |
 | Sandbagging | "Strategic underperformance" | Model underperforms on evals; in OpenAI Research Categories |
 | Instrumental reasoning | "Means-ends reasoning" | Reasoning about how to achieve goals; target of DeepMind monitoring |

@@ -11,6 +11,24 @@
   var NARROW_HEADER_QUERY = '(max-width: 820px)';
   var NARRATION_VERSION = '20260829a';
   var UI_I18N_VERSION = '20261010a';
+  var STAR_NUDGE_VERSION = '20261013a';
+  var THEME_MENU_VERSION = '20261029a';
+  var COMPACT_HEADER_QUERY = '(max-width: 1180px)';
+  var PRIORITY_LABELS = ['catalog', 'learning paths', 'projects', 'practice', 'interviews'];
+  var COMPACT_PRIORITY_COUNT = 3;
+  var NAV_ORDER = [
+    'how-to-learn.html', 'skills.html', 'catalog.html', 'learning-paths.html', 'index.html#contents',
+    'roadmap.html', 'projects.html', 'practice.html', 'interviews.html', 'manuals.html',
+    'cheatsheets.html', 'highlights.html', 'glossary.html', 'index.html#books', 'certifications.html',
+    'blogs.html', 'whats-new.html', 'about.html', 'sponsors.html'
+  ];
+  var TAB_ITEMS = [
+    { href: 'catalog.html', label: 'Learn', icon: 'M3 4h7v16H3zM14 4h7v16h-7z' },
+    { href: 'learning-paths.html', label: 'Paths', icon: 'M5 19V9M5 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM19 5v10M19 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM5 19h8a6 6 0 0 0 6-6' },
+    { href: '/practice', label: 'Practice', icon: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z' },
+    { href: 'projects.html', label: 'Projects', icon: 'M4 20l6-6M14 4l6 6-8 8-6-6z' },
+    { href: 'roadmap.html', label: 'Progress', icon: 'M4 20V10M10 20V4M16 20v-7M22 20H2' }
+  ];
   var navId = 0;
 
   function isStaticPreview(locationValue) {
@@ -21,6 +39,24 @@
       hostname === '127.0.0.1' ||
       hostname === '::1' ||
       hostname === '[::1]';
+  }
+
+  function cleanLessonHref(pathname, suffix) {
+    if (!/(^|\/)lesson$/.test(pathname) || suffix.charAt(0) !== '?') return '';
+    var hashIndex = suffix.indexOf('#');
+    var hash = hashIndex < 0 ? '' : suffix.slice(hashIndex);
+    var params;
+    try {
+      params = new URLSearchParams(hashIndex < 0 ? suffix : suffix.slice(0, hashIndex));
+    } catch (_) {
+      return '';
+    }
+    var match = /^phases\/([a-z0-9][a-z0-9-]*)\/([a-z0-9][a-z0-9-]*)$/.exec(params.get('path') || '');
+    if (!match || params.has('track')) return '';
+    params.delete('path');
+    var query = params.toString();
+    var base = pathname.slice(0, -'lesson'.length) || '/';
+    return base + 'learn/' + match[1].replace(/^\d+-/, '') + '/' + match[2].replace(/^\d+-/, '') + (query ? '?' + query : '') + hash;
   }
 
   function adaptRouteHref(href, locationValue) {
@@ -36,13 +72,14 @@
     var boundary = href.search(/[?#]/);
     var pathname = boundary < 0 ? href : href.slice(0, boundary);
     var suffix = boundary < 0 ? '' : href.slice(boundary);
-    var pages = '(index|about|catalog|glossary|prereqs|developer|contact|privacy|sponsors|projects|project|learning-paths|certifications|certification|assessment|lesson|blogs|manuals|manual-[a-z0-9-]+)';
+    var pages = '(index|about|catalog|glossary|roadmap|developer|contact|privacy|sponsors|projects|project|learning-paths|certifications|certification|assessment|lesson|blogs|manuals|manual-[a-z0-9-]+|inside-an-ai-agent|inside-a-decompiler|inside-an-llm-serving-gpu|skills|how-to-learn|highlights|whats-new)';
     if (isStaticPreview(locationValue)) {
       return pathname.replace(new RegExp('(^|/)' + pages + '$'), '$1$2.html') + suffix;
     }
-    return pathname.replace(new RegExp('(^|/)' + pages + '\\.html$'), function (_, prefix, page) {
+    var cleanPathname = pathname.replace(new RegExp('(^|/)' + pages + '\\.html$'), function (_, prefix, page) {
       return page === 'index' ? (prefix || './') : prefix + page;
-    }) + suffix;
+    });
+    return cleanLessonHref(cleanPathname, suffix) || cleanPathname + suffix;
   }
 
   function adaptRouteLink(link) {
@@ -177,6 +214,24 @@
     document.head.appendChild(script);
   }
 
+  function ensureStarNudge() {
+    if (window.AIFSStarNudge || document.querySelector('script[data-aifs-star-nudge]')) return;
+    var script = document.createElement('script');
+    script.src = 'star-nudge.js?v=' + STAR_NUDGE_VERSION;
+    script.async = true;
+    script.setAttribute('data-aifs-star-nudge', STAR_NUDGE_VERSION);
+    document.head.appendChild(script);
+  }
+
+  function ensureThemeMenu() {
+    if (window.AIFSThemeMenu || document.querySelector('script[data-aifs-theme-menu]')) return;
+    var script = document.createElement('script');
+    script.src = 'theme-menu.js?v=' + THEME_MENU_VERSION;
+    script.async = true;
+    script.setAttribute('data-aifs-theme-menu', THEME_MENU_VERSION);
+    document.head.appendChild(script);
+  }
+
   function ensureNewsletter() {
     if (document.querySelector('script[data-aifs-newsletter]')) return;
     var stylesheet = document.createElement('link');
@@ -184,7 +239,7 @@
     stylesheet.href = 'newsletter.css?v=20260926b';
     document.head.appendChild(stylesheet);
     var script = document.createElement('script');
-    script.src = 'newsletter.js?v=20260926b';
+    script.src = 'newsletter.js?v=20261118a';
     script.async = true;
     script.setAttribute('data-aifs-newsletter', 'true');
     document.head.appendChild(script);
@@ -222,6 +277,8 @@
       target = 'projects.html';
     } else if (current === 'certification.html' || current === 'assessment.html') {
       target = 'certifications.html';
+    } else if (/^\/interviews(?:\/|$)/.test(location.pathname)) {
+      target = 'interviews.html';
     } else if (/^manual-[a-z0-9-]+\.html$/.test(current)) {
       target = 'manuals.html';
     } else if (current === 'lesson.html') {
@@ -259,11 +316,47 @@
 
   function addNavigationLinks(nav) {
     ensureNavigationLink(nav, 'learning-paths.html', 'Learning Paths', '');
+    ensureNavigationLink(nav, 'how-to-learn.html', 'How to Learn', '');
     ensureNavigationLink(nav, 'projects.html', 'Projects', '');
     ensureNavigationLink(nav, 'manuals.html', 'Manuals', '');
+    ensureNavigationLink(nav, '/cheatsheets', 'Cheat Sheets', '');
+    ensureNavigationLink(nav, '/practice', 'Practice', '');
+    ensureNavigationLink(nav, '/interviews', 'Interviews', '');
+    ensureNavigationLink(nav, 'skills.html', 'Skills', '');
+    ensureNavigationLink(nav, 'highlights.html', 'My Highlights', '');
     ensureNavigationLink(nav, '/blogs', 'Blogs & Guides', '');
+    ensureNavigationLink(nav, '/whats-new', "What's New", '');
     ensureNavigationLink(nav, 'certifications.html', 'Certifications', 'header-mobile-only');
     ensureNavigationLink(nav, 'sponsors.html', 'Sponsor us', 'header-mobile-only');
+  }
+
+  function navigationKey(href) {
+    var file = pageFile(href);
+    if (file !== 'index.html') return file;
+    try {
+      return file + new URL(href, location.href).hash;
+    } catch (_) {
+      return file;
+    }
+  }
+
+  function orderNavigationLinks(nav) {
+    var links = Array.prototype.filter.call(nav.children, function (child) {
+      return child.tagName === 'A' && !child.classList.contains('header-github');
+    });
+    var rank = function (link) {
+      var index = NAV_ORDER.indexOf(navigationKey(link.href));
+      return index < 0 ? NAV_ORDER.length : index;
+    };
+    var ordered = links.map(function (link, index) {
+      return { link: link, rank: rank(link), index: index };
+    }).sort(function (a, b) {
+      return a.rank - b.rank || a.index - b.index;
+    });
+    var anchor = nav.querySelector('.header-github');
+    ordered.forEach(function (entry) {
+      nav.insertBefore(entry.link, anchor || null);
+    });
   }
 
   function setupNavigation(header) {
@@ -273,6 +366,7 @@
     if (!inner || !nav || !logo || inner.querySelector('.header-menu-toggle')) return;
 
     addNavigationLinks(nav);
+    orderNavigationLinks(nav);
     syncCurrentPage(header);
 
     navId += 1;
@@ -301,7 +395,7 @@
     });
     routeLinks.forEach(function (link) {
       var label = link.textContent.trim().toLowerCase();
-      if (label !== 'contents' && label !== 'catalog' && label !== 'learning paths') return;
+      if (PRIORITY_LABELS.indexOf(label) < 0) return;
       var marker = document.createComment('header-priority-' + label);
       nav.insertBefore(marker, link);
       priorityEntries.push({ link: link, marker: marker });
@@ -324,6 +418,7 @@
       return child.classList && child.classList.contains('search-toggle');
     });
     var narrow = window.matchMedia ? window.matchMedia(NARROW_HEADER_QUERY) : null;
+    var compact = window.matchMedia ? window.matchMedia(COMPACT_HEADER_QUERY) : null;
     var open = false;
 
     function isMovableTool(child) {
@@ -347,8 +442,11 @@
     }
 
     function movePriorityLinksOut() {
+      var limit = compact && compact.matches ? COMPACT_PRIORITY_COUNT : priorityEntries.length;
       for (var i = 0; i < priorityEntries.length; i++) {
-        priorityNav.appendChild(priorityEntries[i].link);
+        var entry = priorityEntries[i];
+        if (i < limit) priorityNav.appendChild(entry.link);
+        else nav.insertBefore(entry.link, entry.marker.nextSibling);
       }
       priorityNav.hidden = priorityEntries.length === 0;
     }
@@ -371,6 +469,7 @@
     }
 
     function syncLayout() {
+      if (window.AIFSThemeMenu && typeof window.AIFSThemeMenu.close === 'function') window.AIFSThemeMenu.close();
       var isNarrow = narrow ? narrow.matches : false;
       var menuHadFocus = nav.contains(document.activeElement);
       var priorityHadFocus = priorityNav.contains(document.activeElement);
@@ -395,16 +494,20 @@
       if (open && !header.contains(event.target)) setOpen(false, false);
     });
     document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape' && open && !event.defaultPrevented) {
+      if (event.key === 'Escape' && open && !event.defaultPrevented && !document.querySelector('.lang-panel:not([hidden]), #aifsThemeMenu:not([hidden])')) {
         event.preventDefault();
         setOpen(false, true);
       }
+    });
+    document.addEventListener('aifs:overlayopen', function (event) {
+      if (open && event.detail && event.detail.source === 'palette') setOpen(false, false);
     });
 
     if (narrow) {
       if (typeof narrow.addEventListener === 'function') narrow.addEventListener('change', syncLayout);
       else if (typeof narrow.addListener === 'function') narrow.addListener(syncLayout);
     }
+    if (compact && typeof compact.addEventListener === 'function') compact.addEventListener('change', syncLayout);
 
     if (typeof MutationObserver === 'function') {
       var observer = new MutationObserver(function (mutations) {
@@ -420,17 +523,129 @@
     syncLayout();
   }
 
+  var BANNER_KEY = 'aifs:banner:dismissed';
+  var BANNER_ID = 'manuals-20261114';
+  var BANNER_HTML = '<div class="site-banner-inner">'
+    + '<span class="site-banner-tag">New</span>'
+    + '<p class="site-banner-text">'
+    + '<span class="site-banner-long">Detailed manuals for LangChain, Agent Substrate, vLLM, Miles, SGLang, A2A, Docker Sandboxes and Reverse Engineering. </span>'
+    + '<span class="site-banner-short">Detailed manuals. </span>'
+    + '<a class="site-banner-link" href="manuals.html">Read the manuals<span aria-hidden="true"> →</span></a>'
+    + '</p>'
+    + '<button type="button" class="site-banner-close" aria-label="Dismiss the manuals announcement">'
+    + '<svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">'
+    + '<path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" fill="none"/></svg>'
+    + '</button></div>';
+
+  function bannerDismissed() {
+    try {
+      return localStorage.getItem(BANNER_KEY) === BANNER_ID;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function rememberBannerDismissed() {
+    try {
+      localStorage.setItem(BANNER_KEY, BANNER_ID);
+    } catch (_) {}
+  }
+
+  function setupBanner() {
+    var header = document.querySelector('.site-header');
+    if (!header || !header.parentNode || document.documentElement.hasAttribute('data-poster') || document.querySelector('.site-banner') || bannerDismissed()) return;
+
+    var root = document.documentElement;
+    var banner = document.createElement('aside');
+    banner.className = 'site-banner';
+    banner.setAttribute('aria-label', 'Announcement');
+    banner.innerHTML = BANNER_HTML;
+    adaptRouteTree(banner);
+    header.parentNode.insertBefore(banner, header);
+    root.classList.add('has-site-banner');
+
+    var height = 0;
+    var frame = 0;
+
+    function syncOffset() {
+      frame = 0;
+      var offset = Math.max(0, height - (window.pageYOffset || root.scrollTop || 0));
+      root.style.setProperty('--site-banner-offset', offset + 'px');
+    }
+
+    function requestSync() {
+      if (!frame) frame = window.requestAnimationFrame(syncOffset);
+    }
+
+    function measure() {
+      height = banner.offsetHeight;
+      root.style.setProperty('--site-banner-h', height + 'px');
+      syncOffset();
+    }
+
+    var resizeObserver = typeof ResizeObserver === 'function' ? new ResizeObserver(measure) : null;
+    if (resizeObserver) resizeObserver.observe(banner);
+    window.addEventListener('resize', measure);
+    window.addEventListener('scroll', requestSync, { passive: true });
+    measure();
+
+    banner.querySelector('.site-banner-close').addEventListener('click', function () {
+      rememberBannerDismissed();
+      if (resizeObserver) resizeObserver.disconnect();
+      window.removeEventListener('resize', measure);
+      window.removeEventListener('scroll', requestSync);
+      if (frame) window.cancelAnimationFrame(frame);
+      var scrollY = window.pageYOffset || root.scrollTop || 0;
+      banner.parentNode.removeChild(banner);
+      root.classList.remove('has-site-banner');
+      root.style.removeProperty('--site-banner-h');
+      root.style.removeProperty('--site-banner-offset');
+      if (scrollY > 0) window.scrollTo({ top: Math.max(0, scrollY - height), behavior: 'instant' });
+      var logo = header.querySelector('.logo');
+      if (logo) logo.focus();
+    });
+  }
+
+  function setupTabBar() {
+    if (document.querySelector('.site-tabbar') || !document.querySelector('.site-header')) return;
+    if (document.documentElement.hasAttribute('data-poster') || document.querySelector('.lesson-layout')) return;
+    var bar = document.createElement('nav');
+    bar.className = 'site-tabbar';
+    bar.setAttribute('aria-label', 'Sections');
+    var current = pageFile(location.href);
+    var html = '';
+    for (var i = 0; i < TAB_ITEMS.length; i++) {
+      var item = TAB_ITEMS[i];
+      var active = pageFile(item.href) === current || (item.href.charAt(0) === '/' && location.pathname.indexOf(item.href) === 0);
+      html += '<a href="' + item.href + '"' + (active ? ' aria-current="page"' : '') + '>'
+        + '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square" aria-hidden="true"><path d="' + item.icon + '"/></svg>'
+        + '<span>' + item.label + '</span></a>';
+    }
+    bar.innerHTML = html;
+    adaptRouteTree(bar);
+    document.body.appendChild(bar);
+    document.body.classList.add('has-site-tabbar');
+  }
+
   function load() {
+    setupBanner();
+    setupTabBar();
     var headers = document.querySelectorAll('.site-header');
     for (var i = 0; i < headers.length; i++) setupNavigation(headers[i]);
     var footers = document.querySelectorAll('.footer-links');
     for (var j = 0; j < footers.length; j++) {
       ensureNavigationLink(footers[j], '/blogs', 'Blogs & Guides', '');
+      ensureNavigationLink(footers[j], 'skills.html', 'Skills', '');
+      ensureNavigationLink(footers[j], '/practice', 'Practice', '');
+      ensureNavigationLink(footers[j], '/interviews', 'Interviews', '');
+      ensureNavigationLink(footers[j], 'highlights.html', 'My Highlights', '');
     }
     loadStars();
+    ensureThemeMenu();
     ensureNarration();
     ensureUiI18n();
     ensureNewsletter();
+    ensureStarNudge();
   }
 
   setupRouteLinks();

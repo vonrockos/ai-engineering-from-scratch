@@ -3,7 +3,7 @@
 > Park et al. 2023 (UIST '23, arXiv:2304.03442) populated **Smallville**, a sandbox of 25 agents, with a three-part architecture: **memory stream** (natural-language log), **reflection** (higher-level syntheses the agent generates about its own stream), and **plan** (day-level behavior, then sub-plans). The landmark result was the Valentine's Day party emergence: one agent seeded with "wants to throw a Valentine's Day party," without further scripting, produced invitations spread through the population, coordinated dates, and the party happened — from 24 agents who started with no knowledge of it. Ablations show all three components are required for believability. The documented failures are spatial-norm errors (entering closed stores, sharing single-person bathrooms). This is the reference architecture for agent simulations and multi-agent social evaluation in 2026.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), TypeScript
 **Prerequisites:** Phase 16 · 04 (Primitive Model), Phase 16 · 13 (Shared Memory)
 **Time:** ~75 minutes
 
@@ -103,6 +103,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Expected output: tick-by-tick trace. By the final tick, at least 3 of the 5 agents show the party in their plan, and they converge at the party location. The single seed produced the coordinated arrival without any orchestrator.
@@ -117,7 +118,7 @@ Rules for production simulations:
 
 - **Memory is the database.** Pick a real store (vector DB, Postgres) at scale. In-memory stdlib is for prototypes.
 - **Log the retrieval trace.** For every action, log the top-k memories that drove it. This is your debug ability.
-- **Budget per-agent tokens.** Each agent's retrieve + reflect + plan per tick is O(k) LLM calls. N agents × T ticks × calls-per-tick can dwarf your budget.
+- **Budget per-agent tokens.** Each agent's retrieve + reflect + plan per tick is $O(k)$ LLM calls. N agents × T ticks × calls-per-tick can dwarf your budget.
 - **Compact memory periodically.** Summarize-and-prune low-importance entries. Retention policy is a design decision, not a detail.
 - **Detect spatial / social norm violations** explicitly. The architecture does not learn them.
 

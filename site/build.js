@@ -15,8 +15,13 @@ const { buildData: buildProjectData } = require('./build-projects.js');
 const { normalizeWhitespace, wordCount, truncateWords, seoTitleFor, descriptionFromParts, lessonDocumentSeo } = require('../lib/lesson-document');
 const { TRANSLATION_LANGUAGES, TRANSLATION_SOURCE, NATIVE_NAMES, isIndexedLanguage } = require('../lib/lesson-translations');
 const { socialCards } = require('../lib/og-cards');
-const { phaseHubPath, phaseLabel, glossaryLookupKey } = require('../lib/hub-routes');
+const { phaseHubPath, phaseLabel, glossaryLookupKey, lessonCleanPath } = require('../lib/hub-routes');
 const { writeHubs } = require('./build-hubs.js');
+const { writeCheatsheets, loadTopics, coverage } = require('./build-cheatsheets.js');
+const { writePractice } = require('./build-practice.js');
+const { writeLessonCode } = require('./build-lessons.js');
+const { writeInterviews } = require('./build-interviews.js');
+const { lessonNumber } = require('./catalog.js');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const README_PATH = path.join(REPO_ROOT, 'README.md');
@@ -783,8 +788,12 @@ function annotateLessonMeta(phases) {
   return { summarized, withKeywords, lessonMinutes };
 }
 
+function lessonLocation(lessonPathValue) {
+  return lessonCleanPath(lessonPathValue) || `/lesson?path=${encodeURIComponent(lessonPathValue)}`;
+}
+
 function canonicalLessonUrl(lessonPathValue) {
-  return `${SITE_ORIGIN}/lesson?path=${encodeURIComponent(lessonPathValue)}`;
+  return `${SITE_ORIGIN}${lessonLocation(lessonPathValue)}`;
 }
 
 function lessonHref(lessonPathValue) {
@@ -1054,27 +1063,28 @@ function renderCatalogDiscovery(phases, lessonManifest) {
   const rows = [];
   for (const phase of phases) {
     let grouped = false;
-    for (const lesson of phase.lessons) {
+    phase.lessons.forEach((lesson, index) => {
       const relPath = lessonPath(lesson.url);
       const seo = relPath && lessonManifest.lessons[relPath];
-      if (!seo) continue;
+      if (!seo) return;
       if (!grouped) {
         grouped = true;
         rows.push(
           `            <tr class="catalog-group-row" data-generated-discovery="phase">` +
-          `<th colspan="5" scope="rowgroup"><a href="${htmlEscape(phaseHubPath(relPath))}">` +
+          `<th colspan="6" scope="rowgroup"><a href="${htmlEscape(phaseHubPath(relPath))}">` +
           `${htmlEscape(phaseLabel(phase.id, phase.name))}</a></th></tr>`
         );
       }
       rows.push(
         `            <tr data-generated-discovery="lesson">` +
-        `<td>${htmlEscape(String(phase.id).padStart(2, '0'))}</td>` +
+        `<td></td>` +
+        `<td>${htmlEscape(lessonNumber(phase.id, lesson.url, index + 1).label)}</td>` +
         `<td><a href="${htmlEscape(lessonHref(relPath))}">${htmlEscape(seo.title)}</a></td>` +
         `<td>${htmlEscape(lesson.type || '')}</td>` +
         `<td>${htmlEscape(lesson.lang || '')}</td>` +
         `<td>${htmlEscape(lesson.status || '')}</td></tr>`
       );
-    }
+    });
   }
   return rows.join('\n');
 }
@@ -1180,6 +1190,7 @@ function sanitizeSponsorTag(tag) {
 
 function sponsorLinkTarget(href) {
   if (/^#[\w-]+$/.test(href)) return { href, external: false };
+  if (/^mailto:[\w.+-]+@[\w-]+(?:\.[\w-]+)+$/.test(href)) return { href, external: false };
   if (/^https:\/\/[^\s"'<>]+$/.test(href)) return { href, external: true };
   if (/^[\w.-]+(?:\/[\w.-]+)*(?:#[\w-]+)?$/.test(href) && !href.includes('..')) {
     return { href: GITHUB_BLOB_BASE + href, external: true };
@@ -2223,7 +2234,10 @@ function build() {
   const seoManifests = writeSeoArtifacts(phases, certifications, learningPaths);
 
   console.log('Writing glossary term pages and phase hubs...');
+  const cheatsheetTopics = loadTopics();
+  const cheatsheetCoverage = coverage(cheatsheetTopics);
   const hubs = writeHubs({
+    cheatsheets: cheatsheetCoverage.phases,
     phases,
     prerequisites: roadmapPrereqs,
     glossary: glossaryTerms,
@@ -2232,6 +2246,24 @@ function build() {
     minutes: lessonMinutes,
   });
   for (const hub of hubs.phaseModels) phases.find(phase => phase.id === hub.id).hub = hub.href;
+
+  console.log('Writing cheat sheets...');
+  const cheatsheets = writeCheatsheets({ siteDir: __dirname });
+  hubs.cheatsheetPages = cheatsheets.pages;
+  console.log(`   wrote ${cheatsheets.topics.length} cheat sheet posters`);
+  console.log('Writing practice problems...');
+  const practice = writePractice({ siteDir: __dirname });
+  hubs.practicePages = practice.pages;
+  hubs.practice = practice;
+  console.log(`   wrote ${practice.problems.length} practice problems in ${practice.tracks.length} tracks`);
+  console.log('Writing pre-rendered lesson code...');
+  const lessonCode = writeLessonCode({ siteDir: __dirname });
+  console.log(lessonCode.skipped ? '   skipped: Shiki is not installed' : `   wrote ${lessonCode.blocks} code blocks for ${lessonCode.files.size} lessons`);
+  console.log('Writing interview pages...');
+  const interviews = writeInterviews({ siteDir: __dirname });
+  hubs.interviewPages = interviews.pages;
+  hubs.interviews = interviews;
+  console.log(`   wrote ${interviews.questions.length} interview questions and ${interviews.scenarios.length} scenarios`);
   const glossaryPage = path.join(__dirname, 'glossary.html');
   replaceGeneratedDiscovery(glossaryPage, GLOSSARY_JSONLD_START, GLOSSARY_JSONLD_END, hubs.glossaryJsonLd);
   replaceGeneratedDiscovery(glossaryPage, GLOSSARY_INDEX_START, GLOSSARY_INDEX_END, hubs.glossaryIndex);
@@ -2323,6 +2355,9 @@ function writeHubSitemaps(hubs, siteDir = __dirname) {
   return [
     ['sitemap-phases.xml', hubs.phasePages.map(page => ({ loc: page.href, priority: '0.8', freq: 'monthly' }))],
     ['sitemap-glossary.xml', hubs.termPages.map(page => ({ loc: page.href, priority: '0.5', freq: 'monthly' }))],
+    ['sitemap-cheatsheets.xml', (hubs.cheatsheetPages || []).map(page => ({ loc: page.href, priority: '0.5', freq: 'monthly' }))],
+    ['sitemap-practice.xml', (hubs.practicePages || []).map(page => ({ loc: page.href, priority: '0.6', freq: 'monthly' }))],
+    ['sitemap-interviews.xml', (hubs.interviewPages || []).map(page => ({ loc: page.href, priority: '0.6', freq: 'monthly' }))],
   ].filter(([, urls]) => urls.length).map(([name, urls]) => {
     fs.writeFileSync(path.join(siteDir, name), urlsetXml(urls), 'utf8');
     return name;
@@ -2333,10 +2368,16 @@ function writeSitemap(lessonManifest, glossaryCount, certifications, projects, h
   const urls = [
     { loc: '/', priority: '1.0', freq: 'weekly' },
     { loc: '/catalog.html', priority: '0.8', freq: 'weekly' },
-    { loc: '/prereqs.html', priority: '0.7', freq: 'monthly' },
+    { loc: '/roadmap', priority: '0.7', freq: 'monthly' },
     { loc: '/learning-paths.html', priority: '0.8', freq: 'monthly' },
     { loc: '/blogs', priority: '0.7', freq: 'daily' },
     { loc: '/about.html', priority: '0.5', freq: 'yearly' },
+    { loc: '/skills.html', priority: '0.7', freq: 'monthly' },
+    { loc: '/inside-an-ai-agent.html', priority: '0.7', freq: 'monthly' },
+    { loc: '/inside-a-decompiler.html', priority: '0.7', freq: 'monthly' },
+    { loc: '/inside-an-llm-serving-gpu.html', priority: '0.7', freq: 'monthly' },
+    { loc: '/how-to-learn.html', priority: '0.8', freq: 'monthly' },
+    { loc: '/whats-new.html', priority: '0.6', freq: 'weekly' },
     { loc: '/developer.html', priority: '0.6', freq: 'monthly' },
     { loc: '/contact.html', priority: '0.3', freq: 'yearly' },
     { loc: '/privacy.html', priority: '0.3', freq: 'yearly' },
@@ -2354,7 +2395,7 @@ function writeSitemap(lessonManifest, glossaryCount, certifications, projects, h
   }
   for (const lesson of Object.values(lessonManifest.lessons || {})) {
     if (lesson.context && lesson.context.kind === 'course') {
-      urls.push({ loc: '/lesson?path=' + encodeURIComponent(lesson.path), priority: '0.6', freq: 'monthly' });
+      urls.push({ loc: lessonLocation(lesson.path), priority: '0.6', freq: 'monthly' });
     }
   }
   const manualIds = readyManualIds();
@@ -2391,7 +2432,7 @@ function translatedLessons(lessonManifest) {
 function writeLanguageSitemaps(lessonManifest, siteDir = __dirname, hubSitemaps = []) {
   const files = [];
   for (const [lang, entries] of translatedLessons(lessonManifest)) {
-    const urls = entries.map(entry => ({ loc: `/lesson?path=${encodeURIComponent(entry.path)}&lang=${lang}`, priority: '0.5', freq: 'monthly' }));
+    const urls = entries.map(entry => ({ loc: `${lessonLocation(entry.path)}${lessonCleanPath(entry.path) ? '?' : '&'}lang=${lang}`, priority: '0.5', freq: 'monthly' }));
     const name = `sitemap-lessons-${lang}.xml`;
     fs.writeFileSync(path.join(siteDir, name), urlsetXml(urls), 'utf8');
     files.push(name);
@@ -2413,7 +2454,7 @@ function translationLlms(lessonManifest) {
   if (!translated.length) return '';
   let out = `## Lesson translations\n`;
   out += `Course lessons are also published in ${translated.length} languages: ${translated.map(([lang, entries]) => `${lang} (${NATIVE_NAMES[lang]}, ${entries.length} lessons)`).join(', ')}. Certification lessons, projects, and site pages are English only.\n\n`;
-  out += `- Reader page: ${SITE_ORIGIN}/lesson?path=<lesson path>&lang=<code>, with its own canonical URL and hreflang alternates\n`;
+  out += `- Reader page: ${SITE_ORIGIN}/learn/<phase>/<lesson>?lang=<code>, with its own canonical URL and hreflang alternates\n`;
   out += `- Markdown: request the reader page with Accept: text/markdown, or GET ${SITE_ORIGIN}/api/v1/resource?path=<lesson path>&lang=<code>\n`;
   out += `- Raw source: ${TRANSLATION_SOURCE}/<code>/<lesson path>/docs/<code>.md\n`;
   out += `- [Translated lesson sitemaps](${SITE_ORIGIN}/sitemap-index.xml)\n\n`;
@@ -2426,6 +2467,30 @@ function hubLlms(hubs) {
   for (const phase of hubs.phaseModels) out += `- [${phase.headline}](${SITE_ORIGIN}${phase.href}): ${phase.label}\n`;
   out += `\n## Glossary term pages\n`;
   out += `${hubs.termPages.length} glossary terms have their own page at ${SITE_ORIGIN}/glossary/<term slug>. [Glossary term sitemap](${SITE_ORIGIN}/sitemap-glossary.xml)\n\n`;
+  if (hubs.practice && hubs.practice.problems.length) {
+    const labels = { implement: 'Implement', research: 'Research', train: 'Train', lab: 'Lab' };
+    out += `## Practice tasks\n`;
+    out += `${hubs.practice.problems.length} practice tasks ask the learner to implement code from a lesson, implement a method from a research paper, train a tiny model to a target, or run an experiment and answer with numbers. Python with numpy runs the checks in the browser. Each page holds the statement only, and each task page returns Markdown with Accept: text/markdown. [Practice index in Markdown](${SITE_ORIGIN}/agent-pages/practice/index.md) \`python3 scripts/practice/run.py <id> <file>\` runs the checks offline. [Practice sitemap](${SITE_ORIGIN}/sitemap-practice.xml)\n\n`;
+    for (const kind of Object.keys(labels)) {
+      const list = hubs.practice.problems.filter(problem => problem.meta.kind === kind);
+      if (!list.length) continue;
+      out += `### ${labels[kind]}\n\n`;
+      for (const problem of list) out += `- [${problem.meta.title}](${SITE_ORIGIN}${problem.href}) (${problem.meta.difficulty}): ${problem.meta.summary} From [${problem.lessonTitle}](${canonicalLessonUrl(problem.meta.lesson)})\n`;
+      out += `\n`;
+    }
+  }
+  if (hubs.interviews && hubs.interviews.items.length) {
+    const built = hubs.interviews;
+    out += `## Interview questions and scenarios\n`;
+    out += `${built.questions.length} interview questions and ${built.scenarios.length} incident scenarios in ${built.cards.length} cards. Each question page holds the prompt, then the short answer, the full answer, the follow-ups and the common wrong answers in folded sections. Each scenario page shows its evidence listings in order. Every number in an answer comes from a lesson, a manual section or a capture file in the repository. Each item page returns Markdown with Accept: text/markdown. [Interviews index in Markdown](${SITE_ORIGIN}/agent-pages/interviews/index.md) [Interviews JSON](${SITE_ORIGIN}/api/interviews.json) [Interviews sitemap](${SITE_ORIGIN}/sitemap-interviews.xml)\n\n`;
+    for (const card of built.cards) {
+      const items = built.byCard.get(card.id);
+      if (!items.length) continue;
+      out += `### ${card.title}\n\n`;
+      for (const item of items) out += `- [${item.data.title}](${SITE_ORIGIN}/interviews/${item.card}/${item.id}) (level ${item.data.level}, ${item.kind === 'scenario' ? 'scenario' : item.data.kind})\n`;
+      out += `\n`;
+    }
+  }
   return out;
 }
 
@@ -2434,7 +2499,7 @@ function writeLlms(phases, glossaryCount, artifactCount, certifications, lessonM
   let total = 0;
   phases.forEach(p => { total += p.lessons.filter(l => lessonPath(l.url)).length; });
   let out = `# AI Engineering from Scratch\n\n`;
-  out += `> A free, open-source curriculum that builds every core AI algorithm by hand — ${total} lessons across ${phases.length} phases, from linear algebra to autonomous agents. Python, TypeScript, Rust, Julia.\n\n`;
+  out += `> A free, open-source curriculum that builds every core AI algorithm by hand — ${total} lessons across ${phases.length} phases, from linear algebra to autonomous agents. Python, TypeScript, Rust, Julia, Go.\n\n`;
   out += `Canonical site: ${SITE_ORIGIN}\n`;
   out += `Source: https://github.com/rohitg00/ai-engineering-from-scratch\n`;
   out += `Glossary terms: ${glossaryCount} · Reusable outputs (prompts/skills/agents): ${artifactCount}\n\n`;
@@ -2454,7 +2519,7 @@ function writeLlms(phases, glossaryCount, artifactCount, certifications, lessonM
       const p = lessonPath(l.url);
       if (!p) continue;
       const note = l.summary ? ` — ${l.summary}` : '';
-      out += `- [${l.name}](${SITE_ORIGIN}/lesson?path=${encodeURIComponent(p)}) · [raw](${rawOrigin}/${p}/docs/en.md)${note}\n`;
+      out += `- [${l.name}](${canonicalLessonUrl(p)}) · [raw](${rawOrigin}/${p}/docs/en.md)${note}\n`;
     }
     out += `\n`;
   }
@@ -2462,7 +2527,7 @@ function writeLlms(phases, glossaryCount, artifactCount, certifications, lessonM
   out += `## Optional\n`;
   out += `- [Catalog](${SITE_ORIGIN}/catalog.html) — full searchable lesson index\n`;
   out += `- [Blogs & Guides](${SITE_ORIGIN}/blogs) - articles and practical guides on AI engineering, developer tools, and building software\n`;
-  out += `- [Roadmap](${SITE_ORIGIN}/prereqs.html) — prerequisite ordering across phases\n`;
+  out += `- [Roadmap](${SITE_ORIGIN}/roadmap) — prerequisite ordering across phases\n`;
   out += `- [AI Engineering Learning Paths](${SITE_ORIGIN}/learning-paths.html) — four core domain paths and six career routes connected to practical lessons\n`;
   if (glossaryCount > 0) out += `- [Glossary](${SITE_ORIGIN}/glossary.html) — plain-language definitions of ${glossaryCount} terms\n`;
   out += `- [Sponsor the project](${SITE_ORIGIN}/sponsors.html) — sponsorship tiers, rules, and current sponsors from SPONSORS.md\n`;
@@ -2534,7 +2599,7 @@ function syncReadme(lessons) {
 // ─── Keep marketing counts in sync (single source of truth = this build) ──
 function syncCounts(lessons, phaseCount, outputs) {
   const counts = { lessons, phases: phaseCount, outputs };
-  const targets = ['index.html', 'catalog.html', 'lesson.html', 'prereqs.html', 'learning-paths.html', 'about.html', 'cmdpalette.js']
+  const targets = ['index.html', 'catalog.html', 'lesson.html', 'roadmap.html', 'learning-paths.html', 'about.html', 'cmdpalette.js']
     .map(f => path.join(__dirname, f))
     .concat(SPONSORS_SOURCE_PATH);
   for (const p of targets) {
@@ -2549,7 +2614,10 @@ function syncCounts(lessons, phaseCount, outputs) {
 }
 
 if (require.main === module) {
-  build();
+  require('./lib/code').init().then(build).catch(error => {
+    console.error(error);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = {
@@ -2566,6 +2634,7 @@ module.exports = {
   canonicalLessonUrl,
   certificationStats,
   githubSourceUrl,
+  sourceRepository,
   lessonDocumentSeo,
   GLOSSARY_CATEGORY_ORDER,
   annotateLessonMeta,
@@ -2581,4 +2650,6 @@ module.exports = {
   renderSponsorsMarkdown,
   serializeFigureProviderManifest,
   writeFigureManifest,
+  writeHubSitemaps,
+  hubLlms,
 };

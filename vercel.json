@@ -1,8 +1,8 @@
 {
-  "buildCommand": "node site/fetch-translation-coverage.js && node site/build.js && node site/build-projects.js --strict && node site/build-agents.js && node site/build-manuals.js && node site/clean-urls.js && node site/version-assets.js",
+  "buildCommand": "node site/prebuild.js && node site/build.js && node site/build-projects.js --strict && node site/build-agents.js && node site/build-manuals.js && node site/build-search.js && node site/clean-urls.js && node site/version-assets.js",
   "outputDirectory": "site",
   "framework": null,
-  "installCommand": "echo skip",
+  "installCommand": "npm install --no-audit --no-fund",
   "routes": [
     {
       "src": "/blogs(?:\\.html)?/",
@@ -69,23 +69,12 @@
       "destination": "/api/lesson"
     },
     {
+      "source": "/learn/:cleanPhase([a-z0-9-]+)/:cleanLesson([a-z0-9-]+)",
+      "destination": "/api/lesson?cleanPhase=:cleanPhase&cleanLesson=:cleanLesson"
+    },
+    {
       "source": "/certification",
       "destination": "/api/certification"
-    },
-    {
-      "source": "/prereqs",
-      "has": [
-        {
-          "type": "header",
-          "key": "accept",
-          "value": "(?i).*text/markdown.*"
-        }
-      ],
-      "destination": "/agent-pages/prereqs.md"
-    },
-    {
-      "source": "/prereqs",
-      "destination": "/prereqs.html"
     },
     {
       "source": "/project",
@@ -105,6 +94,34 @@
     {
       "source": "/about",
       "destination": "/about.html"
+    },
+    {
+      "source": "/inside-an-ai-agent",
+      "destination": "/inside-an-ai-agent.html"
+    },
+    {
+      "source": "/inside-a-decompiler",
+      "destination": "/inside-a-decompiler.html"
+    },
+    {
+      "source": "/inside-an-llm-serving-gpu",
+      "destination": "/inside-an-llm-serving-gpu.html"
+    },
+    {
+      "source": "/skills",
+      "destination": "/skills.html"
+    },
+    {
+      "source": "/how-to-learn",
+      "destination": "/how-to-learn.html"
+    },
+    {
+      "source": "/whats-new",
+      "destination": "/whats-new.html"
+    },
+    {
+      "source": "/highlights",
+      "destination": "/highlights.html"
     },
     {
       "source": "/catalog",
@@ -167,7 +184,15 @@
       "destination": "/hubs/phase/:page.html"
     },
     {
-      "source": "/path",
+      "source": "/cheatsheets",
+      "destination": "/cheatsheets/index.html"
+    },
+    {
+      "source": "/cheatsheets/:topic([a-z0-9-]+)",
+      "destination": "/cheatsheets/:topic.html"
+    },
+    {
+      "source": "/practice/tracks/:page([a-z0-9-]+)",
       "has": [
         {
           "type": "header",
@@ -175,11 +200,64 @@
           "value": "(?i).*text/markdown.*"
         }
       ],
-      "destination": "/agent-pages/prereqs.md"
+      "destination": "/agent-pages/practice/tracks/:page.md"
     },
     {
-      "source": "/path",
-      "destination": "/prereqs.html"
+      "source": "/practice/:page([a-z0-9-]+)",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": "(?i).*text/markdown.*"
+        }
+      ],
+      "destination": "/agent-pages/practice/:page.md"
+    },
+    {
+      "source": "/practice",
+      "destination": "/practice/index.html"
+    },
+    {
+      "source": "/practice/tracks/:page([a-z0-9-]+)",
+      "destination": "/practice/tracks/:page.html"
+    },
+    {
+      "source": "/practice/:page([a-z0-9-]+)",
+      "destination": "/practice/:page.html"
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+)/:page([a-z0-9-]+)",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": "(?i).*text/markdown.*"
+        }
+      ],
+      "destination": "/agent-pages/interviews/:card/:page.md"
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+)",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": "(?i).*text/markdown.*"
+        }
+      ],
+      "destination": "/agent-pages/interviews/:card.md"
+    },
+    {
+      "source": "/interviews",
+      "destination": "/interviews/index.html"
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+)/:page([a-z0-9-]+)",
+      "destination": "/interviews/:card/:page.html"
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+)",
+      "destination": "/interviews/:card.html"
     },
     {
       "source": "/roadmap",
@@ -190,11 +268,11 @@
           "value": "(?i).*text/markdown.*"
         }
       ],
-      "destination": "/agent-pages/prereqs.md"
+      "destination": "/agent-pages/roadmap.md"
     },
     {
       "source": "/roadmap",
-      "destination": "/prereqs.html"
+      "destination": "/roadmap.html"
     },
     {
       "source": "/developer",
@@ -363,6 +441,14 @@
       "destination": "/openapi.json"
     },
     {
+      "source": "/api/interviews.json",
+      "destination": "/interviews.json"
+    },
+    {
+      "source": "/:manual(manual-[a-z0-9-]+)/:section([a-z0-9-]+)",
+      "destination": "/manual/:manual/:section.html"
+    },
+    {
       "source": "/:page(manuals|manual-[a-z0-9-]+)",
       "destination": "/:page.html"
     },
@@ -373,11 +459,38 @@
   ],
   "headers": [
     {
+      "source": "/highlights",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
+      "source": "/highlights.html",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
       "source": "/(.*)\\.(png|jpg|jpeg|svg|webp|woff2|woff|ttf|ico)",
       "headers": [
         {
           "key": "Cache-Control",
           "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=2592000"
+        }
+      ]
+    },
+    {
+      "source": "/pagefind/(.*)\\.(pf_fragment|pf_index|pf_meta|pf_filter)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
@@ -457,6 +570,106 @@
       ]
     },
     {
+      "source": "/:manual(manual-[a-z0-9-]+)/:section([a-z0-9-]+)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/cheatsheets/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/interviews/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/interviews.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/api/interviews.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    },
+    {
+      "source": "/practice/:path*",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/practice/data/:path*",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/practice/practice_check.py",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/x-python; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/(glossary|phase)/([a-z0-9-]+)",
       "headers": [
         {
@@ -511,12 +724,38 @@
           "value": "public, max-age=0, must-revalidate"
         }
       ]
+    },
+    {
+      "source": "/agent-pages/practice/:path*",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/agent-pages/interviews/:path*",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
     }
   ],
   "functions": {
     "api/lesson.js": {
       "maxDuration": 10,
-      "includeFiles": "{site/lesson.html,site/lesson-seo.json,site/lesson-terms.json,site/lesson-markdown.js,languages.json,phases/*/*/docs/en.md,certifications/*/lessons/*/docs/en.md,lib/og-render.js,lib/og-fonts/*.json}"
+      "includeFiles": "{site/lesson{.html,-seo.json,-code/**},site/lesson-terms.json,site/cheatsheet-map.json,site/practice-map.json,site/lesson-markdown.js,languages.json,phases/*/*/docs/en.md,certifications/*/lessons/*/docs/en.md,lib/og-render.js,lib/og-fonts/*.json}"
     },
     "api/certification.js": {
       "maxDuration": 10,
@@ -524,7 +763,7 @@
     },
     "api/og.js": {
       "maxDuration": 10,
-      "includeFiles": "{site/lesson-seo.json,site/certification-seo.json,site/og-cards.json,lib/og-render.js,lib/og-fonts/*.json}"
+      "includeFiles": "{site/lesson-seo.json,site/certification-seo.json,site/og-cards.json,site/anatomy/*.png,lib/og-render.js,lib/og-fonts/*.json}"
     },
     "api/markdown.js": {
       "maxDuration": 10,
@@ -560,6 +799,21 @@
   "trailingSlash": false,
   "redirects": [
     {
+      "source": "/prereqs",
+      "destination": "/roadmap",
+      "permanent": true
+    },
+    {
+      "source": "/path",
+      "destination": "/roadmap",
+      "permanent": true
+    },
+    {
+      "source": "/prereqs.html",
+      "destination": "/roadmap",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true
@@ -570,13 +824,23 @@
       "permanent": true
     },
     {
-      "source": "/:page(about|catalog|glossary|prereqs|developer|contact|privacy|sponsors|projects|project|learning-paths|certifications|assessment).html",
+      "source": "/:page(about|catalog|glossary|roadmap|developer|contact|privacy|sponsors|projects|project|learning-paths|certifications|assessment|inside-an-ai-agent|inside-a-decompiler|inside-an-llm-serving-gpu|skills|how-to-learn|highlights|whats-new).html",
       "destination": "/:page",
       "permanent": true
     },
     {
       "source": "/:page(manuals|manual-[a-z0-9-]+).html",
       "destination": "/:page",
+      "permanent": true
+    },
+    {
+      "source": "/manual/:manual(manual-[a-z0-9-]+)/:section([a-z0-9-]+).html",
+      "destination": "/:manual/:section",
+      "permanent": true
+    },
+    {
+      "source": "/manual/:manual(manual-[a-z0-9-]+)/:section([a-z0-9-]+)",
+      "destination": "/:manual/:section",
       "permanent": true
     },
     {
@@ -587,6 +851,41 @@
     {
       "source": "/hubs/phase/:page([a-z0-9-]+).html",
       "destination": "/phase/:page",
+      "permanent": true
+    },
+    {
+      "source": "/cheatsheets/:topic([a-z0-9-]+).html",
+      "destination": "/cheatsheets/:topic",
+      "permanent": true
+    },
+    {
+      "source": "/interviews/index.html",
+      "destination": "/interviews",
+      "permanent": true
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+)/:page([a-z0-9-]+).html",
+      "destination": "/interviews/:card/:page",
+      "permanent": true
+    },
+    {
+      "source": "/interviews/:card([a-z0-9-]+).html",
+      "destination": "/interviews/:card",
+      "permanent": true
+    },
+    {
+      "source": "/practice/index.html",
+      "destination": "/practice",
+      "permanent": true
+    },
+    {
+      "source": "/practice/tracks/:page([a-z0-9-]+).html",
+      "destination": "/practice/tracks/:page",
+      "permanent": true
+    },
+    {
+      "source": "/practice/:page([a-z0-9-]+).html",
+      "destination": "/practice/:page",
       "permanent": true
     },
     {

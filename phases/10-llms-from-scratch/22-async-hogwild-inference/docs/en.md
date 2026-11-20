@@ -3,7 +3,7 @@
 > Speculative decoding (Phase 10 · 15) parallelizes tokens within one sequence. Multi-agent frameworks parallelize across whole sequences but force explicit coordination (voting, sub-task splitting). Hogwild! Inference (Rodionov et al., arXiv:2504.06261) does something else: run N instances of the same LLM in parallel against a SHARED key-value cache. Each worker sees every other worker's generated tokens instantly. Modern reasoning models — QwQ, DeepSeek-R1 — can self-coordinate through that shared cache without any fine-tuning. The approach is experimental but it opens an entirely new axis of inference parallelism that sits orthogonal to spec decode. This lesson implements a two-worker Hogwild! simulator in stdlib Python and explains why the shared-cache collaboration emerges from the existing model's reasoning abilities.
 
 **Type:** Build
-**Languages:** Python (stdlib)
+**Languages:** Python (stdlib), Rust
 **Prerequisites:** Phase 10 · 12 (inference optimization), Phase 10 · 15 (speculative decoding)
 **Time:** ~60 minutes
 
@@ -55,7 +55,7 @@ The paper's name riffs on Hogwild! SGD (Recht et al., 2011), an asynchronous-upd
 
 ### RoPE makes this tractable
 
-Rotary Position Embeddings (RoPE, Su et al. 2021) encode position information via rotation in the Q and K vectors. Because positions are rotations and not baked-in offsets, a token's position can shift without recomputing the KV cache entry. When worker `i` writes into the shared cache at position `p`, other workers reading that position can use the cached entry directly — no re-rotation needed.
+Rotary Position Embeddings (RoPE, Su et al. 2021) encode position information via rotation in the Q and K vectors. Because the attention score between a rotated query and a rotated key depends only on their relative distance, a whole block of cached entries can move to a new offset without recomputation: rotate the query instead of re-rotating every cached key. Hogwild! Inference does this once per cache block: for a query at position `i_q` and a block that starts at `i_k` in that worker's view, the query is rotated by the relative distance `i_q - i_k`. That is how each worker sees the shared cache blocks in its own order. The trick works for a uniform shift of a contiguous block. Moving individual tokens to different positions would change their rotations and still need recomputation.
 
 In a learned-position or absolute-position model, Hogwild! would need cache invalidation on every concurrent write. RoPE lets the cache stay stable.
 

@@ -16,7 +16,8 @@
     return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  function parseMd(md) {
+  function parseMd(md, options) {
+    var renderCode = options && options.renderCode || renderCodeBlock;
     var lines = md.split(/\r?\n/);
     var out = '';
     var inCodeBlock = false;
@@ -27,12 +28,24 @@
     var inList = false;
     var listType = '';
     var listItems = [];
+    var listStart = 1;
     var firstBlockquoteDone = false;
     var firstParaAfterMottoDone = false;
     var inBlockquote = false;
     var blockquoteLines = [];
     var mermaidBlocks = 0;
     var inLabChallenge = false;
+    var inMathBlock = false;
+    var mathLines = [];
+    var usedHeadingIds = Object.create(null);
+
+    function uniqueHeadingId(base) {
+      if (!usedHeadingIds[base]) { usedHeadingIds[base] = 1; return base; }
+      var n = 2;
+      while (usedHeadingIds[base + '-' + n]) n++;
+      usedHeadingIds[base + '-' + n] = 1;
+      return base + '-' + n;
+    }
 
     function flushLabChallenge() {
       if (!inLabChallenge) return '';
@@ -44,7 +57,9 @@
       if (!inList) return '';
       inList = false;
       var tag = listType === 'ol' ? 'ol' : 'ul';
-      var h = '<' + tag + '>';
+      var h = tag === 'ol' && listStart > 1
+        ? '<ol start="' + listStart + '" style="counter-reset: ol-counter ' + (listStart - 1) + '">'
+        : '<' + tag + '>';
       for (var li = 0; li < listItems.length; li++) {
         h += '<li>' + inlineFormat(listItems[li]) + '</li>';
       }
@@ -106,7 +121,9 @@
         if (line.match(/^```\s*$/)) {
           inCodeBlock = false;
           var raw = codeLines.join('\n');
-          if (codeLang === 'figure') {
+          if (codeLang === 'math') {
+            out += mathBlock(raw);
+          } else if (codeLang === 'figure') {
             out += '<div class="lesson-figure" data-figure="' + escapeHtml(raw.trim()) + '"></div>';
           } else if (codeLang === 'mermaid') {
             mermaidBlocks++;
@@ -120,12 +137,37 @@
             out += '</div>';
             out += '</div>';
           } else {
-            out += renderCodeBlock(raw, codeLang);
+            out += renderCode(raw, codeLang);
           }
           codeLines = [];
           codeLang = '';
         } else {
           codeLines.push(line);
+        }
+        continue;
+      }
+
+      if (inMathBlock) {
+        if (line.trim() === '$$') {
+          inMathBlock = false;
+          out += mathBlock(mathLines.join('\n'));
+          mathLines = [];
+        } else {
+          mathLines.push(line);
+        }
+        continue;
+      }
+
+      var displayMath = line.match(/^\s*\$\$(.*?)(\$\$)?\s*$/);
+      if (displayMath && (displayMath[2] ? displayMath[1].trim() : !displayMath[1].trim())) {
+        out += flushList();
+        out += flushTable();
+        out += flushBlockquote();
+        if (displayMath[2]) {
+          out += mathBlock(displayMath[1]);
+        } else {
+          inMathBlock = true;
+          mathLines = [];
         }
         continue;
       }
@@ -165,7 +207,7 @@
       if (h1) {
         out += flushList();
         out += flushLabChallenge();
-        var slug = slugify(h1[1]);
+        var slug = uniqueHeadingId(slugify(h1[1]));
         out += '<h1 id="' + slug + '">' + inlineFormat(h1[1]) + '</h1>';
         continue;
       }
@@ -179,6 +221,7 @@
         if (txt.indexOf('build it') >= 0 || txt.indexOf('build ') === 0) sectionClass = ' section-build';
         else if (txt.indexOf('use it') >= 0 || txt.indexOf('use ') === 0) sectionClass = ' section-use';
         else if (txt.indexOf('ship it') >= 0 || txt.indexOf('ship ') === 0) sectionClass = ' section-ship';
+        else if (txt.indexOf('summary') === 0) sectionClass = ' section-summary';
         if (txt.indexOf('learning objectives') >= 0) {
           var objItems = [];
           for (var lo = i + 1; lo < lines.length; lo++) {
@@ -203,11 +246,11 @@
           out += flushLabChallenge();
           inLabChallenge = true;
           out += '<div class="lab-challenge">';
-          out += '<h2 id="' + slug2 + '">&#128171; Lab Challenge</h2>';
+          out += '<h2 id="' + uniqueHeadingId(slug2) + '">&#128171; Lab Challenge</h2>';
           continue;
         }
         out += flushLabChallenge();
-        out += '<h2 id="' + slug2 + '" class="' + sectionClass + '">' + inlineFormat(h2[1]) + '</h2>';
+        out += '<h2 id="' + uniqueHeadingId(slug2) + '" class="' + sectionClass + '">' + inlineFormat(h2[1]) + '</h2>';
         continue;
       }
 
@@ -215,7 +258,15 @@
       if (h3) {
         out += flushList();
         var slug3 = slugify(h3[1]);
-        out += '<h3 id="' + slug3 + '">' + inlineFormat(h3[1]) + '</h3>';
+        out += '<h3 id="' + uniqueHeadingId(slug3) + '">' + inlineFormat(h3[1]) + '</h3>';
+        continue;
+      }
+
+      var h4 = line.match(/^#### (.+)/);
+      if (h4) {
+        out += flushList();
+        var slug4 = slugify(h4[1]);
+        out += '<h4 id="' + uniqueHeadingId(slug4) + '">' + inlineFormat(h4[1]) + '</h4>';
         continue;
       }
 
@@ -238,7 +289,7 @@
         continue;
       }
 
-      var olMatch = line.match(/^\d+\.\s+(.+)/);
+      var olMatch = line.match(/^(\d+)\.\s+(.+)/);
       if (olMatch) {
         out += flushTable();
         out += flushBlockquote();
@@ -246,8 +297,9 @@
           out += flushList();
           inList = true;
           listType = 'ol';
+          listStart = parseInt(olMatch[1], 10) || 1;
         }
-        listItems.push(olMatch[1]);
+        listItems.push(olMatch[2]);
         continue;
       }
 
@@ -277,12 +329,122 @@
       out += '<p' + paraClass + '>' + inlineFormat(line) + '</p>';
     }
 
+    if (inMathBlock) out += mathBlock(mathLines.join('\n'));
     out += flushList();
     out += flushTable();
     out += flushBlockquote();
     out += flushLabChallenge();
 
     return out;
+  }
+
+  function mathBlock(tex) {
+    return '<div class="math-display" data-math="display">' + escapeHtml(tex.trim()) + '</div>';
+  }
+
+  function isSpace(ch) {
+    return ch === ' ' || ch === '\t' || ch === '\n' || ch === '\r' || ch === '\u00a0';
+  }
+
+  function isWordChar(ch) {
+    return /[A-Za-z0-9_]/.test(ch);
+  }
+
+  function closingDollar(text, start) {
+    for (var j = start; j < text.length; j++) {
+      var ch = text.charAt(j);
+      if (ch === '\\') {
+        j++;
+        continue;
+      }
+      if (ch !== '$') continue;
+      if (j > start && !isSpace(text.charAt(j - 1)) && !isWordChar(text.charAt(j + 1))) return j;
+      return -1;
+    }
+    return -1;
+  }
+
+  function splitInlineMath(text) {
+    var parts = [];
+    var plain = '';
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charAt(i);
+      if (ch === '\\' && text.charAt(i + 1) === '$') {
+        plain += '$';
+        i++;
+        continue;
+      }
+      if (ch === '$' && text.charAt(i + 1) === '$') {
+        plain += '$$';
+        i++;
+        continue;
+      }
+      if (ch === '$' && i + 1 < text.length && !isSpace(text.charAt(i + 1)) && !isWordChar(text.charAt(i - 1))) {
+        var end = closingDollar(text, i + 1);
+        if (end > 0) {
+          if (plain) parts.push({ text: plain });
+          plain = '';
+          parts.push({ math: text.slice(i + 1, end) });
+          i = end;
+          continue;
+        }
+      }
+      plain += ch;
+    }
+    if (plain) parts.push({ text: plain });
+    return parts;
+  }
+
+  function extractMath(md) {
+    var found = [];
+    var lines = md.split(/\r?\n/);
+    var inCode = false;
+    var mathFence = [];
+    var mathStart = 0;
+    var block = null;
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i];
+      if (block) {
+        if (line.trim() === '$$') {
+          found.push({ display: true, tex: block.join('\n').trim(), line: i + 1 });
+          block = null;
+        } else {
+          block.push(line);
+        }
+        continue;
+      }
+      var fence = line.match(/^```(\w*)/);
+      if (fence) {
+        if (inCode === 'math') found.push({ display: true, tex: mathFence.join('\n').trim(), line: mathStart });
+        if (inCode) {
+          inCode = false;
+        } else {
+          inCode = fence[1] || 'code';
+          mathFence = [];
+          mathStart = i + 1;
+        }
+        continue;
+      }
+      if (inCode === 'math') {
+        mathFence.push(line);
+        continue;
+      }
+      if (inCode) continue;
+      if (line.trim() === '$$') {
+        block = [];
+        continue;
+      }
+      var single = line.match(/^\s*\$\$(.+?)\$\$\s*$/);
+      if (single) {
+        found.push({ display: true, tex: single[1].trim(), line: i + 1 });
+        continue;
+      }
+      var masked = line.replace(/`[^`]+`/g, function (m) { return new Array(m.length + 1).join(' '); });
+      splitInlineMath(masked).forEach(function (part) {
+        if (part.math != null) found.push({ display: false, tex: part.math, line: i + 1 });
+      });
+    }
+    return found;
   }
 
   function splitTableRow(line) {
@@ -314,29 +476,229 @@
     return cells.map(function (c) { return c.trim(); });
   }
 
+  function escapeInline(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
   function inlineFormat(text) {
-    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    var kept = [];
+    function keep(html) {
+      kept.push(html);
+      return '\u0000' + (kept.length - 1) + '\u0000';
+    }
+    text = text.replace(/`([^`]+)`/g, function (m, code) {
+      return keep('<code>' + escapeInline(code) + '</code>');
+    });
+    text = splitInlineMath(text).map(function (part) {
+      if (part.math == null) return part.text;
+      return keep('<span class="math-inline" data-math="inline">' + escapeHtml(part.math) + '</span>');
+    }).join('');
+    text = escapeInline(text);
     text = text.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
     text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
     text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
-    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
-    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (m, label, href) {
-      if (/^https?:\/\/|^mailto:/i.test(href)) {
-        return '<a href="' + href + '" target="_blank" rel="noopener">' + label + '</a>';
+    // Parse inline links by balancing parentheses in the destination.
+    // URLs such as DOI links may contain their own parentheses.
+    var out = '';
+    for (var i = 0; i < text.length;) {
+      if (text.charAt(i) === '\\' && text.charAt(i + 1) === '[') {
+        out += '[';
+        i += 2;
+        continue;
       }
-      return label;
-    });
-    return text;
+      if (text.charAt(i) !== '[') {
+        out += text.charAt(i++);
+        continue;
+      }
+
+      var labelEnd = -1;
+      for (var labelCursor = i + 1; labelCursor < text.length; labelCursor++) {
+        if (text.charAt(labelCursor) === '\\') {
+          labelCursor++;
+          continue;
+        }
+        if (text.charAt(labelCursor) === ']') {
+          labelEnd = labelCursor;
+          break;
+        }
+      }
+      if (labelEnd === -1 || text.charAt(labelEnd + 1) !== '(') {
+        out += text.charAt(i++);
+        continue;
+      }
+
+      var hrefStart = labelEnd + 2;
+      var depth = 1;
+      var hrefEnd = hrefStart;
+      while (hrefEnd < text.length && depth > 0) {
+        var hrefChar = text.charAt(hrefEnd);
+        if (hrefChar === '\\') {
+          hrefEnd += 2;
+          continue;
+        }
+        if (hrefChar === '(') depth++;
+        if (hrefChar === ')') depth--;
+        hrefEnd++;
+      }
+
+      if (depth !== 0) {
+        out += text.charAt(i++);
+        continue;
+      }
+
+      var label = unescapeMarkdownPunctuation(text.slice(i + 1, labelEnd));
+      var href = unescapeMarkdownPunctuation(text.slice(hrefStart, hrefEnd - 1));
+      if (/^https?:\/\/|^mailto:/i.test(href)) {
+        out += '<a href="' + href + '" target="_blank" rel="noopener">' + label + '</a>';
+      } else {
+        out += label;
+      }
+      i = hrefEnd;
+    }
+    return out.replace(/\u0000(\d+)\u0000/g, function (m, index) { return kept[Number(index)]; });
+  }
+
+  function unescapeMarkdownPunctuation(value) {
+    var unescaped = '';
+    for (var i = 0; i < value.length; i++) {
+      var current = value.charAt(i);
+      var next = value.charAt(i + 1);
+      if (current === '\\' && (next === '[' || next === ']' || next === '(' || next === ')' || next === '\\')) {
+        unescaped += next;
+        i++;
+      } else {
+        unescaped += current;
+      }
+    }
+    return unescaped;
   }
 
   function slugify(text) {
     return text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   }
 
-  function renderCodeBlock(code, lang) {
-    var highlighted = highlightSyntax(escapeHtml(code), lang);
-    var langLabel = lang ? '<span class="code-lang">' + escapeHtml(lang) + '</span>' : '';
-    return '<pre>' + langLabel + '<button class="code-copy" data-code="' + escapeAttr(code) + '">Copy</button><code>' + highlighted + '</code></pre>';
+  var TERMINAL_LANGS = { console: 1, shellsession: 1, 'shell-session': 1, terminal: 1 };
+  var OUTPUT_LANGS = { text: 1, txt: 1, plaintext: 1, plain: 1, output: 1, log: 1, ansi: 1 };
+  var PROMPT = /^(\s*(?:\([\w.-]+\) ?)?(?:\$|%|>>>)(?: |$))/;
+  var ANSI = /\u001b\[[0-9;]*m/g;
+
+  function codeKind(lang) {
+    lang = String(lang || '').toLowerCase();
+    if (TERMINAL_LANGS[lang]) return 'terminal';
+    if (OUTPUT_LANGS[lang]) return 'output';
+    return 'code';
+  }
+
+  function splitSession(code) {
+    var parts = [];
+    var more = false;
+    var repl = false;
+    String(code).split('\n').forEach(function (line) {
+      if (more) {
+        parts.push({ cmd: true, prompt: '', text: line, lang: 'bash' });
+        more = /\\$/.test(line);
+        return;
+      }
+      if (repl && /^\.\.\.( |$)/.test(line)) {
+        parts.push({ cmd: true, prompt: line.slice(0, 4), text: line.slice(4), lang: 'python' });
+        return;
+      }
+      var match = PROMPT.exec(line);
+      if (match) {
+        var text = line.slice(match[1].length);
+        repl = match[1].indexOf('>>>') >= 0;
+        more = /\\$/.test(text);
+        parts.push({ cmd: true, prompt: match[1], text: text, lang: repl ? 'python' : 'bash' });
+        return;
+      }
+      repl = false;
+      parts.push({ cmd: false, text: line });
+    });
+    return parts;
+  }
+
+  function codeLabel(kind, lang) {
+    if (kind === 'terminal') return 'terminal';
+    if (kind === 'output') return lang === 'ansi' ? 'log' : 'output';
+    return lang || 'code';
+  }
+
+  function codeBlockHtml(block) {
+    var head = '<div class="cb-head"><span class="cb-label">' + escapeHtml(block.label) + '</span>' + (block.extra || '') +
+      (block.copy ? '<button type="button" class="cb-copy">Copy</button>' : '') + '</div>';
+    return '<div class="cb" data-kind="' + block.kind + '"' + (block.lang ? ' data-lang="' + escapeAttr(block.lang) + '"' : '') + '>' +
+      head + '<pre><code>' + block.body + '</code></pre></div>';
+  }
+
+  var regexHighlighter = {
+    block: function (code, lang) { return highlightSyntax(escapeHtml(code), lang); },
+    lines: function (lines, lang) { return lines.map(function (line) { return highlightSyntax(escapeHtml(line), lang); }); },
+    ansi: function (code) { return escapeHtml(code.replace(ANSI, '')); }
+  };
+
+  function renderCodeWith(highlighter, code, lang, options) {
+    options = options || {};
+    lang = String(lang || '').toLowerCase();
+    code = String(code == null ? '' : code);
+    var kind = codeKind(lang);
+    var body;
+    var copy = kind === 'code';
+    if (kind === 'terminal') {
+      var parts = splitSession(code);
+      var lit = {};
+      ['bash', 'python'].forEach(function (name) {
+        var group = parts.filter(function (part) { return part.cmd && part.lang === name; });
+        var html = group.length ? highlighter.lines(group.map(function (part) { return part.text; }), name) : [];
+        group.forEach(function (part, index) { lit[parts.indexOf(part)] = html[index]; });
+      });
+      copy = parts.some(function (part) { return part.cmd; });
+      body = parts.map(function (part, index) {
+        if (!part.cmd) return part.text ? '<span class="cb-o">' + escapeHtml(part.text) + '</span>' : '';
+        return (part.prompt ? '<span class="cb-p">' + escapeHtml(part.prompt) + '</span>' : '') + '<span class="cb-ln">' + lit[index] + '</span>';
+      }).join('\n');
+    } else if (lang === 'ansi') {
+      body = highlighter.ansi(code);
+    } else if (kind === 'output') {
+      body = escapeHtml(code);
+    } else {
+      body = highlighter.block(code, lang);
+    }
+    return codeBlockHtml({
+      kind: kind,
+      lang: lang,
+      label: options.label || codeLabel(kind, lang),
+      extra: options.extra,
+      copy: options.copy === false ? false : copy,
+      body: body
+    });
+  }
+
+  function renderCodeBlock(code, lang, options) {
+    return renderCodeWith(regexHighlighter, code, lang, options);
+  }
+
+  function codeKey(code, lang) {
+    var text = String(lang || '').toLowerCase() + '\n' + String(code == null ? '' : code);
+    var h1 = 0xdeadbeef;
+    var h2 = 0x41c6ce57;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    return (h2 >>> 0).toString(36) + (h1 >>> 0).toString(36) + '-' + text.length.toString(36);
+  }
+
+  function prerenderedCode(blocks) {
+    if (!blocks || typeof blocks !== 'object') return renderCodeBlock;
+    return function (code, lang) {
+      var key = codeKey(code, lang);
+      return Object.prototype.hasOwnProperty.call(blocks, key) && typeof blocks[key] === 'string'
+        ? blocks[key]
+        : renderCodeBlock(code, lang);
+    };
   }
 
   function highlightSyntax(code, lang) {
@@ -379,9 +741,93 @@
     return code;
   }
 
+  var QUIZ_ANCHORS = {
+    pre: ['the-concept', 'concept', 'build-it', 'build'],
+    check: ['use-it', 'use', 'ship-it', 'ship'],
+    post: ['key-terms']
+  };
+
+  function headingIds(html) {
+    var ids = [];
+    var pattern = /<h2 id="([^"]*)"/g;
+    var match;
+    while ((match = pattern.exec(html)) !== null) ids.push(match[1]);
+    return ids;
+  }
+
+  function anchorIndex(ids, keys) {
+    for (var k = 0; k < keys.length; k++) {
+      for (var i = 0; i < ids.length; i++) {
+        if (ids[i] === keys[k] || ids[i].indexOf(keys[k] + '-') === 0) return i;
+      }
+    }
+    return -1;
+  }
+
+  function sectionIds(markdown) {
+    var ids = [];
+    var fence = false;
+    var lines = String(markdown || '').split('\n');
+    for (var i = 0; i < lines.length; i++) {
+      if (/^\s*```/.test(lines[i])) { fence = !fence; continue; }
+      if (fence) continue;
+      var h2 = lines[i].match(/^## (.+)/);
+      if (h2) ids.push(slugify(h2[1]));
+    }
+    return ids;
+  }
+
+  function quizPlacement(ids, referenceIds) {
+    var n = ids.length;
+    var source = referenceIds && referenceIds.length ? referenceIds : ids;
+    var m = source.length;
+    var pre = anchorIndex(source, QUIZ_ANCHORS.pre);
+    var post = anchorIndex(source, QUIZ_ANCHORS.post);
+    var check = anchorIndex(source, QUIZ_ANCHORS.check);
+    var first = m && source[0].indexOf('learning-objectives') === 0 ? 1 : 0;
+    if (pre < 0) pre = m - first >= 2 ? first + 1 : first;
+    if (post < 0) post = m;
+    if (post < pre) post = pre;
+    if (check < 0 || check > post) {
+      check = post - 1 > pre ? post - 1 : post;
+    }
+    if (check < pre) check = pre;
+    function toPage(index) {
+      return index >= m ? n : Math.min(index, n);
+    }
+    return { pre: toPage(pre), check: toPage(check), post: toPage(post), count: n };
+  }
+
+  function quizPanelQuestions(data) {
+    var source = data && (data.questions || data);
+    if (!Array.isArray(source)) return null;
+    var shownInline = source.some(function (q) {
+      return q && q.question && Array.isArray(q.options) &&
+        typeof q.correct === 'number' && q.correct >= 0 && q.correct < q.options.length;
+    });
+    return shownInline ? [] : null;
+  }
+
   return {
     parseMd: parseMd,
+    headingIds: headingIds,
+    sectionIds: sectionIds,
+    quizPlacement: quizPlacement,
+    quizPanelQuestions: quizPanelQuestions,
+    extractMath: extractMath,
+    splitInlineMath: splitInlineMath,
     slugify: slugify,
-    escapeAttr: escapeAttr
+    escapeAttr: escapeAttr,
+    inlineFormat: inlineFormat,
+    splitTableRow: splitTableRow,
+    highlightSyntax: highlightSyntax,
+    codeKind: codeKind,
+    splitSession: splitSession,
+    codeBlockHtml: codeBlockHtml,
+    renderCodeWith: renderCodeWith,
+    renderCodeBlock: renderCodeBlock,
+    codeKey: codeKey,
+    prerenderedCode: prerenderedCode,
+    escapeHtml: escapeHtml
   };
 }));

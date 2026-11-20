@@ -3,7 +3,7 @@
 > Two approaches coexist in 2026 multi-agent systems: the **message pool** (everyone sees everyone's messages, as in AutoGen GroupChat or MetaGPT) and the **blackboard with subscription** (agents subscribe to relevant events, as in Context-Aware MCP or the Matrix framework). Both are the only stateful part of a multi-agent system — which means both are where the interesting bugs live. The reference failure mode is **memory poisoning**: one agent hallucinates a "fact," other agents treat it as verified, and accuracy decays gradually in a way that is much harder to debug than an immediate crash. This lesson builds both structures from stdlib, injects a poisoning attack, and shows the three mitigations that actually work in production.
 
 **Type:** Learn + Build
-**Languages:** Python (stdlib, `threading`)
+**Languages:** Python (stdlib, `threading`), TypeScript
 **Prerequisites:** Phase 16 · 04 (Primitive Model), Phase 16 · 09 (Parallel Swarm Networks)
 **Time:** ~75 minutes
 
@@ -68,7 +68,7 @@ The problem is not shared state per se — it is shared state **without provenan
 
 1. **Attribute provenance on every write.** Every entry in shared state records who wrote it, when, under what prompt, and (if applicable) what source the agent cited. Downstream agents read with skepticism keyed to provenance.
 2. **Version writes; treat them as append-only.** A correction is a new entry that supersedes the old, not an in-place update. The audit trail is preserved.
-3. **Keep at least one agent that cannot write to shared state.** A read-only verifier agent samples entries, re-fetches sources, and flags inconsistencies. Because it cannot write to the pool, it cannot be poisoned by the pool.
+3. **Keep at least one agent that cannot write to shared state.** A read-only verifier agent samples entries, re-fetches sources, and flags inconsistencies. It still reads the pool, so it can be fooled by a bad entry, but it checks each entry against the original source and cannot write, so its verdicts never feed a poisoned fact back into shared state.
 
 ### Blackboard precedent (Hayes-Roth, 1985)
 
@@ -119,6 +119,7 @@ Run:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 Expected output:

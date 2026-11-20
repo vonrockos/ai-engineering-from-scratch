@@ -1,6 +1,6 @@
 # Sponsorship
 
-`ai-engineering-from-scratch` is a free, MIT-licensed curriculum. 523 lessons across 20
+`ai-engineering-from-scratch` is a free, MIT-licensed curriculum. 542 lessons across 20
 phases. The work is built and maintained by [Rohit Ghumare](https://github.com/rohitg00).
 
 Cash sponsorships fund the time it takes to ship lessons, keep the site running, and reply
@@ -15,7 +15,6 @@ If you or your company want to support the curriculum, this page is the rate car
 | Sponsor | Description |
 |---|---|
 | <a href="https://serpapi.com/ai-engineering-from-scratch"><picture><source media="(prefers-color-scheme: dark)" srcset="https://serpapi.com/assets/media_kit/logo-with-wordmark-white.svg"><img src="https://serpapi.com/assets/media_kit/logo-with-wordmark.svg" alt="SerpApi" width="180"></picture></a> | Web Search API for your AI apps. Available in Markdown and JSON for any integration. |
-| <a href="https://nitrostack.ai/referral/aiengineeringfromscratch"><img src="https://nitrostack.ai/logo.png" alt="NitroStack" width="56"></a> **NitroStack** | An end-to-end development platform for building, testing, debugging, and deploying production-ready MCP servers and applications. |
 
 ## How to sponsor
 
@@ -26,6 +25,8 @@ Sponsorship changes are not accepted through contributor pull requests.
 
 GitHub Sponsors handles billing, receipts, and tax forms. 0% platform fee on personal
 sponsorships, up to 6% on organization sponsorships, per [GitHub's policy](https://docs.github.com/en/sponsors/receiving-sponsorships-through-github-sponsors/about-github-sponsors-for-open-source-contributors).
+If you need an invoice in your company's name, or have any other billing question, email
+[ghumare64@gmail.com](mailto:ghumare64@gmail.com).
 
 For clarity: the curriculum has no token, no coin, no NFT, no wallet, and no chain
 partnership. The maintainer does not endorse, promote, partner with, or accept
@@ -167,10 +168,11 @@ Listed in order of how the next dollar gets spent:
 
 1. Pick a tier above.
 2. Subscribe via [GitHub Sponsors](https://github.com/sponsors/rohitg00).
-3. For Silver and above, email the maintainer with: your logo (SVG preferred), the URL
+3. For Silver and above, email [ghumare64@gmail.com](mailto:ghumare64@gmail.com) with: your logo (SVG preferred), the URL
    you want it linked to, and the term length you've committed to.
 4. The logo lands in the next site deploy, usually within 48 hours.
-5. Receipts and invoices are issued by GitHub Sponsors automatically.
+5. Receipts and invoices are issued by GitHub Sponsors automatically. If you need an invoice
+   in your company's name, email [ghumare64@gmail.com](mailto:ghumare64@gmail.com).
 
 Hardware partners follow the separate [Hardware Lab Partner](#hardware-lab-partner)
 process and must agree to written terms before shipping equipment.

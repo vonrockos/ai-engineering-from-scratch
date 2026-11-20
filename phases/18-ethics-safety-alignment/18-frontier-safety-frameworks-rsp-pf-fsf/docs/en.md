@@ -3,7 +3,7 @@
 > Three major-lab frameworks define the 2026 industry governance of frontier capability. Anthropic Responsible Scaling Policy v3.0 (February 2026) introduces tiered AI Safety Levels (ASL-1 through ASL-5+), modeled on biosafety levels, with ASL-3 activated May 2025 for CBRN-relevant models. OpenAI Preparedness Framework v2 (April 2025) defines five criteria for tracked capabilities and separates Capabilities Reports from Safeguards Reports. DeepMind Frontier Safety Framework v3.0 (September 2025) introduces Critical Capability Levels including a new Harmful Manipulation CCL. All three now include competitor-adjustment clauses allowing deferral if peer labs ship without comparable safeguards. Cross-lab alignment remains structural, not terminological: "Capability Thresholds," "High Capability thresholds," and "Critical Capability Levels" denote analogous constructs.
 
 **Type:** Learn
-**Languages:** none
+**Languages:** Python, TypeScript
 **Prerequisites:** Phase 18 · 17 (WMDP), Phase 18 · 07-09 (deception failures)
 **Time:** ~75 minutes
 
@@ -75,7 +75,7 @@ v2.0 (February 2025) added a Deceptive Alignment section and higher security lev
 - DeepMind "Critical Capability Levels."
 - OpenAI "High Capability thresholds."
 
-No industry-standard terminology. Structurally aligned: three tiers of frontier capability with published evaluation criteria. All three include competitor-adjustment clauses (2025 onward).
+No industry-standard terminology. Structurally aligned: each of the three frameworks defines tiered capability thresholds with published evaluation criteria. All three include competitor-adjustment clauses (2025 onward).
 
 ### Safety cases
 
@@ -85,7 +85,7 @@ A safety case is a written argument that a deployment is acceptably safe under w
 - **Illegibility.** Does the model lack the ability to execute a coherent plan to cause harm?
 - **Incapability.** Does the model lack the capability to cause the harm in question?
 
-Different safety cases target different pillars. For a ASL-3 CBRN case, incapability (via unlearning) is the primary target. For deceptive alignment, monitoring and illegibility are targets. For cyber uplift, all three are relevant.
+Different safety cases target different pillars. For an ASL-3 CBRN case, incapability (via unlearning) is the primary target. For deceptive alignment, monitoring and illegibility are targets. For cyber uplift, all three are relevant.
 
 ### The race-dynamic problem
 

@@ -3,7 +3,7 @@
 > DP-SGD remains the standard — noise-injected gradient updates provide formal (epsilon, delta) guarantees. Overhead in compute, memory, and utility is substantial; parameter-efficient DP fine-tuning (LoRA + DP-SGD) is the common 2025 configuration (ACM 2025). Two bodies of evidence in tension: canary-based membership inference (Duan et al., 2024) reports limited success against language models; training-data extraction (Carlini et al., 2021; Nasr et al., 2025) recovers substantial verbatim memorization. Resolution (arXiv:2503.06808, March 2025): the gap is in what is measured — inserted canaries vs "most extractable" data. New canary designs enable loss-based MIA without shadow models and yield the first nontrivial DP audit of an LLM trained on real data with realistic DP guarantees. Alternatives: PMixED (arXiv:2403.15638) — private prediction at inference time via mixture of experts on next-token distributions; DP synthetic data generation (Google Research 2024). Emerging attack: Differential Privacy Reversal via LLM Feedback — confidence-score leakage.
 
 **Type:** Build
-**Languages:** Python (stdlib, DP-SGD noise-injection and ε-δ accountant demonstration)
+**Languages:** Python, TypeScript (stdlib, DP-SGD noise-injection and ε-δ accountant demonstration)
 **Prerequisites:** Phase 01 · 09 (information theory), Phase 10 · 01 (large-model training)
 **Time:** ~60 minutes
 
@@ -22,8 +22,11 @@ LLMs memorize. Carlini et al. 2021 showed production language models reproduce v
 
 ### (ε, δ)-differential privacy
 
-A randomized algorithm M is (ε, δ)-DP if for any two datasets differing in one example and any event S:
-P(M(D) in S) <= e^ε * P(M(D') in S) + δ.
+A randomized algorithm $M$ is $(\varepsilon, \delta)$-DP if for any two datasets differing in one example and any event $S$:
+
+```math
+P(M(D) \in S) \le e^{\varepsilon} \cdot P(M(D') \in S) + \delta.
+```
 
 Interpretation: the output distribution is close enough (parametrized by ε) that the contribution of any single individual cannot be reliably inferred, except with probability δ.
 
@@ -33,7 +36,7 @@ Abadi et al. 2016. The standard recipe:
 1. Sample a mini-batch.
 2. Compute per-example gradients.
 3. Clip each per-example gradient to a threshold C.
-4. Sum the clipped gradients and add Gaussian noise with std σ * C.
+4. Sum the clipped gradients and add Gaussian noise with std $\sigma \cdot C$.
 5. Use the noisy sum to update parameters.
 
 Privacy cost is tracked by an accountant (Moments Accountant, Rényi DP accountant). Reported ε values in the LLM literature vary widely by threat model, data sensitivity, and utility target; there is no universally "safe" default ε. Published examples span roughly ε ≈ 1–10 in some LLM training settings, but these are illustrative — not recommended defaults. Lower ε generally requires more noise and can increase utility loss.
@@ -84,9 +87,9 @@ This lesson produces `outputs/skill-dp-audit.md`. Given a DP claim on a language
 
 ## Exercises
 
-1. Run `code/main.py`. Sweep σ in {0.5, 1.0, 2.0} and report the (ε, δ)-accuracy trade-off. Identify the point at which utility collapses.
+1. Run `code/main.py`. Sweep $\sigma \in \lbrace 0.5, 1.0, 2.0 \rbrace$ and report the (ε, δ)-accuracy trade-off. Identify the point at which utility collapses.
 
-2. Implement a canary insertion and a log-loss test. Measure detection rate before and after DP-SGD at σ = 1.0.
+2. Implement a canary insertion and a log-loss test. Measure detection rate before and after DP-SGD at $\sigma = 1.0$.
 
 3. Read Nasr et al. 2025 on training-data extraction. Why does extraction success not collapse under moderate ε? What does this imply about MIA-as-evaluation?
 

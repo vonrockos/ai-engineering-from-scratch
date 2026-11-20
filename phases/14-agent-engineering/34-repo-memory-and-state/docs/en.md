@@ -3,7 +3,7 @@
 > Chat history is volatile. The repo is durable. The workbench stores agent state in versioned files so the next session, the next agent, and the next reviewer all read from the same source of truth.
 
 **Type:** Build
-**Languages:** Python (stdlib + `jsonschema` optional)
+**Languages:** Python (stdlib + `jsonschema` optional), TypeScript
 **Prerequisites:** Phase 14 · 32 (Minimal Workbench)
 **Time:** ~60 minutes
 
@@ -81,6 +81,7 @@ Run it:
 
 ```
 python3 code/main.py
+npx tsx code/main.ts
 ```
 
 The script writes `workdir/agent_state.json` and `workdir/task_board.json`, mutates them across two turns, and prints the validated state at each step.
@@ -95,7 +96,7 @@ Four patterns turn the lesson's minimum into something a multi-agent monorepo ca
 
 **Separate large artifacts from state.** Don't store CSVs, long transcripts, or generated files in `agent_state.json`. Save the artifact as a separate file (or upload to object storage) and keep only the path in state. Checkpoints stay small and fast; the artifacts grow independently.
 
-**Event sourcing for audit, snapshots for resume.** Append to an event log (`state.events.jsonl`) on every mutation; periodically snapshot to `state.json`. Resume reads the snapshot, then replays any events after the snapshot's timestamp. This costs more disk but lets you replay agent decisions verbatim — essential when debugging long-horizon runs. The same shape Postgres uses internally for WAL.
+**Event sourcing for audit, snapshots for resume.** Append to an event log (`state.events.jsonl`) on every mutation; periodically snapshot to `state.json`. Resume reads the snapshot, then replays any events after the snapshot's timestamp. This costs more disk but lets you replay agent decisions verbatim — essential when debugging long-horizon runs. Postgres uses the same log plus checkpoint idea at the storage layer with its WAL, though at a much lower level than application events.
 
 **Schema migrations or refuse to load.** The `schema_version` integer is the contract. When the manager loads a file at an unknown version, it refuses to read. Ship a migration script next to the schema bump; `tools/migrate_state.py` runs idempotently on every startup.
 
